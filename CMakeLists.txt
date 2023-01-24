@@ -21,13 +21,13 @@ include_directories(${CONAN_INCLUDE_DIRS})
 
 add_library(enpitsu STATIC
         src/Screen.h
-        src/Screen.cpp)
+        src/Screen.cpp src/Exception.h)
 
 # ====================below are configurations simply for testing the library======================
 
 add_executable(test main.cpp)
 
-target_include_directories(test PUBLIC headers)
+target_include_directories(test PUBLIC src)
 target_link_directories(test PUBLIC src)
 
 target_link_libraries(test ${CMAKE_BINARY_DIR}/lib/enpitsu.lib)
