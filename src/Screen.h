@@ -32,9 +32,17 @@ namespace enpitsu
         {}
     };
 
+    class BadProcessCreation : public Exception
+    {
+    public:
+        BadProcessCreation() : Exception("A screen already exists in this process. "
+                                         "If you want to create multiple screens please create multiple processes")
+        {}
+    };
+
     class Screen
     {
-        static int screenCount;
+        static bool exists;
     public:
         Screen() = delete;
 
@@ -42,25 +50,26 @@ namespace enpitsu
         explicit Screen
                 (
                         const std::tuple<int, int> &size,
-                        const bool &fullScreen = false,
-                        const std::function<bool()> &customInit = []()
-                        { return true; }
+                        const bool &fullScreen = false
                 );
 
         //move constructor
         explicit Screen
                 (
                         const std::tuple<int, int> &&size,
-                        const bool &&fullScreen = false,
-                        const std::function<bool()> &&customInit = []()
-                        { return true; }
-                ) : Screen(size, fullScreen, customInit)
+                        const bool &&fullScreen = false
+                ) : Screen(size, fullScreen)
         {}
 
         //destructor
-        ~Screen();
+        virtual ~Screen();
 
-        void defaultInitialize();
+        //events
+        void start();
+
+        virtual void init();
+        virtual void tick();
+        virtual void stop();
     };
 }
 #endif //ENPITSU_SCREEN_H

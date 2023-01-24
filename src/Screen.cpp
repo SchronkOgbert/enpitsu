@@ -5,30 +5,22 @@
 #include <iostream>
 #include "Screen.h"
 
-int enpitsu::Screen::screenCount = 0;
+bool enpitsu::Screen::exists = false;
 
 enpitsu::Screen::Screen
         (const std::tuple<int, int> &size,
-         const bool &fullScreen,
-         const std::function<bool()> &customInit
+         const bool &fullScreen
         )
 {
-    //initialize glfw
-    if(!screenCount)
+    if(exists)
     {
-        if(glfwInit() == GLFW_FALSE)
-        {
-            glfwTerminate();
-            throw BadInitException();
-        }
+        throw BadProcessCreation();
     }
-    screenCount++;
-
-    //custom initialize functionality
-    if(!customInit())
+    exists = true;
+    if(glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
-        throw BadCustomInitException();
+        throw BadInitException();
     }
 
     std::cout << "Created screen of size: " << std::get<0>(size) << 'x' << std::get<1>(size) << '\n';
@@ -36,10 +28,27 @@ enpitsu::Screen::Screen
 
 enpitsu::Screen::~Screen()
 {
-    screenCount--;
-    if(!screenCount)
-    {
-        glfwTerminate();
-    }
+    glfwTerminate();
+}
+
+void enpitsu::Screen::start()
+{
+    this->init();
+    this->tick();
+}
+
+void enpitsu::Screen::init()
+{
+    std::cout << "Screen::init\n";
+}
+
+void enpitsu::Screen::tick()
+{
+    std::cout << "Screen::tick\n";
+}
+
+void enpitsu::Screen::stop()
+{
+    std::cout << "Screen::stop\n";
 }
 
