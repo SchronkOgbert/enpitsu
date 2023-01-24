@@ -3,3 +3,9 @@
 //
 
 #include "Object.h"
+#include <iostream>
+
+void Object::tick()
+{
+    std::cout << "Object::tick\n";
+}

@@ -40,6 +40,13 @@ namespace enpitsu
         {}
     };
 
+    class BadWindow : public Exception
+    {
+    public:
+        BadWindow() : Exception("Could not create a window. Are the window hints valid?")
+        {}
+    };
+
     class Screen
     {
         static bool exists;
@@ -47,7 +54,8 @@ namespace enpitsu
         //props
         std::tuple<int, int> size;
         bool fullScreen;
-
+        GLFWwindow *window;
+        std::string name;
 
         //references
         std::shared_ptr<std::vector<std::shared_ptr<Object>>> objects;
@@ -73,11 +81,18 @@ namespace enpitsu
         //destructor
         virtual ~Screen();
 
+        bool addObject(const std::shared_ptr<Object> &obj);
+
+        bool addObject(const std::shared_ptr<Object> &&obj)
+        { return addObject(obj); }
+
         //events
         void start();
 
         virtual void init();
+
         virtual void callTick();
+
         virtual void stop();
     };
 }

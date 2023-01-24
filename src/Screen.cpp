@@ -12,25 +12,28 @@ enpitsu::Screen::Screen
          const bool &fullScreen
         )
 {
-    if(exists)
+    if (exists)
     {
         throw BadProcessCreation();
     }
     exists = true;
     this->size = size;
     this->fullScreen = fullScreen;
-    if(glfwInit() == GLFW_FALSE)
+    this->window = nullptr;
+    this->name = "Window";
+    if (glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
         throw BadInitException();
     }
-
-    std::cout << "Created screen of size: " << std::get<0>(size) << 'x' << std::get<1>(size) << '\n';
 }
 
 enpitsu::Screen::~Screen()
 {
-    std::cout << "Screen::~Screen\n";
+    if (window)
+    {
+        glfwDestroyWindow(window);
+    }
     glfwTerminate();
 }
 
@@ -42,16 +45,46 @@ void enpitsu::Screen::start()
 
 void enpitsu::Screen::init()
 {
-    std::cout << "Screen::init\n";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOT_VERSION);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_DEFAULT_MINOR_VERSION);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, OPENGL_DEFAULT_PROFILE);
+
+    window = glfwCreateWindow(
+            std::get<0>(size),
+            std::get<1>(size),
+            name.c_str(),
+            nullptr,
+            nullptr
+    );
+    if (!window)
+    {
+        throw BadWindow();
+    }
+    glfwMakeContextCurrent(window);
+
+    gladLoadGL();
+    glViewport(0, 0, std::get<0>(size), std::get<1>(size));
+    glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glfwSwapBuffers(window);
 }
 
 void enpitsu::Screen::callTick()
 {
-    std::cout << "Screen::callTick\n";
+    while(!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
+    }
 }
 
 void enpitsu::Screen::stop()
 {
     std::cout << "Screen::stop\n";
+}
+
+bool enpitsu::Screen::addObject(const std::shared_ptr<Object> &obj)
+{
+    objects->push_back(obj);
+    return true;
 }
 

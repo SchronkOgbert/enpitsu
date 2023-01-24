@@ -9,7 +9,11 @@
 
 class Object
 {
+public:
+    Object() = default;
 
+    //events
+    virtual void tick();
 };
 
 

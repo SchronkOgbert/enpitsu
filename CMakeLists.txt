@@ -7,21 +7,20 @@ if(EXISTS ${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
     conan_basic_setup()
 else()
-    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
+    message(FATAL_ERROR "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR}/../)
 
 find_package(glfw3 REQUIRED)
 find_package(glad REQUIRED)
-find_package(GLEW REQUIRED)
 
 link_libraries(${CONAN_LIBS})
 include_directories(${CONAN_INCLUDE_DIRS})
 
 add_library(enpitsu STATIC
         src/Screen.h
-        src/Screen.cpp src/Exception.h src/Object.cpp src/Object.h src/defines.h)
+        src/Screen.cpp src/Exception.h src/Object.cpp src/Object.h src/defines.h src/ShaderProgram.cpp src/ShaderProgram.h)
 
 # ====================below are configurations simply for testing the library======================
 
