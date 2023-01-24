@@ -5,15 +5,15 @@
 #ifndef ENPITSU_SCREEN_H
 #define ENPITSU_SCREEN_H
 
+#include "defines.h"
+
 #include <functional>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Exception.h"
 #include <string>
-
-#ifdef _MSC_VER
-#define strdup _strdup
-#endif
+#include "Object.h"
+#include <memory>
 
 namespace enpitsu
 {
@@ -43,6 +43,15 @@ namespace enpitsu
     class Screen
     {
         static bool exists;
+
+        //props
+        std::tuple<int, int> size;
+        bool fullScreen;
+
+
+        //references
+        std::shared_ptr<std::vector<std::shared_ptr<Object>>> objects;
+
     public:
         Screen() = delete;
 
@@ -68,7 +77,7 @@ namespace enpitsu
         void start();
 
         virtual void init();
-        virtual void tick();
+        virtual void callTick();
         virtual void stop();
     };
 }

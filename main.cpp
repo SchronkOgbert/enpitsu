@@ -21,11 +21,13 @@ public:
 
 int main()
 {
+    std::unique_ptr<Screen> screen(nullptr);
     try
     {
-        std::unique_ptr<MyScreen> screen(new MyScreen());
+        screen = std::make_unique<Screen>(
+                std::make_tuple(800, 600)
+                );
         screen->start();
-        std::unique_ptr<MyScreen> screen1(new MyScreen());
     }
     catch (BadCustomInitException &exception)
     {
@@ -39,4 +41,5 @@ int main()
     {
         std::cerr << exception.what();
     }
+    std::cout << "end program\n";
 }

@@ -17,6 +17,8 @@ enpitsu::Screen::Screen
         throw BadProcessCreation();
     }
     exists = true;
+    this->size = size;
+    this->fullScreen = fullScreen;
     if(glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
@@ -28,13 +30,14 @@ enpitsu::Screen::Screen
 
 enpitsu::Screen::~Screen()
 {
+    std::cout << "Screen::~Screen\n";
     glfwTerminate();
 }
 
 void enpitsu::Screen::start()
 {
     this->init();
-    this->tick();
+    this->callTick();
 }
 
 void enpitsu::Screen::init()
@@ -42,9 +45,9 @@ void enpitsu::Screen::init()
     std::cout << "Screen::init\n";
 }
 
-void enpitsu::Screen::tick()
+void enpitsu::Screen::callTick()
 {
-    std::cout << "Screen::tick\n";
+    std::cout << "Screen::callTick\n";
 }
 
 void enpitsu::Screen::stop()

@@ -21,7 +21,7 @@ include_directories(${CONAN_INCLUDE_DIRS})
 
 add_library(enpitsu STATIC
         src/Screen.h
-        src/Screen.cpp src/Exception.h)
+        src/Screen.cpp src/Exception.h src/Object.cpp src/Object.h src/defines.h)
 
 # ====================below are configurations simply for testing the library======================
 
