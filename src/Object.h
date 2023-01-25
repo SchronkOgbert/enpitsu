@@ -13,7 +13,7 @@ public:
     Object() = default;
 
     //events
-    virtual void tick();
+    virtual void tick(float delta);
 };
 
 

@@ -5,7 +5,7 @@
 #include "Object.h"
 #include <iostream>
 
-void Object::tick()
+void Object::tick(float delta)
 {
-    std::cout << "Object::tick\n";
+    std::cout << "Object::tick with delta " << delta << '\n';
 }

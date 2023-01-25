@@ -89,9 +89,9 @@ namespace enpitsu
         //events
         void start();
 
-        virtual void init();
+    protected:
 
-        virtual void callTick();
+        virtual void callTick(float delta);
 
         virtual void stop();
     };

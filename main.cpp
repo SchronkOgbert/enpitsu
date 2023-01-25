@@ -11,12 +11,6 @@ public:
     {
 
     }
-
-    void init() override
-    {
-        Screen::init();
-        std::cout << "MyScreen::init\n";
-    }
 };
 
 int main()
