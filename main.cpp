@@ -21,7 +21,7 @@ int main()
         screen = std::make_unique<Screen>(
                 std::make_tuple(800, 600)
                 );
-        screen->start();
+        screen->start(); // program run
     }
     catch (BadCustomInitException &exception)
     {

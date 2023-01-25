@@ -24,6 +24,7 @@ enpitsu::Screen::Screen
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_shared<std::vector<std::shared_ptr<Object>>>(std::vector<std::shared_ptr<Object>>());
+    this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
@@ -42,10 +43,22 @@ enpitsu::Screen::~Screen()
 
 void enpitsu::Screen::start()
 {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOT_VERSION);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_DEFAULT_MINOR_VERSION);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, OPENGL_DEFAULT_PROFILE);
+    this->init();
 
+    auto before = std::chrono::system_clock::now();
+    auto now = before;
+    std::chrono::duration<float> delta{};
+    while (!shouldDestroy)
+    {
+        now = std::chrono::system_clock::now();
+        delta = now - before;
+        this->tick(delta.count());
+        before = now;
+    }
+}
+
+void enpitsu::Screen::createGLFWWindow()
+{
     window = glfwCreateWindow(
             std::get<0>(size),
             std::get<1>(size),
@@ -58,26 +71,9 @@ void enpitsu::Screen::start()
         throw BadWindow();
     }
     glfwMakeContextCurrent(window);
-
-    gladLoadGL();
-    glViewport(0, 0, std::get<0>(size), std::get<1>(size));
-    glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glfwSwapBuffers(window);
-    auto before = std::chrono::system_clock::now();
-    auto now = before;
-    std::chrono::duration<float> delta{};
-    while (!glfwWindowShouldClose(window))
-    {
-        now = std::chrono::system_clock::now();
-        delta = now - before;
-        this->callTick(delta.count());
-        glfwPollEvents();
-        before = now;
-    }
 }
 
-void enpitsu::Screen::callTick(float delta)
+void enpitsu::Screen::callTick(const float &delta)
 {
     for (auto &obj: *objects)
     {
@@ -85,14 +81,40 @@ void enpitsu::Screen::callTick(float delta)
     }
 }
 
-void enpitsu::Screen::stop()
-{
-    std::cout << "Screen::stop\n";
-}
-
 bool enpitsu::Screen::addObject(const std::shared_ptr<Object> &obj)
 {
     objects->push_back(obj);
     return true;
+}
+
+void enpitsu::Screen::setGLFWHints()
+{
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOT_VERSION);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_DEFAULT_MINOR_VERSION);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, OPENGL_DEFAULT_PROFILE);
+}
+
+void enpitsu::Screen::tick(const float &delta)
+{
+    if(glfwWindowShouldClose(window))
+    {
+        this->destroy();
+        return;
+    }
+    this->callTick(delta);
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+
+void enpitsu::Screen::init()
+{
+    this->setGLFWHints();
+    this->createGLFWWindow();
+    gladLoadGL();
+}
+
+void enpitsu::Screen::destroy()
+{
+    this->shouldDestroy = true;
 }
 
