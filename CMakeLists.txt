@@ -16,17 +16,17 @@ find_package(glfw3 REQUIRED)
 find_package(glad REQUIRED)
 
 link_libraries(${CONAN_LIBS})
-include_directories(${CONAN_INCLUDE_DIRS})
+include_directories(${CONAN_INCLUDE_DIRS} include)
 
-add_library(enpitsu STATIC
-        src/Screen.h
-        src/Screen.cpp src/Exception.h src/Object.cpp src/Object.h src/defines.h src/ShaderProgram.cpp src/ShaderProgram.h src/InputEvents.h)
+file(GLOB HEADER_FILES include/*.h)
+file(GLOB SOURCE_FILES src/*.cpp)
+
+add_library(enpitsu STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
 # ====================below are configurations simply for testing the library======================
 
 add_executable(test main.cpp)
 
-target_include_directories(test PUBLIC src)
 target_link_directories(test PUBLIC src)
 
 target_link_libraries(test ${CMAKE_BINARY_DIR}/lib/enpitsu.lib)
