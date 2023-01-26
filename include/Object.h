@@ -24,13 +24,15 @@ namespace enpitsu
 
         void callKeyReleased(const KeyEvent &event);
 
+        virtual ~Object();
+
     protected:
         //events
         virtual void tick(const float &delta);
 
         virtual void init();
 
-        virtual void draw() = 0;
+        virtual void draw();
     };
 }
 

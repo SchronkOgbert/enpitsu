@@ -25,9 +25,14 @@ add_library(enpitsu STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
 # ====================below are configurations simply for testing the library======================
 
-add_executable(test main.cpp)
+file(GLOB TEST_HEADER testsrc/include/*.h)
+file(GLOB TEST_SRC testsrc/src/*.cpp)
 
-target_link_directories(test PUBLIC src)
+add_executable(test main.cpp ${TEST_HEADER} ${TEST_SRC})
+
+target_include_directories(test PUBLIC testsrc/include)
+
+target_link_directories(test PUBLIC src testsrc/src)
 
 target_link_libraries(test ${CMAKE_BINARY_DIR}/lib/enpitsu.lib)
 

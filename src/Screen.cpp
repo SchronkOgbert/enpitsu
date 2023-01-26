@@ -46,6 +46,8 @@ void enpitsu::Screen::start()
 {
     this->init();
 
+    this->callInit(); //call this after the init actually runs the code and adds the objects
+
     auto before = std::chrono::system_clock::now();
     auto now = before;
     std::chrono::duration<float> delta{};
@@ -82,9 +84,11 @@ void enpitsu::Screen::callTick(const float &delta)
     }
 }
 
-bool enpitsu::Screen::addObject(const std::shared_ptr<Object> &obj)
+bool enpitsu::Screen::addObject(std::shared_ptr<Object> obj)
 {
+    std::cout << "Add object " << obj << " to screen\n";
     objects->push_back(obj);
+    std::cout << "There are " << objects->size() << " objects after this operation\n";
     return true;
 }
 
@@ -122,7 +126,6 @@ void enpitsu::Screen::init()
                 );
     });
     gladLoadGL();
-    this->callInit();
 }
 
 void enpitsu::Screen::destroy()
@@ -132,6 +135,7 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
+    std::cout << "Calling init for " << objects->size() << " objects\n";
     for (auto &obj: *objects)
     {
         obj->callInit();

@@ -81,12 +81,6 @@ namespace enpitsu
     class InputEvents
     {
     public:
-        InputEvents() = delete;
-
-        InputEvents(const InputEvents &other) = delete;
-
-        InputEvents(const InputEvents &&other) = delete;
-
         virtual void OnMouseClick(const MouseEvent &event) = 0;
 
         virtual void OnKeyPressed(const KeyEvent &event) = 0;

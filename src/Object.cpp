@@ -23,6 +23,7 @@ void enpitsu::Object::callInit()
 void enpitsu::Object::init()
 {
     listensInputEvents = dynamic_cast<InputEvents *>(this) != nullptr;
+    std::cout << "Accept events: " << listensInputEvents << '\n';
 }
 
 void enpitsu::Object::callKeyPressed(const enpitsu::KeyEvent &event)
@@ -39,4 +40,14 @@ void enpitsu::Object::callKeyReleased(const enpitsu::KeyEvent &event)
     {
         dynamic_cast<InputEvents *>(this)->OnKeyReleased(event);
     }
+}
+
+void enpitsu::Object::draw()
+{
+
+}
+
+enpitsu::Object::~Object()
+{
+    std::cout << "Object " << this << " destroyed\n";
 }

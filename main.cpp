@@ -1,39 +1,9 @@
-#include "Screen.h"
-#include <memory>
+#include "App.h"
 #include <iostream>
-
-using namespace enpitsu;
-
-class MyScreen : public Screen
-{
-public:
-    MyScreen() : Screen(std::make_tuple(800, 600))
-    {
-
-    }
-};
 
 int main()
 {
-    std::unique_ptr<Screen> screen(nullptr);
-    try
-    {
-        screen = std::make_unique<Screen>(
-                std::make_tuple(800, 600)
-                );
-        screen->start(); // program run
-    }
-    catch (BadCustomInitException &exception)
-    {
-        std::cerr << exception.what();
-    }
-    catch (BadProcessCreation &exception)
-    {
-        std::cerr << exception.what();
-    }
-    catch (Exception &exception)
-    {
-        std::cerr << exception.what();
-    }
+    std::unique_ptr<App> app(new App());
+    app->run();
     std::cout << "end program\n";
 }

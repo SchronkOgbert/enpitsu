@@ -88,10 +88,7 @@ namespace enpitsu
         //destructor
         virtual ~Screen();
 
-        bool addObject(const std::shared_ptr<Object> &obj);
-
-        bool addObject(const std::shared_ptr<Object> &&obj)
-        { return addObject(obj); }
+        bool addObject(std::shared_ptr<Object> obj);
 
         //events
         /**
