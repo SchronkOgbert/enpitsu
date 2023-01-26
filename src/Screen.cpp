@@ -4,7 +4,6 @@
 #include <tuple>
 #include <iostream>
 #include <chrono>
-#include <ctime>
 #include "Screen.h"
 #include "InputEvents.h"
 
@@ -25,6 +24,7 @@ enpitsu::Screen::Screen
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_shared<std::vector<std::shared_ptr<Object>>>(std::vector<std::shared_ptr<Object>>());
+    this->objects->reserve(1000000);
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -137,6 +137,11 @@ void enpitsu::Screen::init()
         glViewport(0, 0, width, height);
         static_cast<Screen*>(glfwGetWindowUserPointer(glfwWindow))->tick(0.1f);
     });
+    glfwSetErrorCallback([](int errorCode, const char* description)
+    {
+        std::cerr << description;
+        exit(errorCode);
+    });
 
     //load opengl
     gladLoadGL();
@@ -188,7 +193,6 @@ void enpitsu::Screen::callKeyEvents(const int &key,
             std::cerr << "Event not implemented\n";
         }
     }
-
 }
 
 void enpitsu::Screen::sendPress(KeyEvent event) const

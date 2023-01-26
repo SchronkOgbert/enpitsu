@@ -13,6 +13,8 @@ namespace enpitsu
     class Object
     {
         bool listensInputEvents{false};
+
+    protected:
         void* screen;
     public:
         explicit Object(void* screen);

@@ -15,6 +15,7 @@
 #include "Object.h"
 #include "InputEvents.h"
 #include <memory>
+#include <mutex>
 
 namespace enpitsu
 {
@@ -58,6 +59,8 @@ namespace enpitsu
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
+
+        //control variables
 
         //references
         std::shared_ptr<std::vector<std::shared_ptr<Object>>> objects;

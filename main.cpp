@@ -4,6 +4,13 @@
 int main()
 {
     std::unique_ptr<App> app(new App());
-    app->run();
+    try
+    {
+        app->run();
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << e.what();
+    }
     std::cout << "end program\n";
 }

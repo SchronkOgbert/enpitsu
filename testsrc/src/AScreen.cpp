@@ -6,12 +6,10 @@
 
 #include <memory>
 #include "AObject.h"
+#include "ObjectMaker.h"
 
 void AScreen::init()
 {
     Screen::init();
-    for(int i = 0; i < 1000; i++)
-    {
-        addObject(std::make_shared<AObject>(this));
-    }
+    addObject(std::make_shared<ObjectMaker>(this));
 }
