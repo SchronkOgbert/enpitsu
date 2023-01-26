@@ -7,7 +7,7 @@
 
 void AObject::OnKeyPressed(const enpitsu::KeyEvent &event)
 {
-    std::cout << "Key pressed: " << event.event << '\n';
+//    std::cout << "Key pressed: " << event.event << '\n';
 }
 
 void AObject::OnMouseClick(const enpitsu::MouseEvent &event)

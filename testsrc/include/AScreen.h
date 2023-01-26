@@ -11,7 +11,7 @@
 class AScreen : public enpitsu::Screen
 {
 public:
-    AScreen() : enpitsu::Screen(std::make_tuple(800, 600))
+    AScreen() : enpitsu::Screen(std::make_tuple(1280, 720))
     {}
 
     void init() override;

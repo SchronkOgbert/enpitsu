@@ -117,7 +117,9 @@ void enpitsu::Screen::init()
 {
     this->setGLFWHints();
     this->createGLFWWindow();
-    glfwSetWindowUserPointer(window, this);
+    //set callbacks
+    glfwSetWindowUserPointer(window, this); //needed for callbacks
+
     glfwSetKeyCallback(window, [](GLFWwindow *windowRef, int key, int scancode, int action, int mods)
     {
         static_cast<Screen*>(glfwGetWindowUserPointer(windowRef))->callKeyEvents(
@@ -127,6 +129,16 @@ void enpitsu::Screen::init()
                 mods
                 );
     });
+    glfwSetWindowSizeCallback(window, [](GLFWwindow* glfwWindow, int width, int height)
+    {
+        std::cout << "window resize\n";
+        static_cast<Screen*>(glfwGetWindowUserPointer(glfwWindow))->size =
+                std::make_tuple(width, height);
+        glViewport(0, 0, width, height);
+        static_cast<Screen*>(glfwGetWindowUserPointer(glfwWindow))->tick(0.1f);
+    });
+
+    //load opengl
     gladLoadGL();
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 }
@@ -154,6 +166,10 @@ void enpitsu::Screen::callKeyEvents(const int &key,
     if(key >=65 && key <= 90)
     {
         event = KeyEvent(KeyEvent::Event(key - 65));
+    }
+    else if(key < 10)
+    {
+        event = KeyEvent(KeyEvent::Event(key + 26));
     }
     switch (action)
     {
@@ -193,10 +209,6 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
 
 void enpitsu::Screen::updateScreenDefaults()
 {
-    int x, y;
-    glfwGetWindowSize(window, &x, &y);
-    this->size = std::make_tuple(x, y);
-    glViewport(0, 0, x, y);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
