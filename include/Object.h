@@ -12,8 +12,17 @@ class Object
 public:
     Object() = default;
 
+    void callTick(const float& delta);
+
+    void callInit();
+
+protected:
     //events
-    virtual void tick(float delta);
+    virtual void tick(const float &delta);
+
+    virtual void init();
+
+    virtual void draw() = 0;
 };
 
 

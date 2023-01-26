@@ -77,7 +77,7 @@ void enpitsu::Screen::callTick(const float &delta)
 {
     for (auto &obj: *objects)
     {
-        obj->tick(delta);
+        obj->callTick(delta);
     }
 }
 
@@ -111,10 +111,19 @@ void enpitsu::Screen::init()
     this->setGLFWHints();
     this->createGLFWWindow();
     gladLoadGL();
+    this->callInit();
 }
 
 void enpitsu::Screen::destroy()
 {
     this->shouldDestroy = true;
+}
+
+void enpitsu::Screen::callInit()
+{
+    for(auto &obj : *objects)
+    {
+        obj->callInit();
+    }
 }
 

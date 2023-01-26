@@ -99,8 +99,13 @@ namespace enpitsu
 
         //all the events below run sometime during the Screen::start function
         /**
+         * Call init for all the objects the screen has a reference to
+         */
+         void callInit();
+
+        /**
          * This function runs at the beginning of the start function\n
-         * It calls \name Screen::setGLFWHints and \name Screen::createGLFWWindow
+         * It calls Screen::setGLFWHints and Screen::createGLFWWindow
          */
         virtual void init();
 
@@ -108,7 +113,7 @@ namespace enpitsu
          * Calls tick for all the objects the screen has a reference to
          * @param delta the time elapsed since the last tick was run
          */
-        virtual void callTick(const float &delta);
+        void callTick(const float &delta);
 
         /**
          * Override this function to define custom tick behaviour

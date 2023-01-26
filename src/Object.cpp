@@ -5,7 +5,22 @@
 #include "Object.h"
 #include <iostream>
 
-void Object::tick(float delta)
+void Object::tick(const float &delta)
 {
-    std::cout << "Object::tick with delta " << delta << '\n';
+    this->draw();
+}
+
+void Object::callTick(const float &delta)
+{
+    this->tick(delta);
+}
+
+void Object::callInit()
+{
+    this->init();
+}
+
+void Object::init()
+{
+
 }
