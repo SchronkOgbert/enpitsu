@@ -67,6 +67,8 @@ namespace enpitsu
 
         void sendRelease(const KeyEvent & event);
 
+        void updateScreenDefaults();
+
     public:
         Screen() = delete;
 

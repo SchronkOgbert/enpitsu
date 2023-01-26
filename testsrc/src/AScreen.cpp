@@ -10,5 +10,8 @@
 void AScreen::init()
 {
     Screen::init();
-    addObject(std::make_shared<AObject>(this));
+    for(int i = 0; i < 1000; i++)
+    {
+        addObject(std::make_shared<AObject>(this));
+    }
 }

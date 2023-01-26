@@ -101,11 +101,13 @@ void enpitsu::Screen::setGLFWHints()
 
 void enpitsu::Screen::tick(const float &delta)
 {
+//    std::cout << "delta: " << delta << '\n';
     if (glfwWindowShouldClose(window))
     {
         this->destroy();
         return;
     }
+    updateScreenDefaults();
     this->callTick(delta);
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -126,6 +128,7 @@ void enpitsu::Screen::init()
                 );
     });
     gladLoadGL();
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 }
 
 void enpitsu::Screen::destroy()
@@ -148,9 +151,9 @@ void enpitsu::Screen::callKeyEvents(const int &key,
                                     const int &mods)
 {
     KeyEvent event{};
-    if(action >=65 && action <= 90)
+    if(key >=65 && key <= 90)
     {
-        event = KeyEvent(KeyEvent::Event(action - 65));
+        event = KeyEvent(KeyEvent::Event(key - 65));
     }
     switch (action)
     {
@@ -186,5 +189,14 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
     {
         obj->callKeyReleased(event);
     }
+}
+
+void enpitsu::Screen::updateScreenDefaults()
+{
+    int x, y;
+    glfwGetWindowSize(window, &x, &y);
+    this->size = std::make_tuple(x, y);
+    glViewport(0, 0, x, y);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
