@@ -5,11 +5,10 @@
 #include "AScreen.h"
 
 #include <memory>
-#include "Object.h"
 #include "AObject.h"
 
 void AScreen::init()
 {
     Screen::init();
-    addObject(std::make_shared<AObject>());
+    addObject(std::make_shared<AObject>(this));
 }

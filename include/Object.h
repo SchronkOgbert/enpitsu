@@ -13,8 +13,9 @@ namespace enpitsu
     class Object
     {
         bool listensInputEvents{false};
+        void* screen;
     public:
-        Object() = default;
+        explicit Object(void* screen);
 
         void callTick(const float &delta);
 

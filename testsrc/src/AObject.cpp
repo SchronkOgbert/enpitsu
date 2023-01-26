@@ -19,3 +19,8 @@ void AObject::OnKeyReleased(const enpitsu::KeyEvent &event)
 {
 
 }
+
+AObject::AObject(void *screen) : Object(screen)
+{
+
+}
