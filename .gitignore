@@ -39,3 +39,5 @@
 graph_info.json
 *.lock
 cmake-build*
+
+dirty_generator.py

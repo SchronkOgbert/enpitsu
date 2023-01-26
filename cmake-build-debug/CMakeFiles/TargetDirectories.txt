@@ -1,2 +1,0 @@
-J:/unistuff/license/enpitsu/cmake-build-debug/CMakeFiles/edit_cache.dir
-J:/unistuff/license/enpitsu/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -7,25 +7,34 @@ if(EXISTS ${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
     include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
     conan_basic_setup()
 else()
-    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
+    message(FATAL_ERROR "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR}/../)
 
-add_library(enpitsu STATIC
-        src/Screen.h
-        src/Screen.cpp)
+find_package(glfw3 REQUIRED)
+find_package(glad REQUIRED)
 
-add_executable(test main.cpp)
+link_libraries(${CONAN_LIBS})
+include_directories(${CONAN_INCLUDE_DIRS} include)
 
-target_include_directories(test PUBLIC headers)
-target_link_directories(test PUBLIC src)
+file(GLOB HEADER_FILES include/*.h)
+file(GLOB SOURCE_FILES src/*.cpp)
+
+add_library(enpitsu STATIC ${HEADER_FILES} ${SOURCE_FILES})
+
+# ====================below are configurations simply for testing the library======================
+
+file(GLOB TEST_HEADER testsrc/include/*.h)
+file(GLOB TEST_SRC testsrc/src/*.cpp)
+
+add_executable(test main.cpp ${TEST_HEADER} ${TEST_SRC})
+
+target_include_directories(test PUBLIC testsrc/include)
+
+target_link_directories(test PUBLIC src testsrc/src)
 
 target_link_libraries(test ${CMAKE_BINARY_DIR}/lib/enpitsu.lib)
 
-link_libraries(${CONAN_LIBS})
 
-find_package(glfw3 REQUIRED)
-find_package(glad REQUIRED)
-find_package(GLEW REQUIRED)
 
