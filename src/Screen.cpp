@@ -6,6 +6,7 @@
 #include <chrono>
 #include <ctime>
 #include "Screen.h"
+#include "InputEvents.h"
 
 bool enpitsu::Screen::exists = false;
 
@@ -96,7 +97,7 @@ void enpitsu::Screen::setGLFWHints()
 
 void enpitsu::Screen::tick(const float &delta)
 {
-    if(glfwWindowShouldClose(window))
+    if (glfwWindowShouldClose(window))
     {
         this->destroy();
         return;
@@ -110,6 +111,16 @@ void enpitsu::Screen::init()
 {
     this->setGLFWHints();
     this->createGLFWWindow();
+    glfwSetWindowUserPointer(window, this);
+    glfwSetKeyCallback(window, [](GLFWwindow *windowRef, int key, int scancode, int action, int mods)
+    {
+        static_cast<Screen*>(glfwGetWindowUserPointer(windowRef))->callKeyEvents(
+                key,
+                scancode,
+                action,
+                mods
+                );
+    });
     gladLoadGL();
     this->callInit();
 }
@@ -121,9 +132,55 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
-    for(auto &obj : *objects)
+    for (auto &obj: *objects)
     {
         obj->callInit();
+    }
+}
+
+void enpitsu::Screen::callKeyEvents(const int &key,
+                                    const int &scancode,
+                                    const int &action,
+                                    const int &mods)
+{
+    KeyEvent event{};
+    if(action >=65 && action <= 90)
+    {
+        event = KeyEvent(KeyEvent::Event(action - 65));
+    }
+    switch (action)
+    {
+        case GLFW_PRESS:
+        {
+            sendPress(event);
+            break;
+        }
+        case GLFW_RELEASE:
+        {
+            sendRelease(event);
+            break;
+        }
+        default:
+        {
+            std::cerr << "Event not implemented\n";
+        }
+    }
+
+}
+
+void enpitsu::Screen::sendPress(KeyEvent event) const
+{
+    for(auto &obj : *objects)
+    {
+        obj->callKeyPressed(event);
+    }
+}
+
+void enpitsu::Screen::sendRelease(const KeyEvent &event)
+{
+    for(auto &obj : *objects)
+    {
+        obj->callKeyReleased(event);
     }
 }
 

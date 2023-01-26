@@ -13,6 +13,7 @@
 #include "Exception.h"
 #include <string>
 #include "Object.h"
+#include "InputEvents.h"
 #include <memory>
 
 namespace enpitsu
@@ -61,6 +62,11 @@ namespace enpitsu
         //references
         std::shared_ptr<std::vector<std::shared_ptr<Object>>> objects;
 
+        //private events
+        void sendPress(KeyEvent event) const;
+
+        void sendRelease(const KeyEvent & event);
+
     public:
         Screen() = delete;
 
@@ -95,13 +101,22 @@ namespace enpitsu
          */
         void start();
 
+        /**
+         * Function that calls the input events for all objects\n
+         * It has to be public because of some quirks of glfw
+         */
+        void callKeyEvents(const int &key,
+                           const int &scancode,
+                           const int &action,
+                           const int &mods);
+
     protected:
 
         //all the events below run sometime during the Screen::start function
         /**
          * Call init for all the objects the screen has a reference to
          */
-         void callInit();
+        void callInit();
 
         /**
          * This function runs at the beginning of the start function\n
@@ -119,7 +134,7 @@ namespace enpitsu
          * Override this function to define custom tick behaviour
          * @param delta the time elapsed since the last tick was run
          */
-        virtual void tick(const float& delta);
+        virtual void tick(const float &delta);
 
         /**
          * Sets the hints for the GLFW window\n
@@ -136,7 +151,7 @@ namespace enpitsu
         /**
          * Call this function to destroy the window
          */
-         virtual void destroy();
+        virtual void destroy();
     };
 }
 #endif //ENPITSU_SCREEN_H

@@ -5,22 +5,38 @@
 #include "Object.h"
 #include <iostream>
 
-void Object::tick(const float &delta)
+void enpitsu::Object::tick(const float &delta)
 {
     this->draw();
 }
 
-void Object::callTick(const float &delta)
+void enpitsu::Object::callTick(const float &delta)
 {
     this->tick(delta);
 }
 
-void Object::callInit()
+void enpitsu::Object::callInit()
 {
     this->init();
 }
 
-void Object::init()
+void enpitsu::Object::init()
 {
+    listensInputEvents = dynamic_cast<InputEvents *>(this) != nullptr;
+}
 
+void enpitsu::Object::callKeyPressed(const enpitsu::KeyEvent &event)
+{
+    if(listensInputEvents)
+    {
+        dynamic_cast<InputEvents *>(this)->OnKeyPressed(event);
+    }
+}
+
+void enpitsu::Object::callKeyReleased(const enpitsu::KeyEvent &event)
+{
+    if(listensInputEvents)
+    {
+        dynamic_cast<InputEvents *>(this)->OnKeyReleased(event);
+    }
 }

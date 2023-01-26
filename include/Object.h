@@ -6,24 +6,33 @@
 #define ENPITSU_OBJECT_H
 
 #include "defines.h"
+#include "InputEvents.h"
 
-class Object
+namespace enpitsu
 {
-public:
-    Object() = default;
+    class Object
+    {
+        bool listensInputEvents{false};
+    public:
+        Object() = default;
 
-    void callTick(const float& delta);
+        void callTick(const float &delta);
 
-    void callInit();
+        void callInit();
 
-protected:
-    //events
-    virtual void tick(const float &delta);
+        void callKeyPressed(const KeyEvent & event);
 
-    virtual void init();
+        void callKeyReleased(const KeyEvent &event);
 
-    virtual void draw() = 0;
-};
+    protected:
+        //events
+        virtual void tick(const float &delta);
+
+        virtual void init();
+
+        virtual void draw() = 0;
+    };
+}
 
 
 #endif //ENPITSU_OBJECT_H
