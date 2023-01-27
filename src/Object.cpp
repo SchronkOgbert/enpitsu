@@ -43,11 +43,6 @@ void enpitsu::Object::callKeyReleased(const enpitsu::KeyEvent &event)
     }
 }
 
-void enpitsu::Object::draw()
-{
-    static_cast<Screen*>(screen);
-}
-
 enpitsu::Object::~Object()
 {
     std::cout << "Object " << this << " destroyed\n";

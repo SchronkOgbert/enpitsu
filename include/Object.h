@@ -35,7 +35,7 @@ namespace enpitsu
 
         virtual void init();
 
-        virtual void draw();
+        virtual void draw() = 0;
     };
 }
 

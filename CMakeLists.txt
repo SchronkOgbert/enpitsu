@@ -20,6 +20,7 @@ include_directories(${CONAN_INCLUDE_DIRS} include)
 
 file(GLOB HEADER_FILES include/*.h)
 file(GLOB SOURCE_FILES src/*.cpp)
+file(GLOB RESOURCE_FILES shaders/*)
 
 add_library(enpitsu STATIC ${HEADER_FILES} ${SOURCE_FILES})
 
