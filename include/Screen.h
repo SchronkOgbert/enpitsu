@@ -12,13 +12,13 @@
 #include <GLFW/glfw3.h>
 #include "Exception.h"
 #include <string>
-#include "Object.h"
 #include "InputEvents.h"
 #include <memory>
 #include <mutex>
 
 namespace enpitsu
 {
+    class Object;
 
     class BadInitException : public Exception
     {

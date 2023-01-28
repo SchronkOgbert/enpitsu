@@ -10,14 +10,15 @@
 
 namespace enpitsu
 {
+    class Screen;
     class Object
     {
         bool listensInputEvents{false};
 
     protected:
-        void* screen;
+        Screen* screen;
     public:
-        explicit Object(void* screen);
+        explicit Object(Screen *screen);
 
         void callTick(const float &delta);
 
@@ -35,7 +36,8 @@ namespace enpitsu
 
         virtual void init();
 
-        virtual void draw() = 0;
+        virtual void draw()
+        {  };
     };
 }
 

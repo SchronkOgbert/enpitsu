@@ -5,6 +5,7 @@
 #include <iostream>
 #include <chrono>
 #include "Screen.h"
+#include "Object.h"
 #include "InputEvents.h"
 
 bool enpitsu::Screen::exists = false;

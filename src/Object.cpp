@@ -48,7 +48,7 @@ enpitsu::Object::~Object()
     std::cout << "Object " << this << " destroyed\n";
 }
 
-enpitsu::Object::Object(void *screen)
+enpitsu::Object::Object(Screen *screen)
 {
     this->screen = screen;
 }
