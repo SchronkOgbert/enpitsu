@@ -15,6 +15,9 @@
 #include "InputEvents.h"
 #include <memory>
 #include <mutex>
+#include "Bell/Core.h"
+
+using bell::core::println;
 
 namespace enpitsu
 {
