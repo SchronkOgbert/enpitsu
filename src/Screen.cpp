@@ -24,8 +24,7 @@ enpitsu::Screen::Screen
     this->fullScreen = fullScreen;
     this->window = nullptr;
     this->name = "Window";
-    this->objects = std::make_shared<std::vector<std::shared_ptr<Object>>>(std::vector<std::shared_ptr<Object>>());
-    this->objects->reserve(1000000);
+    this->objects = std::make_shared<std::list<std::shared_ptr<Object>>>(std::list<std::shared_ptr<Object>>());
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -215,5 +214,11 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
 void enpitsu::Screen::updateScreenDefaults()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+bool enpitsu::Screen::removeObject(std::shared_ptr<Object> obj)
+{
+    objects->remove(obj);
+    return true;
 }
 

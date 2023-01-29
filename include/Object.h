@@ -36,6 +36,8 @@ namespace enpitsu
 
         virtual void init();
 
+        virtual void destroy();
+
         virtual void draw()
         {  };
     };

@@ -52,3 +52,8 @@ enpitsu::Object::Object(Screen *screen)
 {
     this->screen = screen;
 }
+
+void enpitsu::Object::destroy()
+{
+    this->screen->removeObject(std::shared_ptr<Object>(this));
+}

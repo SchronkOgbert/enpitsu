@@ -63,7 +63,7 @@ namespace enpitsu
         //control variables
 
         //references
-        std::shared_ptr<std::vector<std::shared_ptr<Object>>> objects;
+        std::shared_ptr<std::list<std::shared_ptr<Object>>> objects;
 
         //private events
         void sendPress(KeyEvent event) const;
@@ -94,6 +94,8 @@ namespace enpitsu
         virtual ~Screen();
 
         bool addObject(std::shared_ptr<Object> obj);
+
+        bool removeObject(std::shared_ptr<Object> obj);
 
         //events
         /**
