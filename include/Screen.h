@@ -15,6 +15,7 @@
 #include "InputEvents.h"
 #include <memory>
 #include <mutex>
+#include <list>
 #include "Bell/Core.h"
 
 using bell::core::println;
