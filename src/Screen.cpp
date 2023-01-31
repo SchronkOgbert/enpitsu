@@ -90,6 +90,7 @@ bool enpitsu::Screen::addObject(std::shared_ptr<Object> obj)
 {
     std::cout << "Add object " << obj << " to screen\n";
     objects->push_back(obj);
+    obj->callInit();
     std::cout << "There are " << objects->size() << " objects after this operation\n";
     return true;
 }
