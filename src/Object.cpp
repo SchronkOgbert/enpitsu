@@ -56,7 +56,7 @@ enpitsu::Object::Object(Screen *screen)
 
 void enpitsu::Object::destroy()
 {
-    this->screen->removeObject(std::shared_ptr<Object>(this));
+    this->screen->removeObject(this);
 }
 
 void enpitsu::Object::callMousePressed(const enpitsu::MouseEvent &event)
