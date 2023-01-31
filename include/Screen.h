@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/23/2023.
-//
-
 #ifndef ENPITSU_SCREEN_H
 #define ENPITSU_SCREEN_H
 
@@ -58,11 +54,12 @@ namespace enpitsu
         static bool exists;
 
         //props
-        std::tuple<int, int> size;
+        std::pair<int, int> size;
         bool fullScreen;
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
+        std::pair<double, double> cursorPos;
 
         //control variables
 
@@ -72,7 +69,7 @@ namespace enpitsu
         //private events
         void sendPress(KeyEvent event) const;
 
-        void sendRelease(const KeyEvent & event);
+        void sendRelease(const KeyEvent &event);
 
         void updateScreenDefaults();
 
@@ -82,14 +79,14 @@ namespace enpitsu
         // default constructor
         explicit Screen
                 (
-                        const std::tuple<int, int> &size,
+                        const std::pair<int, int> &size,
                         const bool &fullScreen = false
                 );
 
         //move constructor
         explicit Screen
                 (
-                        const std::tuple<int, int> &&size,
+                        const std::pair<int, int> &&size,
                         const bool &&fullScreen = false
                 ) : Screen(size, fullScreen)
         {}
@@ -117,6 +114,13 @@ namespace enpitsu
                            const int &scancode,
                            const int &action,
                            const int &mods);
+
+        void callMouseEvents(const int &button,
+                             const int &action,
+                             const int &mods,
+                             const std::pair<double, double> &pos);
+
+        void enableCursor(const bool &enable);
 
     protected:
 

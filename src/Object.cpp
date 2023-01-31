@@ -5,6 +5,7 @@
 #include "Object.h"
 #include "Screen.h"
 #include <iostream>
+#include "InputEvents.h"
 
 void enpitsu::Object::tick(const float &delta)
 {
@@ -23,23 +24,23 @@ void enpitsu::Object::callInit()
 
 void enpitsu::Object::init()
 {
-    listensInputEvents = dynamic_cast<InputEvents *>(this) != nullptr;
-    std::cout << "Accept events: " << listensInputEvents << '\n';
+    eventHandler = dynamic_cast<InputEvents *>(this);
+    std::cout << "Accept events: " << (eventHandler != nullptr) << '\n';
 }
 
 void enpitsu::Object::callKeyPressed(const enpitsu::KeyEvent &event)
 {
-    if(listensInputEvents)
+    if(eventHandler)
     {
-        dynamic_cast<InputEvents *>(this)->OnKeyPressed(event);
+        eventHandler->OnKeyPressed(event);
     }
 }
 
 void enpitsu::Object::callKeyReleased(const enpitsu::KeyEvent &event)
 {
-    if(listensInputEvents)
+    if(eventHandler)
     {
-        dynamic_cast<InputEvents *>(this)->OnKeyReleased(event);
+        eventHandler->OnKeyReleased(event);
     }
 }
 
@@ -56,4 +57,20 @@ enpitsu::Object::Object(Screen *screen)
 void enpitsu::Object::destroy()
 {
     this->screen->removeObject(std::shared_ptr<Object>(this));
+}
+
+void enpitsu::Object::callMousePressed(const enpitsu::MouseEvent &event)
+{
+    if(eventHandler)
+    {
+        eventHandler->OnMousePressed(event);
+    }
+}
+
+void enpitsu::Object::callMouseReleased(const enpitsu::MouseEvent &event)
+{
+    if(eventHandler)
+    {
+        eventHandler->OnMouseReleased(event);
+    }
 }
