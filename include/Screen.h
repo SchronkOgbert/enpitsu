@@ -18,7 +18,6 @@ using bell::core::println;
 
 namespace enpitsu
 {
-    class Object;
 
     class BadInitException : public Exception
     {
@@ -52,6 +51,8 @@ namespace enpitsu
     class Screen
     {
         static bool exists;
+
+        friend class Object;
 
         //props
         std::pair<int, int> size;
@@ -94,7 +95,7 @@ namespace enpitsu
         //destructor
         virtual ~Screen();
 
-        bool addObject(Object *obj);
+        Object* addObject(Object *obj);
 
         bool removeObject(Object *obj);
 

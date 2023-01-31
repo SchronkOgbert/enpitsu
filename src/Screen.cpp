@@ -7,6 +7,8 @@
 
 bool enpitsu::Screen::exists = false;
 
+using enpitsu::Object;
+
 enpitsu::Screen::Screen
         (const std::pair<int, int> &size,
          const bool &fullScreen
@@ -32,6 +34,10 @@ enpitsu::Screen::Screen
 
 enpitsu::Screen::~Screen()
 {
+    for(auto& obj : *objects)
+    {
+        obj->onDestroy();
+    }
     if (window)
     {
         glfwDestroyWindow(window);
@@ -86,13 +92,13 @@ void enpitsu::Screen::callTick(const float &delta)
     }
 }
 
-bool enpitsu::Screen::addObject(Object *obj)
+Object* enpitsu::Screen::addObject(Object *obj)
 {
     std::cout << "Add object " << obj << " to screen\n";
     objects->push_back(std::unique_ptr<Object>(obj));
     obj->callInit();
     std::cout << "There are " << objects->size() << " objects after this operation\n";
-    return true;
+    return obj;
 }
 
 void enpitsu::Screen::setGLFWHints()

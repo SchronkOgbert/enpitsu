@@ -10,10 +10,10 @@
 
 namespace enpitsu
 {
-    class Screen;
     class InputEvents;
     class Object
     {
+        friend class Screen;
     protected:
         Screen* screen;
         InputEvents* eventHandler{nullptr};
@@ -34,13 +34,18 @@ namespace enpitsu
 
         virtual ~Object();
 
+        void destroy();
+
     protected:
         //events
         virtual void tick(const float &delta);
 
         virtual void init();
 
-        virtual void destroy();
+        /**
+         * Specify what the object should do before getting destroyed
+         */
+        virtual void onDestroy();
 
         virtual void draw()
         {  };

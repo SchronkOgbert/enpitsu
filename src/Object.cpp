@@ -56,6 +56,7 @@ enpitsu::Object::Object(Screen *screen)
 
 void enpitsu::Object::destroy()
 {
+    this->onDestroy();
     this->screen->removeObject(this);
 }
 
@@ -73,4 +74,9 @@ void enpitsu::Object::callMouseReleased(const enpitsu::MouseEvent &event)
     {
         eventHandler->OnMouseReleased(event);
     }
+}
+
+void enpitsu::Object::onDestroy()
+{
+    println("destroying ");
 }
