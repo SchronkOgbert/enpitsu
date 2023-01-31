@@ -34,7 +34,7 @@ enpitsu::Screen::Screen
 
 enpitsu::Screen::~Screen()
 {
-    for(auto& obj : *objects)
+    for (auto &obj: *objects)
     {
         obj->onDestroy();
     }
@@ -92,8 +92,9 @@ void enpitsu::Screen::callTick(const float &delta)
     }
 }
 
-Object* enpitsu::Screen::addObject(Object *obj)
+Object *enpitsu::Screen::addObject(Object *obj)
 {
+    if (!obj) throw BadObjectAdd();
     std::cout << "Add object " << obj << " to screen\n";
     objects->push_back(std::unique_ptr<Object>(obj));
     obj->callInit();
@@ -242,13 +243,16 @@ void enpitsu::Screen::updateScreenDefaults()
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-bool enpitsu::Screen::removeObject(Object *obj)
+void enpitsu::Screen::removeObject(Object *obj)
 {
-    objects->remove_if([obj](std::unique_ptr<Object> &el)
+    bool success = false;
+    objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
                        {
+                           if (success) return false;
+                           success = obj == el.get();
                            return obj == el.get();
                        });
-    return true;
+    if (!success) throw BadObjectRemove(obj);
 }
 
 void enpitsu::Screen::callMouseEvents(const int &button, const int &action, const int &mods,

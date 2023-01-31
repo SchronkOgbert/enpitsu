@@ -48,6 +48,23 @@ namespace enpitsu
         {}
     };
 
+    class BadObjectAdd : public Exception
+    {
+    public:
+        BadObjectAdd() : Exception("The object you are trying to add is nullptr.")
+        {}
+    };
+
+    class BadObjectRemove : public Exception
+    {
+    public:
+        explicit BadObjectRemove(void* obj) : Exception("Could not remove object. "
+                                      "Are you sure you added it using Screen::addObject?")
+        {
+            std::cerr << "object " << obj << '\n';
+        }
+    };
+
     class Screen
     {
         static bool exists;
@@ -74,6 +91,8 @@ namespace enpitsu
 
         void updateScreenDefaults();
 
+        void removeObject(Object *obj);
+
     public:
         Screen() = delete;
 
@@ -96,8 +115,6 @@ namespace enpitsu
         virtual ~Screen();
 
         Object* addObject(Object *obj);
-
-        bool removeObject(Object *obj);
 
         //events
         /**
