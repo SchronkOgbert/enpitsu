@@ -11,8 +11,8 @@
 class ShaderProgram
 {
     GLuint ID;
-    GLuint vertexShader;
-    GLuint fragmentShader;
+
+private:
     static char* readShaderFile(const char *filename);
 public:
     ShaderProgram(const char* vertexFile, const char* fragmentFile);
@@ -20,6 +20,7 @@ public:
     virtual void Create();
     virtual void Delete();
 
+    [[nodiscard]] GLuint getId() const;
 };
 
 

@@ -11,8 +11,8 @@ ShaderProgram::ShaderProgram(const char *vertexFile, const char *fragmentFile)
     const auto* vertexData = readShaderFile(vertexFile);
     const auto* fragmentData = readShaderFile(fragmentFile);
 
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     ID = glCreateProgram();
     std::cout << "compiling shader " << ID << "(" << vertexFile << ")\n";
 
@@ -55,4 +55,9 @@ char* ShaderProgram::readShaderFile(const char *filename)
     fin.seekg(0, std::ios::beg);
     fin.read(result, size);
     return result;
+}
+
+GLuint ShaderProgram::getId() const
+{
+    return ID;
 }
