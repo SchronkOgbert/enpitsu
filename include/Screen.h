@@ -13,6 +13,7 @@
 #include <mutex>
 #include <list>
 #include "Bell/Core.h"
+#include <chrono>
 
 using bell::core::println;
 
@@ -80,6 +81,8 @@ namespace enpitsu
         std::pair<double, double> cursorPos;
 
         //control variables
+        std::chrono::time_point<std::chrono::system_clock> before;
+        std::chrono::time_point<std::chrono::system_clock> now;
 
         //references
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;

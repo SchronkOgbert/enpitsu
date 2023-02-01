@@ -52,8 +52,8 @@ void enpitsu::Screen::start()
 
     this->callInit(); //call this after the init actually runs the code and adds the objects
 
-    auto before = std::chrono::system_clock::now();
-    auto now = before;
+    before = std::chrono::system_clock::now();
+    now = before;
     std::chrono::duration<float> delta{};
     while (!shouldDestroy)
     {
@@ -96,7 +96,7 @@ Object *enpitsu::Screen::addObject(Object *obj)
 {
     if (!obj) throw BadObjectAdd();
     std::cout << "Add object " << obj << " to screen\n";
-    objects->push_back(std::unique_ptr<Object>(obj));
+    objects->emplace_back(obj);
     obj->callInit();
     std::cout << "There are " << objects->size() << " objects after this operation\n";
     return obj;
@@ -141,11 +141,14 @@ void enpitsu::Screen::init()
     });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *glfwWindow, int width, int height)
     {
-        std::cout << "window resize\n";
-        static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow))->size =
-                std::make_pair(width, height);
+        auto* screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
+        screen->size = std::make_pair(width, height);
         glViewport(0, 0, width, height);
-        static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow))->tick(0.1f);
+        screen->now = std::chrono::system_clock::now();
+        std::chrono::duration<float> delta = screen->now - screen->before;
+        screen->tick(delta.count());
+        screen->before = screen->now;
+
     });
     glfwSetCursorPosCallback(window, [](GLFWwindow *glfwWindow, double xpos, double ypos)
     {
@@ -167,7 +170,7 @@ void enpitsu::Screen::init()
 
     //load opengl
     gladLoadGL();
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearColor(0.1f, 0.5f, 0.1f, 1.0f);
 }
 
 void enpitsu::Screen::destroy()
