@@ -1,10 +1,10 @@
-//
-// Created by weekendUM on 1/24/2023.
-//
-
 #include "ShaderProgram.h"
 #include <fstream>
 #include <iostream>
+#include "cstring"
+#include "Bell/Core.h"
+
+using bell::core::println;
 
 ShaderProgram::ShaderProgram(const char *vertexFile, const char *fragmentFile)
 {
@@ -38,7 +38,7 @@ ShaderProgram::ShaderProgram(const char *vertexFile, const char *fragmentFile)
 void ShaderProgram::Create()
 {
     glUseProgram(ID);
-    std::cout << "compiled shader " << ID << '\n';
+//    std::cout << "compiled shader " << ID << '\n';
 }
 
 void ShaderProgram::Delete()
@@ -48,12 +48,17 @@ void ShaderProgram::Delete()
 
 char* ShaderProgram::readShaderFile(const char *filename)
 {
+    // TODO: replace this with something that runs in a reasonable amount of time
     std::ifstream fin(filename);
-    fin.seekg(0, std::ios::end);
-    const unsigned size = unsigned(fin.tellg()) + 2;
-    char* result = new char[size];
-    fin.seekg(0, std::ios::beg);
-    fin.read(result, size);
+    std::string buffer;
+    std::string lineBuffer;
+    while(std::getline(fin, lineBuffer))
+    {
+        buffer += lineBuffer + "\n";
+    }
+    char *result = new char[buffer.size() + 1];
+    strcpy(result, buffer.c_str());
+    println("Read data from file:\n", result);
     return result;
 }
 

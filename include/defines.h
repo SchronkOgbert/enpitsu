@@ -5,6 +5,8 @@
 #ifndef ENPITSU_DEFINES_H
 #define ENPITSU_DEFINES_H
 
+#define _CRT_SECURE_NO_DEPRECATE
+
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
 

@@ -5,6 +5,8 @@
 #ifndef ENPITSU_SHADERPROGRAM_H
 #define ENPITSU_SHADERPROGRAM_H
 
+#include "defines.h"
+
 #include <glad/glad.h>
 #include <experimental/string>
 
