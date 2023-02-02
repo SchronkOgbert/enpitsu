@@ -7,5 +7,10 @@
 
 void enpitsu::Object2D::draw()
 {
-    static_cast<Screen*>(screen);
+    screen;
+}
+
+enpitsu::Object2D::Object2D(enpitsu::Screen *screen, const std::vector<Vector2> &points, bool isStatic) : Object(screen)
+{
+
 }
