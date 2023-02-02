@@ -32,3 +32,8 @@ void VAO::Unbind()
 {
     glBindVertexArray(0U);
 }
+
+void VAO::Delete()
+{
+    glDeleteVertexArrays(1, &ID);
+}

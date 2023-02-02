@@ -58,7 +58,7 @@ char* ShaderProgram::readShaderFile(const char *filename)
     }
     char *result = new char[buffer.size() + 1];
     strcpy(result, buffer.c_str());
-    println("Read data from file:\n", result);
+//    println("Read data from file:\n", result);
     return result;
 }
 
