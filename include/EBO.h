@@ -5,10 +5,21 @@
 #ifndef LIBTEST_EBO_H
 #define LIBTEST_EBO_H
 
+#include <glad/glad.h>
 
 class EBO
 {
+    GLuint ID;
+public:
+    EBO(GLuint *indices, const GLsizeiptr &size, const bool &isStatic = true);
 
+    void Bind();
+
+    void Unbind();
+
+    void Delete();
+
+    [[nodiscard]] GLuint getId() const;
 };
 
 
