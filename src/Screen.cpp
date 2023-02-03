@@ -159,7 +159,7 @@ void enpitsu::Screen::init()
         auto obj = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
         auto *pos = &(obj->cursorPos);
         glfwGetCursorPos(glfwWindow, &(pos->first), &(pos->second));
-        println(pos->first, ' ', pos->second);
+//        println(pos->first, ' ', pos->second);
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -170,7 +170,7 @@ void enpitsu::Screen::init()
 
     //load opengl
     gladLoadGL();
-    glClearColor(0.1f, 0.5f, 0.1f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void enpitsu::Screen::destroy()

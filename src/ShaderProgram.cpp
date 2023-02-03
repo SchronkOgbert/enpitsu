@@ -38,7 +38,7 @@ ShaderProgram::ShaderProgram(const char *vertexFile, const char *fragmentFile)
 void ShaderProgram::Create()
 {
     glUseProgram(ID);
-//    std::cout << "compiled shader " << ID << '\n';
+    println("compiled shader ", ID);
 }
 
 void ShaderProgram::Delete()

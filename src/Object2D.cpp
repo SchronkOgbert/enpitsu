@@ -42,9 +42,9 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
         print(point, ' ');
     }
     println('\n');
-    for(auto &indice : this->indices)
+    for(auto &index : this->indices)
     {
-        print(indice, ' ');
+        print(index, ' ');
     }
     println('\n');
     shaderProgram->Create();

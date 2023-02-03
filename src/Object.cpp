@@ -78,5 +78,5 @@ void enpitsu::Object::callMouseReleased(const enpitsu::MouseEvent &event)
 
 void enpitsu::Object::onDestroy()
 {
-    println("destroying ");
+    println("destroying ", this);
 }
