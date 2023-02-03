@@ -4,5 +4,10 @@
 
 #include "ControlObject.h"
 
-namespace enpitsu {
+namespace enpitsu
+{
+    void ControlObject::draw()
+    {
+
+    }
 } // enpitsu

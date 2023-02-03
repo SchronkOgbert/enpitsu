@@ -5,11 +5,21 @@
 #ifndef LIBTEST_CONTROLOBJECT_H
 #define LIBTEST_CONTROLOBJECT_H
 
-namespace enpitsu {
+#include "Object.h"
 
-class ControlObject {
+namespace enpitsu
+{
+    /**
+     * An object that doesn't draw on the screen, but ticks nonetheless
+     */
+    class ControlObject : public Object
+    {
+    public:
+        using Object::Object;
 
-};
+    protected:
+        void draw() final;
+    };
 
 } // enpitsu
 
