@@ -4,18 +4,19 @@
 
 #include "Object2D.h"
 #include "Screen.h"
-
-void enpitsu::Object2D::draw()
-{
-    shaderProgram->Create();
-    vao->Bind();
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
-}
+#include "Bell/Core.h"
+using bell::core::print;
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const bool &isStatic,
                             const std::vector<unsigned int> &drawOrder) : Object(screen)
 {
-    this->vertices = std::vector<GLfloat>(points.size() * 2U);
+    println("received ", points.size(), " points");
+    this->vertices.reserve(points.size() * 2U);
+    for(auto &point : points)
+    {
+        this->vertices.push_back(point.x);
+        this->vertices.push_back(point.y);
+    }
     if (drawOrder.empty())
     {
         this->indices = std::vector<GLuint>(this->vertices.size());
@@ -24,10 +25,29 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
             this->indices[i] = i;
         }
     }
+    else
+    {
+        this->indices = drawOrder;
+    }
+    vao = std::make_unique<VAO>(2);
+    println(vao->getId());
     vao->Bind();
-    vbo = std::make_unique<VBO>(&vertices[0U], static_cast<GLsizeiptr>(vertices.size()), isStatic);
-    ebo = std::make_unique<EBO>(&indices[0U], static_cast<GLsizeiptr >(indices.size()), isStatic);
-    shaderProgram = std::make_unique<ShaderProgram>("default.vert", "default.frag");
+    vbo = std::make_unique<VBO>(&vertices[0U], sizeof(&vertices[0]) * vertices.size(), isStatic);
+    println(sizeof(&vertices[0]) * vertices.size());
+    ebo = std::make_unique<EBO>(&indices[0U], sizeof(&indices[0]) * indices.size(), isStatic);
+    println(sizeof(&indices[0]) * indices.size());
+    shaderProgram = std::make_unique<ShaderProgram>("shaders/default.vert", "shaders/default.frag");
+    for(auto &point : this->vertices)
+    {
+        print(point, ' ');
+    }
+    println('\n');
+    for(auto &indice : this->indices)
+    {
+        print(indice, ' ');
+    }
+    println('\n');
+    shaderProgram->Create();
 }
 
 void enpitsu::Object2D::init()

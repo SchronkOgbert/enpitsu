@@ -47,8 +47,7 @@ namespace enpitsu
          */
         virtual void onDestroy();
 
-        virtual void draw()
-        {  };
+        virtual void draw() = 0;
     };
 }
 

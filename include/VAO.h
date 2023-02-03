@@ -11,8 +11,9 @@
 class VAO
 {
     GLuint ID;
+    GLint vertexSize;
 public:
-    VAO();
+    explicit VAO(const GLint &vertexSize);
 
     void LinkVBO(VBO vbo, const GLuint &layout);
 

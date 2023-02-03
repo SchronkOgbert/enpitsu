@@ -17,6 +17,7 @@ namespace enpitsu
 {
     class Object2D : public Object
     {
+    protected:
         std::vector<GLfloat > vertices;
         std::vector<GLuint > indices;
         std::unique_ptr<VAO> vao;
@@ -30,12 +31,11 @@ namespace enpitsu
                  const bool &isStatic = true,
                  const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 
-        virtual void init() override;
+        void init() override;
 
-        virtual void onDestroy() override;
+        void onDestroy() override;
 
     protected:
-        virtual void draw() override;
     };
 }
 
