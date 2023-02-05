@@ -296,3 +296,14 @@ void enpitsu::Screen::enableCursor(const bool &enable)
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
+const std::pair<int, int> &enpitsu::Screen::getSize() const
+{
+    return size;
+}
+
+void enpitsu::Screen::setSize(const std::pair<int, int> &size)
+{
+    this->size = size;
+    glfwSetWindowSize(window, size.first, size.second);
+}
+

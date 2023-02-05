@@ -143,6 +143,14 @@ namespace enpitsu
 
         void enableCursor(const bool &enable);
 
+        /**
+         * get the window size
+         * @return std::pair of <int, int>, first is width, second is height
+         */
+        [[nodiscard]] const std::pair<int, int> &getSize() const;
+
+        void setSize(const std::pair<int, int> &size);
+
     protected:
 
         //all the events below run sometime during the Screen::start function
