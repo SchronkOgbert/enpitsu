@@ -14,8 +14,8 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     this->vertices.reserve(points.size() * 2U);
     for(auto &point : points)
     {
-        this->vertices.push_back(point.x);
-        this->vertices.push_back(point.y);
+        this->vertices.push_back(static_cast<float>(point.x / screen->getSize().first) * 2 - 1.0F);
+        this->vertices.push_back(static_cast<float>(point.y / screen->getSize().second) * 2 - 1.0F);
     }
     if (drawOrder.empty())
     {
@@ -66,4 +66,22 @@ void enpitsu::Object2D::onDestroy()
     vbo->Delete();
     ebo->Delete();
     shaderProgram->Delete();
+}
+
+bool enpitsu::Object2D::isScaleToScreen() const
+{
+    return scaleToScreen;
+}
+
+void enpitsu::Object2D::setScaleToScreen(const bool &scaleToScreen)
+{
+    this->scaleToScreen = scaleToScreen;
+}
+
+void enpitsu::Object2D::draw()
+{
+    if(scaleToScreen)
+    {
+
+    }
 }

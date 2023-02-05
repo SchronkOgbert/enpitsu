@@ -24,6 +24,12 @@ namespace enpitsu
         std::unique_ptr<VBO> vbo;
         std::unique_ptr<EBO> ebo;
         std::unique_ptr<ShaderProgram> shaderProgram;
+        bool scaleToScreen = false;
+    public:
+        [[nodiscard]] bool isScaleToScreen() const;
+
+        void setScaleToScreen(const bool &scaleToScreen);
+
     public:
         using Object::Object;
 
@@ -34,6 +40,9 @@ namespace enpitsu
         void init() override;
 
         void onDestroy() override;
+
+    protected:
+        void draw() override;
 
     protected:
     };
