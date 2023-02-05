@@ -17,9 +17,9 @@ namespace enpitsu
     class Object
     {
         friend class Screen;
+        InputEvents* eventHandler{nullptr};
     protected:
         Screen* screen;
-        InputEvents* eventHandler{nullptr};
     public:
         explicit Object(Screen *screen);
 
