@@ -14,6 +14,7 @@ namespace enpitsu
     {
     public:
         using Object2D::Object2D;
+        Triangles(Screen* screen) = delete;
 
     protected:
         void draw() override;

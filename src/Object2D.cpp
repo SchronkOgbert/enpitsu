@@ -53,6 +53,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
 void enpitsu::Object2D::init()
 {
     Object::init();
+    if(!vao || !vbo || !ebo) throw BadGLObject();
     vao->LinkVBO(*vbo, 0U);
     vao->Unbind();
     vbo->Unbind();

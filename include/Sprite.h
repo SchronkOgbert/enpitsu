@@ -5,13 +5,13 @@
 #ifndef LIBTEST_SPRITE_H
 #define LIBTEST_SPRITE_H
 
-#include "Object.h"
+#include "Triangles.h"
 #include "Texture2D.h"
 
 namespace enpitsu
 {
 
-    class Sprite : public Object
+    class Sprite : public Triangles
     {
     protected:
         std::unique_ptr<Texture2D> textureObject;
@@ -21,6 +21,13 @@ namespace enpitsu
         [[nodiscard]] int getWidth() const;
 
         [[nodiscard]] int getHeight() const;
+
+    protected:
+    public:
+        void init() override;
+
+    protected:
+        void draw() override;
     };
 
 } // enpitsu

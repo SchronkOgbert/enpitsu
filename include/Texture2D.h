@@ -7,25 +7,42 @@
 
 #include "glad/glad.h"
 #include "memory"
+#include "ShaderProgram.h"
 
 
 namespace enpitsu
 {
     class Texture2D
     {
-        GLuint ID;
-        GLenum type;
-        int width;
-        int height;
-        int columnCount;
+        enum DisplayType
+        {
+            NEAREST,
+            LINEAR
+        }displayType;
+        GLuint ID{};
+        GLenum type{};
+        int width{};
+        int height{};
+        int columnCount{};
     public:
-        Texture2D(const char *textureFile);
+
+        explicit Texture2D(const char *textureFile);
 
         unsigned char *readTextureFile(const char *filename);
 
-        int getWidth() const;
+        [[nodiscard]] int getWidth() const;
 
-        int getHeight() const;
+        [[nodiscard]] int getHeight() const;
+
+        void changeDisplayType(const DisplayType &displayType);
+
+        void Bind() const;
+
+        void Unbind() const;
+
+//        void BuildUnit(ShaderProgram* shaderProgram, )
+
+        virtual ~Texture2D();
     };
 }
 

@@ -23,7 +23,7 @@ public:
 
     void Delete();
 
-    GLuint getId() const;
+    [[nodiscard]] GLuint getId() const;
 };
 
 

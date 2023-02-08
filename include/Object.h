@@ -10,9 +10,17 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "Exception.h"
 
 namespace enpitsu
 {
+    class BadGLObject : public Exception
+    {
+    public:
+        BadGLObject() : Exception("Either the vao, vbo or ebo could not be initialized")
+        {}
+    };
+
     class InputEvents;
     class Object
     {

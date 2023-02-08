@@ -17,7 +17,7 @@ namespace enpitsu
 {
     class Object2D : public Object
     {
-        Vector2 origin;
+        Vector2 origin{};
     protected:
 
         std::vector<GLfloat > vertices;
@@ -36,7 +36,7 @@ namespace enpitsu
         void setOrigin(const Vector2 &origin);
         using Object::Object;
 
-        Object2D(Screen *screen, const std::vector<Vector2> &points,
+        explicit Object2D(Screen *screen, const std::vector<Vector2> &points,
                  const bool &isStatic = true,
                  const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 
