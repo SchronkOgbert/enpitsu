@@ -17,7 +17,9 @@ namespace enpitsu
 {
     class Object2D : public Object
     {
+        Vector2 origin;
     protected:
+
         std::vector<GLfloat > vertices;
         std::vector<GLuint > indices;
         std::unique_ptr<VAO> vao;
@@ -27,10 +29,11 @@ namespace enpitsu
         bool scaleToScreen = false;
     public:
         [[nodiscard]] bool isScaleToScreen() const;
-
         void setScaleToScreen(const bool &scaleToScreen);
 
-    public:
+        [[nodiscard]] const Vector2 &getOrigin() const;
+
+        void setOrigin(const Vector2 &origin);
         using Object::Object;
 
         Object2D(Screen *screen, const std::vector<Vector2> &points,

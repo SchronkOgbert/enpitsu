@@ -85,3 +85,13 @@ void enpitsu::Object2D::draw()
 
     }
 }
+
+const enpitsu::Vector2 &enpitsu::Object2D::getOrigin() const
+{
+    return origin;
+}
+
+void enpitsu::Object2D::setOrigin(const enpitsu::Vector2 &origin)
+{
+    this->origin = origin;
+}
