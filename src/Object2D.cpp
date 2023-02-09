@@ -5,6 +5,7 @@
 #include "Object2D.h"
 #include "Screen.h"
 #include "Bell/Core.h"
+#include "SolidColor.h"
 using bell::core::print;
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const bool &isStatic,
@@ -32,31 +33,23 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     vao = std::make_unique<VAO>(2);
     println(vao->getId());
     vao->Bind();
-    vbo = std::make_unique<VBO>(&vertices[0U], sizeof(&vertices[0]) * vertices.size(), isStatic);
+    vertexPosition = std::make_unique<VBO>(&vertices[0U], sizeof(&vertices[0]) * vertices.size(), isStatic);
     println(sizeof(&vertices[0]) * vertices.size());
+    color = std::make_unique<VBO>(&colorValues[0], sizeof(float) * 4, isStatic);
     ebo = std::make_unique<EBO>(&indices[0U], sizeof(&indices[0]) * indices.size(), isStatic);
     println(sizeof(&indices[0]) * indices.size());
-    shaderProgram = std::make_unique<ShaderProgram>("shaders/default.vert", "shaders/default.frag");
-    for(auto &point : this->vertices)
-    {
-        print(point, ' ');
-    }
-    println('\n');
-    for(auto &index : this->indices)
-    {
-        print(index, ' ');
-    }
-    println('\n');
+    shaderProgram = std::unique_ptr<ShaderProgram>(new SolidColor(Vector4(0.8f, 0.3f, 0.02f, 1.0f)));
     shaderProgram->Create();
+    if(!vao || !vertexPosition || !ebo) throw BadGLObject();
+    vao->LinkVBO(*vertexPosition, 0U);
+    vao->LinkVBO(*color, 1U);
 }
 
 void enpitsu::Object2D::init()
 {
     Object::init();
-    if(!vao || !vbo || !ebo) throw BadGLObject();
-    vao->LinkVBO(*vbo, 0U);
     vao->Unbind();
-    vbo->Unbind();
+    vertexPosition->Unbind();
     ebo->Unbind();
 }
 
@@ -64,7 +57,7 @@ void enpitsu::Object2D::onDestroy()
 {
     Object::onDestroy();
     vao->Delete();
-    vbo->Delete();
+    vertexPosition->Delete();
     ebo->Delete();
     shaderProgram->Delete();
 }

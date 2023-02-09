@@ -22,8 +22,10 @@ namespace enpitsu
 
         std::vector<GLfloat > vertices;
         std::vector<GLuint > indices;
+        std::vector<GLfloat > colorValues{0.5f, 0.0f, 0.0f, 1.0f};
         std::unique_ptr<VAO> vao;
-        std::unique_ptr<VBO> vbo;
+        std::unique_ptr<VBO> vertexPosition;
+        std::unique_ptr<VBO> color;
         std::unique_ptr<EBO> ebo;
         std::unique_ptr<ShaderProgram> shaderProgram;
         bool scaleToScreen = false;

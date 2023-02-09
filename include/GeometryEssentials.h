@@ -39,6 +39,8 @@ namespace enpitsu
 
         Vector4(double x, double y, double z, double a) : x(x), y(y), z(z), a(a)
         {}
+
+        static float* toArray(const Vector4& obj);
     };
 }
 

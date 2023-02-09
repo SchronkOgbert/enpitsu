@@ -17,7 +17,7 @@ namespace enpitsu
     class BadGLObject : public Exception
     {
     public:
-        BadGLObject() : Exception("Either the vao, vbo or ebo could not be initialized")
+        BadGLObject() : Exception("Either the vao, vertexPosition or ebo could not be initialized")
         {}
     };
 
