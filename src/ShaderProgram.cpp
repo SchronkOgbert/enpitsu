@@ -40,9 +40,14 @@ namespace enpitsu
         delete[] fragmentData;
     }
 
-    void ShaderProgram::Create()
+    void ShaderProgram::Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices,
+                               const int &vertexSize,
+                               const bool &isStatic)
     {
-
+        setVao(new VAO(2));
+        getVao()->Bind();
+        setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(), isStatic));
+        setEbo(new EBO(&indices[0U], sizeof(&indices[0]) * indices.size(), isStatic));
         glLinkProgram(ID);
         hasCompiled(vertexShader);
         hasCompiled(fragmentShader);

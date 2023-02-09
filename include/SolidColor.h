@@ -13,11 +13,15 @@ namespace enpitsu
 
     class SolidColor : public ShaderProgram
     {
+    protected:
         Vector4 color;
+        std::vector<GLfloat > colorInfo;
+        std::unique_ptr<VBO> colorVertex;
     public:
         explicit SolidColor(const Vector4& rgbaColor);
 
-        void Create() override;
+        void Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, const int &vertexSize,
+                    const bool &isStatic) override;
     };
 
 } // enpitsu

@@ -7,9 +7,12 @@
 
 #include "defines.h"
 #include "Exception.h"
+#include "VAO.h"
+#include "EBO.h"
 
 #include <glad/glad.h>
-#include <experimental/string>
+#include <memory>
+#include <vector>
 
 namespace enpitsu
 {
@@ -44,6 +47,41 @@ namespace enpitsu
         GLuint vertexShader;
         GLuint fragmentShader;
 
+        //shader data
+        std::unique_ptr<VAO> vao;
+        std::unique_ptr<VBO> vertexPosition;
+        std::unique_ptr<EBO> ebo;
+    public:
+        [[nodiscard]] const std::unique_ptr<VAO> &getVao() const
+        {
+            return vao;
+        }
+
+        [[nodiscard]] const std::unique_ptr<VBO> &getVertexPosition() const
+        {
+            return vertexPosition;
+        }
+
+        [[nodiscard]] const std::unique_ptr<EBO> &getEbo() const
+        {
+            return ebo;
+        }
+
+        void setVao(VAO* vao)
+        {
+            this->vao = std::unique_ptr<VAO>(vao);
+        }
+
+        void setVertexPosition(VBO* vertexPosition)
+        {
+            this->vertexPosition = std::unique_ptr<VBO>(vertexPosition);
+        }
+
+        void setEbo(EBO* ebo)
+        {
+            ShaderProgram::ebo = std::unique_ptr<EBO>(ebo);
+        }
+
     private:
         static char *readShaderFile(const char *filename);
 
@@ -54,7 +92,9 @@ namespace enpitsu
     public:
         ShaderProgram(const char *vertexFile, const char *fragmentFile);
 
-        virtual void Create();
+        virtual void
+        Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, const int &vertexSize,
+               const bool &isStatic);
 
         virtual void Delete();
 

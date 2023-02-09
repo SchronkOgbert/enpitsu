@@ -18,11 +18,15 @@ namespace enpitsu
                                       static_cast<GLfloat >(textureObject->getWidth())),
                               Vector2(static_cast<GLfloat >(textureObject->getHeight()), 0)
                       },
+                      new SolidColor(Vector4(0.5f, 0.0f, 0.0f, 1.0f)),
                       true,
-                      {0, 1, 2, 0, 2, 3}
+                      {
+                              0, 1, 2, 0, 2, 3
+                      }
             )
     {
-        this->textureObject = std::unique_ptr<Texture2D>(textureObject);
+        this->
+                textureObject = std::unique_ptr<Texture2D>(textureObject);
         println("created sprite");
     }
 
@@ -47,4 +51,5 @@ namespace enpitsu
         Object2D::init();
         println("init sprite");
     }
+
 } // enpitsu

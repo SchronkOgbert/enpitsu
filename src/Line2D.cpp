@@ -6,7 +6,8 @@
 #include "Screen.h"
 
 enpitsu::Line2D::Line2D(enpitsu::Screen *screen, const std::vector<Vector2> &points, const bool &isStatic) :
-Object2D(screen, points, isStatic, {0, 1, 0})
+        Object2D(screen, points, new SolidColor(Vector4(0.5f, 0.0f, 0.0f, 1.0f)),
+                 isStatic, {0, 1, 0})
 {
     if(points.size() != 2)
     {
@@ -16,6 +17,6 @@ Object2D(screen, points, isStatic, {0, 1, 0})
 
 void enpitsu::Line2D::draw()
 {
-    vao->Bind();
+    shaderProgram->getVao()->Bind();
     glDrawArrays(GL_LINES, 0, 2);
 }

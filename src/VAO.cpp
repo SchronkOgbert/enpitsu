@@ -18,7 +18,7 @@ VAO::VAO(const GLint &vertexSize) : vertexSize(vertexSize)
 void VAO::LinkVBO(VBO vbo, const GLuint &layout)
 {
     vbo.Bind();
-    glVertexAttribPointer(layout, vertexSize, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(layout, layout == 0 ? vertexSize : 4, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(layout);
     vbo.Unbind();
 }
