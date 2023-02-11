@@ -9,7 +9,7 @@ using bell::core::println;
 
 namespace enpitsu
 {
-    Sprite::Sprite(enpitsu::Screen *screen, Texture2D *textureObject) :
+    Sprite::Sprite(enpitsu::Screen *screen, Texture2D *textureObject, const bool &isStatic, const Vector2 &origin) :
             Triangles(screen,
                       {
                               Vector2(0, 0),
@@ -18,8 +18,9 @@ namespace enpitsu
                                       static_cast<GLfloat >(textureObject->getWidth())),
                               Vector2(static_cast<GLfloat >(textureObject->getHeight()), 0)
                       },
-                      new SolidColor(Vector4(32.0f, 128.0f, 0.0f, 255)),
-                      true,
+                      origin,
+                      new SolidColor(Vector4(255, 255, 255, 255)),
+                      isStatic,
                       {
                               0, 1, 2, 0, 2, 3
                       }

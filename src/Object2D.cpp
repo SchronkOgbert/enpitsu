@@ -6,14 +6,18 @@
 #include "Screen.h"
 #include "Bell/Core.h"
 #include "SolidColor.h"
+#include "GeometryEssentials.h"
 
 using bell::core::print;
 
-enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, ShaderProgram *shader,
-                                     const bool &isStatic,
-                                     const std::vector<unsigned int> &drawOrder) : Object(screen)
+enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
+                            ShaderProgram *shader,
+                            const bool &isStatic, const std::vector<unsigned int> &drawOrder) :
+        Object(screen),
+        isStatic(isStatic),
+        origin(origin)
 {
-    if(!shader)
+    if (!shader)
     {
         throw BadShaderObject();
     }
@@ -21,8 +25,9 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     this->vertices.reserve(points.size() * 2U);
     for (auto &point: points)
     {
-        this->vertices.push_back(static_cast<float>(point.x / screen->getSize().first) * 2 - 1.0F);
-        this->vertices.push_back(static_cast<float>(point.y / screen->getSize().second) * 2 - 1.0F);
+        this->vertices.push_back(toGLCoord(origin.x + point.x, screen->getSize().first));
+        this->vertices.push_back(toGLCoord(origin.y + point.y,
+                                           screen->getSize().second));
     }
     if (drawOrder.empty())
     {
@@ -37,17 +42,18 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     }
     shaderProgram = std::unique_ptr<ShaderProgram>(shader);
     println(sizeof(&indices[0]) * indices.size());
+}
+
+void enpitsu::Object2D::init()
+{
+    Object::init();
+//    forceSetLocation(origin); // this also compiles the shader
     shaderProgram->Create(vertices, indices, 2, isStatic);
     if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
     {
         throw BadGLObject();
     }
     shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
-}
-
-void enpitsu::Object2D::init()
-{
-    Object::init();
     shaderProgram->getVao()->Unbind();
     shaderProgram->getVertexPosition()->Unbind();
     shaderProgram->getEbo()->Unbind();
@@ -88,4 +94,27 @@ const enpitsu::Vector2 &enpitsu::Object2D::getOrigin() const
 void enpitsu::Object2D::setOrigin(const enpitsu::Vector2 &origin)
 {
     this->origin = origin;
+}
+
+void enpitsu::Object2D::setLocation(const enpitsu::Vector2 &newLocation)
+{
+    if (isStatic) throw Exception("Cannot move static object");
+    forceSetLocation(newLocation);
+}
+
+void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) noexcept
+{
+    for (auto i = 0; i < vertices.size(); i += 2)
+    {
+        vertices[i] = toGLCoord(
+                fromGLCoord(vertices[i], screen->getSize().first) + newLocation.x,
+                screen->getSize().first
+        );
+        vertices[i + 1] = toGLCoord(
+                fromGLCoord(vertices[i + 1], screen->getSize().second) +
+                newLocation.y, // this is because y starts form the bottom in glfw
+                screen->getSize().second
+        );
+    }
+    shaderProgram->Create(vertices, indices, 2, isStatic);
 }

@@ -160,6 +160,7 @@ void enpitsu::Screen::init()
         auto *pos = &(obj->cursorPos);
         glfwGetCursorPos(glfwWindow, &(pos->first), &(pos->second));
 //        println(pos->first, ' ', pos->second);
+        pos->second = obj->getSize().second - pos->second;
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)

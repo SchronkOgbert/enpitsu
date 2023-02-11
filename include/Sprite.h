@@ -16,7 +16,7 @@ namespace enpitsu
     protected:
         std::unique_ptr<Texture2D> textureObject;
     public:
-        Sprite(Screen* screen, Texture2D* textureObject);
+        Sprite(enpitsu::Screen *screen, Texture2D *textureObject, const bool &isStatic, const Vector2 &origin);
 
         [[nodiscard]] int getWidth() const;
 
