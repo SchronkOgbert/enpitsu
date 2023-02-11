@@ -8,7 +8,7 @@
 namespace enpitsu
 {
     SolidColor::SolidColor(const Vector4 &rgbaColor) :
-    ShaderProgram("shaders/default.vert", "shaders/default.frag"), color(rgbaColor)
+            ShaderProgram("shaders/default.vert", "shaders/default.frag"), color(rgbaColor)
     {
 
     }
@@ -18,7 +18,7 @@ namespace enpitsu
                        const bool &isStatic)
     {
         colorInfo.resize(vertices.size() / vertexSize * 4);
-        for(auto i = 0; i < colorInfo.size(); i++)
+        for (auto i = 0; i < colorInfo.size(); i++)
         {
             colorInfo[i++] = static_cast<float>(color.x) / 255.0f;
             colorInfo[i++] = static_cast<float>(color.y) / 255.0f;
@@ -26,13 +26,14 @@ namespace enpitsu
             colorInfo[i] = static_cast<float>(color.a) / 255.0f;
         }
         std::cout << "size of color info: " << sizeof(GLfloat) * colorInfo.size() << '\n';
-        for(auto & vertex: colorInfo)
+        for (auto &vertex: colorInfo)
         {
             std::cout << "color vertex: " << vertex << '\n';
         }
         colorVertex = std::make_unique<VBO>(&colorInfo[0U],
-                                            sizeof(GLfloat) * colorInfo.size(), isStatic);
+                                            sizeof(GLfloat) * colorInfo.size(), VBO::objectLayout::RGBA,
+                                            isStatic);
         ShaderProgram::Create(vertices, indices, vertexSize, isStatic);
-        vao->LinkVBO(*colorVertex, 1U);
+        vao->LinkVBO(*colorVertex);
     }
 } // enpitsu

@@ -14,11 +14,11 @@ namespace enpitsu
         const auto *vertexData = readShaderFile(vertexFile);
         const auto *fragmentData = readShaderFile(fragmentFile);
 
-        if(strlen(vertexData) == 0)
+        if (strlen(vertexData) == 0)
         {
             throw BadShaderSource("Vertex shader source could not be loaded. Is the file path correct");
         }
-        if(strlen(fragmentData) == 0)
+        if (strlen(fragmentData) == 0)
         {
             throw BadShaderSource("Fragment shader source could not be loaded. Is the file path correct?");
         }
@@ -46,7 +46,9 @@ namespace enpitsu
     {
         setVao(new VAO(2));
         getVao()->Bind();
-        setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(), isStatic));
+        setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),
+                                  vertexSize == 2 ? VBO::objectLayout::VERTEX2D : VBO::objectLayout::VERTEX3D,
+                                  isStatic));
         setEbo(new EBO(&indices[0U], sizeof(&indices[0]) * indices.size(), isStatic));
         glLinkProgram(ID);
         hasCompiled(vertexShader);
@@ -55,7 +57,7 @@ namespace enpitsu
         {
             hasLinked();
         }
-        catch (BadShaderLink& e)
+        catch (BadShaderLink &e)
         {
             std::cerr << e.what();
         }
@@ -97,7 +99,7 @@ namespace enpitsu
         char shaderSource[1024];
         glGetShaderSource(shader, 1024, nullptr, shaderSource);
 //        println("Shader source:\n------------------\n", shaderSource, "\n-----------------");
-        if(!compiled)
+        if (!compiled)
         {
             char shaderInfo[1024];
             glGetShaderInfoLog(ID, 1024, nullptr, shaderInfo);
@@ -109,7 +111,7 @@ namespace enpitsu
     {
         int linked;
         glGetProgramiv(ID, GL_LINK_STATUS, &linked);
-        if(!linked)
+        if (!linked)
         {
             char programInfo[1024];
             glGetProgramInfoLog(ID, 1024, nullptr, programInfo);

@@ -15,7 +15,7 @@ class VAO
 public:
     explicit VAO(const GLint &vertexSize);
 
-    void LinkVBO(VBO vbo, const GLuint &layout);
+    void LinkVBO(VBO vbo);
 
     void Bind();
 

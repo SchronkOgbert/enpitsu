@@ -42,7 +42,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     {
         throw BadGLObject();
     }
-    shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition(), 0U);
+    shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
 }
 
 void enpitsu::Object2D::init()

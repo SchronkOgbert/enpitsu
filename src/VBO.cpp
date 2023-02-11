@@ -9,11 +9,13 @@ GLuint VBO::getId() const
     return ID;
 }
 
-VBO::VBO(GLfloat *vertices, const GLsizeiptr &size, const bool &isStatic)
+VBO::VBO(GLfloat *vertices, const GLsizeiptr &size, const VBO::objectLayout &layout, const bool &isStatic) :
+        layout(layout)
 {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
-    glBufferData(GL_ARRAY_BUFFER, size, vertices, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW); // NOLINT(clion-misra-cpp2008-5-0-4)
+    glBufferData(GL_ARRAY_BUFFER, size, vertices,
+                 isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW); // NOLINT(clion-misra-cpp2008-5-0-4)
 }
 
 void VBO::Bind() const
