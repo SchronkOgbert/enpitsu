@@ -20,10 +20,10 @@ namespace enpitsu
         colorInfo.resize(vertices.size() / vertexSize * 4);
         for(auto i = 0; i < colorInfo.size(); i++)
         {
-            colorInfo[i++] = static_cast<float>(color.x);
-            colorInfo[i++] = static_cast<float>(color.y);
-            colorInfo[i++] = static_cast<float>(color.z);
-            colorInfo[i] = static_cast<float>(color.a);
+            colorInfo[i++] = static_cast<float>(color.x) / 255.0f;
+            colorInfo[i++] = static_cast<float>(color.y) / 255.0f;
+            colorInfo[i++] = static_cast<float>(color.z) / 255.0f;
+            colorInfo[i] = static_cast<float>(color.a) / 255.0f;
         }
         std::cout << "size of color info: " << sizeof(GLfloat) * colorInfo.size() << '\n';
         for(auto & vertex: colorInfo)

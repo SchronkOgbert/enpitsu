@@ -18,7 +18,7 @@ namespace enpitsu
                                       static_cast<GLfloat >(textureObject->getWidth())),
                               Vector2(static_cast<GLfloat >(textureObject->getHeight()), 0)
                       },
-                      new SolidColor(Vector4(0.5f, 0.0f, 0.0f, 1.0f)),
+                      new SolidColor(Vector4(32.0f, 128.0f, 0.0f, 255)),
                       true,
                       {
                               0, 1, 2, 0, 2, 3

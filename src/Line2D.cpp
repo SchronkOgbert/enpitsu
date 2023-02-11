@@ -6,7 +6,7 @@
 #include "Screen.h"
 
 enpitsu::Line2D::Line2D(enpitsu::Screen *screen, const std::vector<Vector2> &points, const bool &isStatic) :
-        Object2D(screen, points, new SolidColor(Vector4(0.5f, 0.0f, 0.0f, 1.0f)),
+        Object2D(screen, points, new SolidColor(Vector4(128.0f, 0.0f, 0.0f, 255)),
                  isStatic, {0, 1, 0})
 {
     if(points.size() != 2)
