@@ -66,6 +66,7 @@ namespace enpitsu
         }
     };
 
+    class Object;
     class Screen
     {
         static bool exists;

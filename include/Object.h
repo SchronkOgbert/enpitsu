@@ -22,6 +22,7 @@ namespace enpitsu
     };
 
     class InputEvents;
+    class Screen;
     class Object
     {
         friend class Screen;
