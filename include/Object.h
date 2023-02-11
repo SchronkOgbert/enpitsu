@@ -7,17 +7,30 @@
 
 #include "defines.h"
 #include "InputEvents.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "Exception.h"
 
 namespace enpitsu
 {
+    class BadGLObject : public Exception
+    {
+    public:
+        BadGLObject() : Exception("Either the vao, vertexPosition or ebo could not be initialized")
+        {}
+    };
+
+    class InputEvents;
+    class Screen;
     class Object
     {
-        bool listensInputEvents{false};
-
+        friend class Screen;
+        InputEvents* eventHandler{nullptr};
     protected:
-        void* screen;
+        Screen* screen;
     public:
-        explicit Object(void* screen);
+        explicit Object(Screen *screen);
 
         void callTick(const float &delta);
 
@@ -27,7 +40,13 @@ namespace enpitsu
 
         void callKeyReleased(const KeyEvent &event);
 
+        void callMousePressed(const MouseEvent &event);
+
+        void callMouseReleased(const MouseEvent &event);
+
         virtual ~Object();
+
+        void destroy();
 
     protected:
         //events
@@ -35,7 +54,12 @@ namespace enpitsu
 
         virtual void init();
 
-        virtual void draw();
+        /**
+         * Specify what the object should do before getting destroyed
+         */
+        virtual void onDestroy();
+
+        virtual void draw() = 0;
     };
 }
 

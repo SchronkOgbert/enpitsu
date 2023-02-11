@@ -4,8 +4,19 @@
 
 #ifndef ENPITSU_INPUTEVENTS_H
 #define ENPITSU_INPUTEVENTS_H
+
+#include <utility>
+#include "Exception.h"
+
 namespace enpitsu
 {
+    class BadMouseInput : public Exception
+    {
+    public:
+        BadMouseInput() : Exception("Unrecognized mouse input")
+        {}
+    };
+
     struct MouseEvent
     {
         enum Event
@@ -14,13 +25,16 @@ namespace enpitsu
             LEFT_MOUSE_BUTTON,
             MIDDLE_MOUSE_BUTTON
         };
-        MouseEvent::Event event;
+        MouseEvent::Event button;
         float scrollValue;
+        std::pair<double, double> screenPos;
 
         MouseEvent() = default;
 
-        MouseEvent(const MouseEvent::Event &event, const float &scrollValue = 0) :
-                event(event),
+        MouseEvent(const MouseEvent::Event &button, const std::pair<double, double> &screenPos,
+                   const float &scrollValue = 0) :
+                button(button),
+                screenPos(screenPos),
                 scrollValue(scrollValue)
         {}
     };
@@ -81,7 +95,9 @@ namespace enpitsu
     class InputEvents
     {
     public:
-        virtual void OnMouseClick(const MouseEvent &event) = 0;
+        virtual void OnMousePressed(const MouseEvent &event) = 0;
+
+        virtual void OnMouseReleased(const MouseEvent &event) = 0;
 
         virtual void OnKeyPressed(const KeyEvent &event) = 0;
 

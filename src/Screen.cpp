@@ -1,16 +1,16 @@
-//
-// Created by weekendUM on 1/23/2023.
-//
 #include <tuple>
 #include <iostream>
 #include <chrono>
 #include "Screen.h"
+#include "Object.h"
 #include "InputEvents.h"
 
 bool enpitsu::Screen::exists = false;
 
+using enpitsu::Object;
+
 enpitsu::Screen::Screen
-        (const std::tuple<int, int> &size,
+        (const std::pair<int, int> &size,
          const bool &fullScreen
         )
 {
@@ -23,8 +23,7 @@ enpitsu::Screen::Screen
     this->fullScreen = fullScreen;
     this->window = nullptr;
     this->name = "Window";
-    this->objects = std::make_shared<std::vector<std::shared_ptr<Object>>>(std::vector<std::shared_ptr<Object>>());
-    this->objects->reserve(1000000);
+    this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -35,11 +34,16 @@ enpitsu::Screen::Screen
 
 enpitsu::Screen::~Screen()
 {
+    for (auto &obj: *objects)
+    {
+        obj->onDestroy();
+    }
     if (window)
     {
         glfwDestroyWindow(window);
     }
     glfwTerminate();
+    println("window destroyed");
 }
 
 void enpitsu::Screen::start()
@@ -48,8 +52,8 @@ void enpitsu::Screen::start()
 
     this->callInit(); //call this after the init actually runs the code and adds the objects
 
-    auto before = std::chrono::system_clock::now();
-    auto now = before;
+    before = std::chrono::system_clock::now();
+    now = before;
     std::chrono::duration<float> delta{};
     while (!shouldDestroy)
     {
@@ -74,6 +78,10 @@ void enpitsu::Screen::createGLFWWindow()
         throw BadWindow();
     }
     glfwMakeContextCurrent(window);
+    if (glfwRawMouseMotionSupported())
+    {
+        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+    }
 }
 
 void enpitsu::Screen::callTick(const float &delta)
@@ -84,12 +92,14 @@ void enpitsu::Screen::callTick(const float &delta)
     }
 }
 
-bool enpitsu::Screen::addObject(std::shared_ptr<Object> obj)
+Object *enpitsu::Screen::addObject(Object *obj)
 {
+    if (!obj) throw BadObjectAdd();
     std::cout << "Add object " << obj << " to screen\n";
-    objects->push_back(obj);
+    objects->emplace_back(obj);
+    obj->callInit();
     std::cout << "There are " << objects->size() << " objects after this operation\n";
-    return true;
+    return obj;
 }
 
 void enpitsu::Screen::setGLFWHints()
@@ -122,30 +132,45 @@ void enpitsu::Screen::init()
 
     glfwSetKeyCallback(window, [](GLFWwindow *windowRef, int key, int scancode, int action, int mods)
     {
-        static_cast<Screen*>(glfwGetWindowUserPointer(windowRef))->callKeyEvents(
+        static_cast<Screen *>(glfwGetWindowUserPointer(windowRef))->callKeyEvents(
                 key,
                 scancode,
                 action,
                 mods
-                );
+        );
     });
-    glfwSetWindowSizeCallback(window, [](GLFWwindow* glfwWindow, int width, int height)
+    glfwSetWindowSizeCallback(window, [](GLFWwindow *glfwWindow, int width, int height)
     {
-        std::cout << "window resize\n";
-        static_cast<Screen*>(glfwGetWindowUserPointer(glfwWindow))->size =
-                std::make_tuple(width, height);
+        auto* screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
+        screen->size = std::make_pair(width, height);
         glViewport(0, 0, width, height);
-        static_cast<Screen*>(glfwGetWindowUserPointer(glfwWindow))->tick(0.1f);
+        screen->now = std::chrono::system_clock::now();
+        std::chrono::duration<float> delta = screen->now - screen->before;
+        screen->tick(delta.count());
+        screen->before = screen->now;
+
     });
-    glfwSetErrorCallback([](int errorCode, const char* description)
+    glfwSetCursorPosCallback(window, [](GLFWwindow *glfwWindow, double xpos, double ypos)
     {
-        std::cerr << description;
-        exit(errorCode);
+        static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
     });
+    glfwSetMouseButtonCallback(window, [](GLFWwindow *glfwWindow, int button, int action, int mods)
+    {
+        auto obj = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
+        auto *pos = &(obj->cursorPos);
+        glfwGetCursorPos(glfwWindow, &(pos->first), &(pos->second));
+//        println(pos->first, ' ', pos->second);
+        obj->callMouseEvents(button, action, mods, obj->cursorPos);
+    });
+    glfwSetErrorCallback([](int errorCode, const char *description)
+                         {
+                             std::cerr << description;
+                             exit(errorCode);
+                         });
 
     //load opengl
     gladLoadGL();
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void enpitsu::Screen::destroy()
@@ -168,13 +193,18 @@ void enpitsu::Screen::callKeyEvents(const int &key,
                                     const int &mods)
 {
     KeyEvent event{};
-    if(key >=65 && key <= 90)
+    if (key >= 65 && key <= 90)
     {
         event = KeyEvent(KeyEvent::Event(key - 65));
-    }
-    else if(key < 10)
+    } else if (key < 10)
     {
         event = KeyEvent(KeyEvent::Event(key + 26));
+    } else
+    {
+        switch (key)
+        {
+
+        }
     }
     switch (action)
     {
@@ -197,7 +227,7 @@ void enpitsu::Screen::callKeyEvents(const int &key,
 
 void enpitsu::Screen::sendPress(KeyEvent event) const
 {
-    for(auto &obj : *objects)
+    for (auto &obj: *objects)
     {
         obj->callKeyPressed(event);
     }
@@ -205,7 +235,7 @@ void enpitsu::Screen::sendPress(KeyEvent event) const
 
 void enpitsu::Screen::sendRelease(const KeyEvent &event)
 {
-    for(auto &obj : *objects)
+    for (auto &obj: *objects)
     {
         obj->callKeyReleased(event);
     }
@@ -214,5 +244,66 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
 void enpitsu::Screen::updateScreenDefaults()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void enpitsu::Screen::removeObject(Object *obj)
+{
+    bool success = false;
+    objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
+                       {
+                           if (success) return false;
+                           success = obj == el.get();
+                           return obj == el.get();
+                       });
+    if (!success) throw BadObjectRemove(obj);
+}
+
+void enpitsu::Screen::callMouseEvents(const int &button, const int &action, const int &mods,
+                                      const std::pair<double, double> &pos)
+{
+    MouseEvent event{};
+    event.screenPos = pos;
+    switch (button)
+    {
+        case GLFW_MOUSE_BUTTON_LEFT:
+        {
+            event.button = MouseEvent::Event::LEFT_MOUSE_BUTTON;
+            break;
+        }
+        case GLFW_MOUSE_BUTTON_RIGHT:
+        {
+            event.button = MouseEvent::Event::RIGHT_MOUSE_BUTTON;
+            break;
+        }
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+        {
+            event.button = MouseEvent::Event::MIDDLE_MOUSE_BUTTON;
+            break;
+        }
+        default:
+        {
+            throw BadMouseInput();
+        }
+    }
+    for (auto &obj: *objects)
+    {
+        action ? obj->callMousePressed(event) : obj->callMouseReleased(event);
+    }
+}
+
+void enpitsu::Screen::enableCursor(const bool &enable)
+{
+    glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
+
+const std::pair<int, int> &enpitsu::Screen::getSize() const
+{
+    return size;
+}
+
+void enpitsu::Screen::setSize(const std::pair<int, int> &size)
+{
+    this->size = size;
+    glfwSetWindowSize(window, size.first, size.second);
 }
 

@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/23/2023.
-//
-
 #ifndef ENPITSU_SCREEN_H
 #define ENPITSU_SCREEN_H
 
@@ -12,10 +8,14 @@
 #include <GLFW/glfw3.h>
 #include "Exception.h"
 #include <string>
-#include "Object.h"
 #include "InputEvents.h"
 #include <memory>
 #include <mutex>
+#include <list>
+#include "Bell/Core.h"
+#include <chrono>
+
+using bell::core::println;
 
 namespace enpitsu
 {
@@ -49,28 +49,53 @@ namespace enpitsu
         {}
     };
 
+    class BadObjectAdd : public Exception
+    {
+    public:
+        BadObjectAdd() : Exception("The object you are trying to add is nullptr.")
+        {}
+    };
+
+    class BadObjectRemove : public Exception
+    {
+    public:
+        explicit BadObjectRemove(void* obj) : Exception("Could not remove object. "
+                                      "Are you sure you added it using Screen::addObject?")
+        {
+            std::cerr << "object " << obj << '\n';
+        }
+    };
+
+    class Object;
     class Screen
     {
         static bool exists;
 
+        friend class Object;
+
         //props
-        std::tuple<int, int> size;
+        std::pair<int, int> size;
         bool fullScreen;
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
+        std::pair<double, double> cursorPos;
 
         //control variables
+        std::chrono::time_point<std::chrono::system_clock> before;
+        std::chrono::time_point<std::chrono::system_clock> now;
 
         //references
-        std::shared_ptr<std::vector<std::shared_ptr<Object>>> objects;
+        std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
 
         //private events
         void sendPress(KeyEvent event) const;
 
-        void sendRelease(const KeyEvent & event);
+        void sendRelease(const KeyEvent &event);
 
         void updateScreenDefaults();
+
+        void removeObject(Object *obj);
 
     public:
         Screen() = delete;
@@ -78,14 +103,14 @@ namespace enpitsu
         // default constructor
         explicit Screen
                 (
-                        const std::tuple<int, int> &size,
+                        const std::pair<int, int> &size,
                         const bool &fullScreen = false
                 );
 
         //move constructor
         explicit Screen
                 (
-                        const std::tuple<int, int> &&size,
+                        const std::pair<int, int> &&size,
                         const bool &&fullScreen = false
                 ) : Screen(size, fullScreen)
         {}
@@ -93,7 +118,7 @@ namespace enpitsu
         //destructor
         virtual ~Screen();
 
-        bool addObject(std::shared_ptr<Object> obj);
+        Object* addObject(Object *obj);
 
         //events
         /**
@@ -111,6 +136,21 @@ namespace enpitsu
                            const int &scancode,
                            const int &action,
                            const int &mods);
+
+        void callMouseEvents(const int &button,
+                             const int &action,
+                             const int &mods,
+                             const std::pair<double, double> &pos);
+
+        void enableCursor(const bool &enable);
+
+        /**
+         * get the window size
+         * @return std::pair of <int, int>, first is width, second is height
+         */
+        [[nodiscard]] const std::pair<int, int> &getSize() const;
+
+        void setSize(const std::pair<int, int> &size);
 
     protected:
 
