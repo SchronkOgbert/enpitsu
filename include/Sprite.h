@@ -6,7 +6,7 @@
 #define LIBTEST_SPRITE_H
 
 #include "Triangles.h"
-#include "Texture2D.h"
+#include "Texture2DShader.h"
 
 namespace enpitsu
 {
@@ -14,9 +14,9 @@ namespace enpitsu
     class Sprite : public Triangles
     {
     protected:
-        std::unique_ptr<Texture2D> textureObject;
+        std::unique_ptr<Texture2DShader> textureObject;
     public:
-        Sprite(enpitsu::Screen *screen, Texture2D *textureObject, const bool &isStatic, const Vector2 &origin);
+        Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin);
 
         [[nodiscard]] int getWidth() const;
 

@@ -44,7 +44,7 @@ namespace enpitsu
                                const int &vertexSize,
                                const bool &isStatic)
     {
-        setVao(new VAO(2));
+        setVao(new VAO(vertexSize));
         getVao()->Bind();
         setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),
                                   vertexSize == 2 ? VBO::objectLayout::VERTEX2D : VBO::objectLayout::VERTEX3D,
@@ -53,14 +53,7 @@ namespace enpitsu
         glLinkProgram(ID);
         hasCompiled(vertexShader);
         hasCompiled(fragmentShader);
-        try
-        {
-            hasLinked();
-        }
-        catch (BadShaderLink &e)
-        {
-            std::cerr << e.what();
-        }
+        hasLinked();
         glUseProgram(ID);
     }
 

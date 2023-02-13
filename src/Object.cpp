@@ -46,7 +46,7 @@ void enpitsu::Object::callKeyReleased(const enpitsu::KeyEvent &event)
 
 enpitsu::Object::~Object()
 {
-    std::cout << "Object " << this << " destroyed\n";
+//    std::cout << "Object " << this << " destroyed\n";
 }
 
 enpitsu::Object::Object(Screen *screen)
@@ -78,5 +78,5 @@ void enpitsu::Object::callMouseReleased(const enpitsu::MouseEvent &event)
 
 void enpitsu::Object::onDestroy()
 {
-    println("destroying ", this);
+//    println("destroying ", this);
 }

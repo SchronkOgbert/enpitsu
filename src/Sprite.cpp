@@ -9,25 +9,25 @@ using bell::core::println;
 
 namespace enpitsu
 {
-    Sprite::Sprite(enpitsu::Screen *screen, Texture2D *textureObject, const bool &isStatic, const Vector2 &origin) :
+    Sprite::Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin) :
             Triangles(screen,
                       {
                               Vector2(0, 0),
-                              Vector2(0, static_cast<GLfloat >(textureObject->getWidth())),
-                              Vector2(static_cast<GLfloat >(textureObject->getHeight()),
-                                      static_cast<GLfloat >(textureObject->getWidth())),
-                              Vector2(static_cast<GLfloat >(textureObject->getHeight()), 0)
+                              Vector2(0, static_cast<GLfloat >(shader->getWidth())),
+                              Vector2(static_cast<GLfloat >(shader->getHeight()),
+                                      static_cast<GLfloat >(shader->getWidth())),
+                              Vector2(static_cast<GLfloat >(shader->getHeight()), 0)
                       },
                       origin,
-                      new SolidColor(Vector4(255, 255, 255, 255)),
+                      shader,
                       isStatic,
                       {
                               0, 1, 2, 0, 2, 3
                       }
             )
     {
-        this->
-                textureObject = std::unique_ptr<Texture2D>(textureObject);
+        this->textureObject = std::unique_ptr<Texture2DShader>(shader);
+        textureObject->Create(vertices, indices, 2, true);
         println("created sprite");
     }
 
@@ -44,6 +44,7 @@ namespace enpitsu
     void Sprite::draw()
     {
         Triangles::draw();
+        textureObject->Bind();
 //        println("drawing sprite");
     }
 
