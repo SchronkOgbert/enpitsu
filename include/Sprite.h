@@ -14,7 +14,7 @@ namespace enpitsu
     class Sprite : public Triangles
     {
     protected:
-        std::unique_ptr<Texture2DShader> textureObject;
+        Texture2DShader* textureObject;
     public:
         Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin);
 
@@ -25,6 +25,8 @@ namespace enpitsu
     protected:
     public:
         void init() override;
+
+        ~Sprite() override;
 
     protected:
         void draw() override;

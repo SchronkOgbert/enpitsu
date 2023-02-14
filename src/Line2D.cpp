@@ -17,6 +17,6 @@ enpitsu::Line2D::Line2D(enpitsu::Screen *screen, const std::vector<Vector2> &poi
 
 void enpitsu::Line2D::draw()
 {
-    shaderProgram->getVao()->Bind();
+    Object2D::draw();
     glDrawArrays(GL_LINES, 0, 2);
 }

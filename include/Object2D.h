@@ -52,6 +52,11 @@ namespace enpitsu
 
         void init() override;
 
+    protected:
+        void tick(const float &delta) override;
+
+    public:
+
         void onDestroy() override;
 
         void setLocation(const Vector2& newLocation);

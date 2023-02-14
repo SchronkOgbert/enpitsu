@@ -80,6 +80,7 @@ void enpitsu::Object2D::setScaleToScreen(const bool &scaleToScreen)
 
 void enpitsu::Object2D::draw()
 {
+    shaderProgram->Bind();
     if (scaleToScreen)
     {
 
@@ -117,4 +118,11 @@ void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) no
         );
     }
     shaderProgram->Create(vertices, indices, 2, isStatic);
+}
+
+void enpitsu::Object2D::tick(const float &delta)
+{
+    Object::tick(delta);
+    this->draw();
+    shaderProgram->Unbind();
 }

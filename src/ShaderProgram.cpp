@@ -111,4 +111,21 @@ namespace enpitsu
             throw BadShaderLink(programInfo);
         }
     }
+
+    void ShaderProgram::Bind()
+    {
+        vao->Bind();
+        glUseProgram(ID);
+    }
+
+    ShaderProgram::~ShaderProgram()
+    {
+        println("destroy shader");
+    }
+
+    void ShaderProgram::Unbind()
+    {
+        vao->Unbind();
+        glUseProgram(0);
+    }
 }

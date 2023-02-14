@@ -98,6 +98,12 @@ namespace enpitsu
 
         virtual void Delete();
 
+        virtual void Bind();
+
+        virtual void Unbind();
+
+        virtual ~ShaderProgram();
+
         [[nodiscard]] GLuint getId() const;
     };
 }

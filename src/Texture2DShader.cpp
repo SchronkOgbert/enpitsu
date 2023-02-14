@@ -25,7 +25,6 @@ namespace enpitsu
                                  const bool &isStatic)
     {
         ShaderProgram::Create(vertices, indices, vertexSize, isStatic);
-        textureObject->Bind();
         textureCoords = std::make_unique<VBO>(&coordData[0],
                                               sizeof(GLfloat) * coordData.size(),
                                               VBO::objectLayout::TEXTURE2D,
@@ -45,6 +44,7 @@ namespace enpitsu
 
     void Texture2DShader::Bind()
     {
+        ShaderProgram::Bind();
         textureObject->Bind();
     }
 } // enpitsu

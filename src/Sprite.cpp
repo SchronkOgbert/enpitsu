@@ -26,8 +26,7 @@ namespace enpitsu
                       }
             )
     {
-        this->textureObject = std::unique_ptr<Texture2DShader>(shader);
-        textureObject->Create(vertices, indices, 2, true);
+        textureObject = shader;
         println("created sprite");
     }
 
@@ -44,7 +43,6 @@ namespace enpitsu
     void Sprite::draw()
     {
         Triangles::draw();
-        textureObject->Bind();
 //        println("drawing sprite");
     }
 
@@ -52,6 +50,11 @@ namespace enpitsu
     {
         Object2D::init();
         println("init sprite");
+    }
+
+    Sprite::~Sprite()
+    {
+        println("destroying sprite");
     }
 
 } // enpitsu
