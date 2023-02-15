@@ -28,6 +28,8 @@ namespace enpitsu
 
         ~Sprite() override;
 
+        void resize() override;
+
     protected:
         void draw() override;
     };

@@ -20,3 +20,8 @@ void enpitsu::Line2D::draw()
     Object2D::draw();
     glDrawArrays(GL_LINES, 0, 2);
 }
+
+void enpitsu::Line2D::resize()
+{
+
+}

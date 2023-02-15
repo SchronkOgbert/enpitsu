@@ -92,16 +92,6 @@ void enpitsu::Screen::callTick(const float &delta)
     }
 }
 
-Object *enpitsu::Screen::addObject(Object *obj)
-{
-    if (!obj) throw BadObjectAdd();
-    std::cout << "Add object " << obj << " to screen\n";
-    objects->emplace_back(obj);
-    obj->callInit();
-    std::cout << "There are " << objects->size() << " objects after this operation\n";
-    return obj;
-}
-
 void enpitsu::Screen::setGLFWHints()
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOT_VERSION);

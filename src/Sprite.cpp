@@ -54,7 +54,12 @@ namespace enpitsu
 
     Sprite::~Sprite()
     {
-        println("destroying sprite");
+//        println("destroying sprite");
+    }
+
+    void Sprite::resize()
+    {
+
     }
 
 } // enpitsu

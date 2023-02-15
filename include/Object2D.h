@@ -61,6 +61,8 @@ namespace enpitsu
 
         void setLocation(const Vector2& newLocation);
 
+        virtual void resize() = 0;
+
     protected:
         void draw() override;
     };
