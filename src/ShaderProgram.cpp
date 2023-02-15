@@ -120,7 +120,7 @@ namespace enpitsu
 
     ShaderProgram::~ShaderProgram()
     {
-        println("destroy shader");
+//        println("destroy shader");
     }
 
     void ShaderProgram::Unbind()

@@ -172,6 +172,7 @@ void enpitsu::Screen::init()
     //load opengl
     gladLoadGL();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glEnable(GL_ALPHA_TEST);
 }
 
 void enpitsu::Screen::destroy()
@@ -197,9 +198,10 @@ void enpitsu::Screen::callKeyEvents(const int &key,
     if (key >= 65 && key <= 90)
     {
         event = KeyEvent(KeyEvent::Event(key - 65));
-    } else if (key < 10)
+    } else if (key < 58 && key > 47)
     {
-        event = KeyEvent(KeyEvent::Event(key + 26));
+        event = KeyEvent(KeyEvent::Event(key - 22));
+
     } else
     {
         switch (key)
