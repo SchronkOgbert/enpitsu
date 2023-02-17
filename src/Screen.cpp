@@ -43,7 +43,6 @@ enpitsu::Screen::~Screen()
         glfwDestroyWindow(window);
     }
     glfwTerminate();
-    println("window destroyed");
 }
 
 void enpitsu::Screen::start()
@@ -90,16 +89,6 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         obj->callTick(delta);
     }
-}
-
-Object *enpitsu::Screen::addObject(Object *obj)
-{
-    if (!obj) throw BadObjectAdd();
-    std::cout << "Add object " << obj << " to screen\n";
-    objects->emplace_back(obj);
-    obj->callInit();
-    std::cout << "There are " << objects->size() << " objects after this operation\n";
-    return obj;
 }
 
 void enpitsu::Screen::setGLFWHints()
@@ -160,6 +149,7 @@ void enpitsu::Screen::init()
         auto *pos = &(obj->cursorPos);
         glfwGetCursorPos(glfwWindow, &(pos->first), &(pos->second));
 //        println(pos->first, ' ', pos->second);
+        pos->second = obj->getSize().second - pos->second;
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -171,6 +161,7 @@ void enpitsu::Screen::init()
     //load opengl
     gladLoadGL();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glEnable(GL_ALPHA_TEST);
 }
 
 void enpitsu::Screen::destroy()
@@ -196,9 +187,10 @@ void enpitsu::Screen::callKeyEvents(const int &key,
     if (key >= 65 && key <= 90)
     {
         event = KeyEvent(KeyEvent::Event(key - 65));
-    } else if (key < 10)
+    } else if (key < 58 && key > 47)
     {
-        event = KeyEvent(KeyEvent::Event(key + 26));
+        event = KeyEvent(KeyEvent::Event(key - 22));
+
     } else
     {
         switch (key)

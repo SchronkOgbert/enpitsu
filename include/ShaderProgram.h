@@ -90,13 +90,19 @@ namespace enpitsu
         void hasLinked();
 
     public:
-        ShaderProgram(const char *vertexFile, const char *fragmentFile);
+        explicit ShaderProgram(const char *vertexFile = "default.vert", const char *fragmentFile = "default.frag");
 
         virtual void
         Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, const int &vertexSize,
                const bool &isStatic);
 
         virtual void Delete();
+
+        virtual void Bind();
+
+        virtual void Unbind();
+
+        virtual ~ShaderProgram();
 
         [[nodiscard]] GLuint getId() const;
     };

@@ -12,13 +12,20 @@
 #include <memory>
 #include <mutex>
 #include <list>
-#include "Bell/Core.h"
 #include <chrono>
-
-using bell::core::println;
+#include <cstddef>
+#include <concepts>
+#include <iostream>
 
 namespace enpitsu
 {
+    class Object;
+
+    template<class Object>
+    concept objectType = requires(Object t)
+    {
+        { t.callInit() };
+    };
 
     class BadInitException : public Exception
     {
@@ -65,8 +72,6 @@ namespace enpitsu
             std::cerr << "object " << obj << '\n';
         }
     };
-
-    class Object;
     class Screen
     {
         static bool exists;
@@ -118,7 +123,16 @@ namespace enpitsu
         //destructor
         virtual ~Screen();
 
-        Object* addObject(Object *obj);
+        template<objectType type>
+        type *addObject(type *obj)
+        {
+            if (!obj) throw BadObjectAdd();
+            std::cout << "Add object " << obj << " to screen\n";
+            objects->emplace_back(obj);
+            obj->callInit();
+            std::cout << "There are " << objects->size() << " objects after this operation\n";
+            return obj;
+        }
 
         //events
         /**

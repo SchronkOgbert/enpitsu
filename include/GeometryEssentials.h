@@ -42,6 +42,10 @@ namespace enpitsu
 
         static float* toArray(const Vector4& obj);
     };
+
+    float toGLCoord(const float &screenCoord, const float &maxDimension);
+
+    float fromGLCoord(const float& GLCoord, const float &maxDimension);
 }
 
 #endif //LIBTEST_GEOMETRYESSENTIALS_H

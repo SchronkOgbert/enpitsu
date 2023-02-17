@@ -20,6 +20,8 @@ namespace enpitsu
     public:
         Line2D(Screen *screen, const std::vector<Vector2> &points, const bool &isStatic = true);
 
+        void resize() override;
+
     protected:
         void draw() override;
     };

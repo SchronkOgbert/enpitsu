@@ -26,6 +26,9 @@ namespace enpitsu
     class Object2D : public Object
     {
         Vector2 origin{};
+        bool isStatic;
+
+        void forceSetLocation(const Vector2& newLocation) noexcept;
     protected:
 
         std::vector<GLfloat > vertices;
@@ -42,19 +45,26 @@ namespace enpitsu
         [[nodiscard]] const Vector2 &getOrigin() const;
         void setOrigin(const Vector2 &origin);
 
-        explicit Object2D(Screen *screen, const std::vector<Vector2> &points,
+        explicit Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
                           ShaderProgram *shader = new SolidColor(Vector4(0.8f, 0.3f, 0.02f, 1.0f)),
                           const bool &isStatic = true,
                           const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 
         void init() override;
 
+    protected:
+        void tick(const float &delta) override;
+
+    public:
+
         void onDestroy() override;
+
+        void setLocation(const Vector2& newLocation);
+
+        virtual void resize() = 0;
 
     protected:
         void draw() override;
-
-    protected:
     };
 }
 

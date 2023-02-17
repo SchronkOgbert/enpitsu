@@ -6,14 +6,11 @@
 
 #include "Texture2D.h"
 #include "stb_image.h"
-#include "Bell/Core.h"
-
-using bell::core::println;
 
 enpitsu::Texture2D::Texture2D(const char *textureFile)
 {
+    stbi_set_flip_vertically_on_load(true);
     auto textureData = readTextureFile(textureFile);
-
     glGenTextures(1, &ID);
     glActiveTexture(GL_TEXTURE0);
     Bind();
@@ -31,9 +28,7 @@ enpitsu::Texture2D::Texture2D(const char *textureFile)
                     textureData
             );
     glGenerateMipmap(GL_TEXTURE_2D);
-    Unbind();
     stbi_image_free(textureData);
-    println("loaded texture");
 }
 
 void enpitsu::Texture2D::Bind() const

@@ -9,7 +9,7 @@ namespace enpitsu
 {
     void Triangles::draw()
     {
-        shaderProgram->getVao()->Bind();
+        Object2D::draw();
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
 //        println("drawing");
     }

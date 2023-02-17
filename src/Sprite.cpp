@@ -3,31 +3,27 @@
 //
 
 #include "Sprite.h"
-#include "Bell/Core.h"
-
-using bell::core::println;
 
 namespace enpitsu
 {
-    Sprite::Sprite(enpitsu::Screen *screen, Texture2D *textureObject) :
+    Sprite::Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin) :
             Triangles(screen,
                       {
                               Vector2(0, 0),
-                              Vector2(0, static_cast<GLfloat >(textureObject->getWidth())),
-                              Vector2(static_cast<GLfloat >(textureObject->getHeight()),
-                                      static_cast<GLfloat >(textureObject->getWidth())),
-                              Vector2(static_cast<GLfloat >(textureObject->getHeight()), 0)
+                              Vector2(0, static_cast<GLfloat >(shader->getWidth())),
+                              Vector2(static_cast<GLfloat >(shader->getHeight()),
+                                      static_cast<GLfloat >(shader->getWidth())),
+                              Vector2(static_cast<GLfloat >(shader->getHeight()), 0)
                       },
-                      new SolidColor(Vector4(32.0f, 128.0f, 0.0f, 255)),
-                      true,
+                      origin,
+                      shader,
+                      isStatic,
                       {
                               0, 1, 2, 0, 2, 3
                       }
             )
     {
-        this->
-                textureObject = std::unique_ptr<Texture2D>(textureObject);
-        println("created sprite");
+        textureObject = shader;
     }
 
     int Sprite::getWidth() const
@@ -49,7 +45,16 @@ namespace enpitsu
     void Sprite::init()
     {
         Object2D::init();
-        println("init sprite");
+    }
+
+    Sprite::~Sprite()
+    {
+//        println("destroying sprite");
+    }
+
+    void Sprite::resize()
+    {
+
     }
 
 } // enpitsu

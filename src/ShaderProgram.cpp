@@ -2,9 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include "cstring"
-#include "Bell/Core.h"
-
-using bell::core::println;
 
 namespace enpitsu
 {
@@ -44,7 +41,7 @@ namespace enpitsu
                                const int &vertexSize,
                                const bool &isStatic)
     {
-        setVao(new VAO(2));
+        setVao(new VAO(vertexSize));
         getVao()->Bind();
         setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),
                                   vertexSize == 2 ? VBO::objectLayout::VERTEX2D : VBO::objectLayout::VERTEX3D,
@@ -53,14 +50,7 @@ namespace enpitsu
         glLinkProgram(ID);
         hasCompiled(vertexShader);
         hasCompiled(fragmentShader);
-        try
-        {
-            hasLinked();
-        }
-        catch (BadShaderLink &e)
-        {
-            std::cerr << e.what();
-        }
+        hasLinked();
         glUseProgram(ID);
     }
 
@@ -117,5 +107,22 @@ namespace enpitsu
             glGetProgramInfoLog(ID, 1024, nullptr, programInfo);
             throw BadShaderLink(programInfo);
         }
+    }
+
+    void ShaderProgram::Bind()
+    {
+        vao->Bind();
+        glUseProgram(ID);
+    }
+
+    ShaderProgram::~ShaderProgram()
+    {
+//        println("destroy shader");
+    }
+
+    void ShaderProgram::Unbind()
+    {
+        vao->Unbind();
+        glUseProgram(0);
     }
 }

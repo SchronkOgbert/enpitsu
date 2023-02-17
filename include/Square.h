@@ -18,7 +18,7 @@ namespace enpitsu
          * @param screen the screen that made it
          * @param size the length of the lines in pixels
          */
-        explicit Square(Screen* screen, const double& size = 128);
+        Square(enpitsu::Screen *screen, const double &size, const Vector2 &origin);
     };
 
 } // enpitsu
