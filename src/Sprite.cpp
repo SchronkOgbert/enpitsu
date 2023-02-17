@@ -3,9 +3,6 @@
 //
 
 #include "Sprite.h"
-#include "Bell/Core.h"
-
-using bell::core::println;
 
 namespace enpitsu
 {
@@ -27,7 +24,6 @@ namespace enpitsu
             )
     {
         textureObject = shader;
-        println("created sprite");
     }
 
     int Sprite::getWidth() const
@@ -49,7 +45,6 @@ namespace enpitsu
     void Sprite::init()
     {
         Object2D::init();
-        println("init sprite");
     }
 
     Sprite::~Sprite()

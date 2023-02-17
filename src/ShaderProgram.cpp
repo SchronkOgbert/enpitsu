@@ -2,9 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include "cstring"
-#include "Bell/Core.h"
-
-using bell::core::println;
 
 namespace enpitsu
 {

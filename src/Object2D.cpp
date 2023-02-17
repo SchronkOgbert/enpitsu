@@ -4,11 +4,8 @@
 
 #include "Object2D.h"
 #include "Screen.h"
-#include "Bell/Core.h"
 #include "SolidColor.h"
 #include "GeometryEssentials.h"
-
-using bell::core::print;
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
                             ShaderProgram *shader,
@@ -21,7 +18,6 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     {
         throw BadShaderObject();
     }
-    println("received ", points.size(), " points");
     this->vertices.reserve(points.size() * 2U);
     for (auto &point: points)
     {
@@ -41,7 +37,6 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
         this->indices = drawOrder;
     }
     shaderProgram = std::unique_ptr<ShaderProgram>(shader);
-    println(sizeof(&indices[0]) * indices.size());
 }
 
 void enpitsu::Object2D::init()

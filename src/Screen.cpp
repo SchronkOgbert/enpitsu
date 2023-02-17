@@ -43,7 +43,6 @@ enpitsu::Screen::~Screen()
         glfwDestroyWindow(window);
     }
     glfwTerminate();
-    println("window destroyed");
 }
 
 void enpitsu::Screen::start()

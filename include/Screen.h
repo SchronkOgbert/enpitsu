@@ -12,12 +12,10 @@
 #include <memory>
 #include <mutex>
 #include <list>
-#include "Bell/Core.h"
 #include <chrono>
 #include <cstddef>
 #include <concepts>
-
-using bell::core::println;
+#include <iostream>
 
 namespace enpitsu
 {

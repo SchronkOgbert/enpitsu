@@ -3,9 +3,6 @@
 //
 
 #include "Texture2DShader.h"
-#include "Bell/Core.h"
-
-using bell::core::println;
 
 namespace enpitsu
 {
@@ -34,11 +31,9 @@ namespace enpitsu
         glUniform1f(textureScale, 1.0F);
         GLfloat scale;
         glGetUniformfv(ID, glGetUniformLocation(ID, "scale"), &scale);
-        println("\nTexture scale:\n", scale);
         glUniform1i(glGetUniformLocation(ID, "textureObject"), 0);
         GLint texObj;
         glGetUniformiv(ID, glGetUniformLocation(ID, "textureObject"), &texObj);
-        println("Texture object: ", texObj);
         textureCoords->Unbind();
     }
 
