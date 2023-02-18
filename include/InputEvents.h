@@ -95,6 +95,10 @@ namespace enpitsu
     class InputEvents
     {
     public:
+        InputEvents() = default;
+        InputEvents(const InputEvents&) = delete;
+        InputEvents(const InputEvents&&) = delete;
+
         virtual void OnMousePressed(const MouseEvent &event) = 0;
 
         virtual void OnMouseReleased(const MouseEvent &event) = 0;
