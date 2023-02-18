@@ -7,6 +7,7 @@
 
 #include <utility>
 #include "Exception.h"
+#include "GeometryEssentials.h"
 
 namespace enpitsu
 {
@@ -27,11 +28,11 @@ namespace enpitsu
         };
         MouseEvent::Event button;
         float scrollValue;
-        std::pair<double, double> screenPos;
+        Vector2 screenPos;
 
         MouseEvent() = default;
 
-        MouseEvent(const MouseEvent::Event &button, const std::pair<double, double> &screenPos,
+        MouseEvent(const MouseEvent::Event &button, const Vector2 &screenPos,
                    const float &scrollValue = 0) :
                 button(button),
                 screenPos(screenPos),

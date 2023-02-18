@@ -4,23 +4,22 @@
 #include "Screen.h"
 #include "Object.h"
 #include "InputEvents.h"
+#include "Camera3D.h"
 
 bool enpitsu::Screen::exists = false;
 
 using enpitsu::Object;
 
 enpitsu::Screen::Screen
-        (const std::pair<int, int> &size,
+        (const Vector2 &size,
          const bool &fullScreen
-        )
+        ) : size(size), fullScreen(fullScreen)
 {
     if (exists)
     {
         throw BadProcessCreation();
     }
     exists = true;
-    this->size = size;
-    this->fullScreen = fullScreen;
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
@@ -66,8 +65,8 @@ void enpitsu::Screen::start()
 void enpitsu::Screen::createGLFWWindow()
 {
     window = glfwCreateWindow(
-            std::get<0>(size),
-            std::get<1>(size),
+            static_cast<int>(size.x),
+            static_cast<int>(size.y),
             name.c_str(),
             nullptr,
             nullptr
@@ -131,7 +130,7 @@ void enpitsu::Screen::init()
     glfwSetWindowSizeCallback(window, [](GLFWwindow *glfwWindow, int width, int height)
     {
         auto* screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
-        screen->size = std::make_pair(width, height);
+        screen->size = Vector2(width, height);
         glViewport(0, 0, width, height);
         screen->now = std::chrono::system_clock::now();
         std::chrono::duration<float> delta = screen->now - screen->before;
@@ -147,9 +146,9 @@ void enpitsu::Screen::init()
     {
         auto obj = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
         auto *pos = &(obj->cursorPos);
-        glfwGetCursorPos(glfwWindow, &(pos->first), &(pos->second));
+        glfwGetCursorPos(glfwWindow, &(pos->x), &(pos->y));
 //        println(pos->first, ' ', pos->second);
-        pos->second = obj->getSize().second - pos->second;
+        pos->y = obj->getSize().y - pos->y;
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -251,7 +250,7 @@ void enpitsu::Screen::removeObject(Object *obj)
 }
 
 void enpitsu::Screen::callMouseEvents(const int &button, const int &action, const int &mods,
-                                      const std::pair<double, double> &pos)
+                                      const Vector2 &pos)
 {
     MouseEvent event{};
     event.screenPos = pos;
@@ -288,14 +287,22 @@ void enpitsu::Screen::enableCursor(const bool &enable)
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
-const std::pair<int, int> &enpitsu::Screen::getSize() const
+const enpitsu::Vector2 & enpitsu::Screen::getSize() const
 {
     return size;
 }
 
-void enpitsu::Screen::setSize(const std::pair<int, int> &size)
+void enpitsu::Screen::setSize(const Vector2 &size)
 {
     this->size = size;
-    glfwSetWindowSize(window, size.first, size.second);
+    glfwSetWindowSize(window, size.x, size.y);
+}
+
+enpitsu::Screen::Screen(const enpitsu::Vector2 &size, Camera3D *camera, const bool &fullscreen)
+{
+    this->size = size;
+    if(camera == nullptr) throw BadWindow();
+    this->camera = camera;
+    this->fullScreen = fullscreen;
 }
 
