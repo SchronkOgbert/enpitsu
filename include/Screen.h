@@ -7,8 +7,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Exception.h"
-#include <string>
+#include "GeometryEssentials.h"
 #include "InputEvents.h"
+#include <string>
 #include <memory>
 #include <mutex>
 #include <list>
@@ -21,8 +22,11 @@ namespace enpitsu
 {
     class Object;
 
+    class Camera3D;
+
     template<class Object>
-    concept objectType = requires(Object t)
+    concept objectType =
+    requires(Object t)
     {
         { t.callInit() };
     };
@@ -66,25 +70,29 @@ namespace enpitsu
     class BadObjectRemove : public Exception
     {
     public:
-        explicit BadObjectRemove(void* obj) : Exception("Could not remove object. "
-                                      "Are you sure you added it using Screen::addObject?")
+        explicit BadObjectRemove(void *obj) : Exception("Could not remove object. "
+                                                        "Are you sure you added it using Screen::addObject?")
         {
             std::cerr << "object " << obj << '\n';
         }
     };
+
     class Screen
     {
         static bool exists;
 
         friend class Object;
 
+        friend class Camera3D;
+
         //props
-        std::pair<int, int> size;
+        Vector2 size; // TODO change this to Vector2
         bool fullScreen;
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
-        std::pair<double, double> cursorPos;
+        Vector2 cursorPos;
+        Camera3D *camera{nullptr};
 
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
@@ -108,16 +116,31 @@ namespace enpitsu
         // default constructor
         explicit Screen
                 (
-                        const std::pair<int, int> &size,
+                        const Vector2 &size,
                         const bool &fullScreen = false
                 );
 
         //move constructor
         explicit Screen
                 (
-                        const std::pair<int, int> &&size,
+                        const Vector2 &&size, // TODO change this to Vector2
                         const bool &&fullScreen = false
                 ) : Screen(size, fullScreen)
+        {}
+
+        explicit Screen
+                (
+                        const Vector2 &size,
+                        Camera3D *camera,
+                        const bool &fullscreen = false
+                );
+
+        explicit Screen
+                (
+                        const Vector2 &&size,
+                        Camera3D *camera,
+                        const bool &&fullscreen = false
+                ) : Screen(size, camera, fullscreen)
         {}
 
         //destructor
@@ -154,7 +177,7 @@ namespace enpitsu
         void callMouseEvents(const int &button,
                              const int &action,
                              const int &mods,
-                             const std::pair<double, double> &pos);
+                             const Vector2 &pos);
 
         void enableCursor(const bool &enable);
 
@@ -162,9 +185,9 @@ namespace enpitsu
          * get the window size
          * @return std::pair of <int, int>, first is width, second is height
          */
-        [[nodiscard]] const std::pair<int, int> &getSize() const;
+        [[nodiscard]] const Vector2 & getSize() const;
 
-        void setSize(const std::pair<int, int> &size);
+        void setSize(const Vector2 &size);
 
     protected:
 
