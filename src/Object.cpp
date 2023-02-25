@@ -25,7 +25,7 @@ void enpitsu::Object::callInit()
 void enpitsu::Object::init()
 {
     eventHandler = dynamic_cast<InputEvents *>(this);
-    std::cout << "Accept events: " << (eventHandler != nullptr) << '\n';
+    PLOGD << "Accept events: " << (eventHandler != nullptr);
 }
 
 void enpitsu::Object::callKeyPressed(const enpitsu::KeyEvent &event)

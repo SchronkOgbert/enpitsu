@@ -23,7 +23,7 @@ namespace enpitsu
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         ID = glCreateProgram();
-        std::cout << "compiling shader " << ID << "(" << vertexFile << ")\n";
+        PLOGD << "compiling shader " << ID << "(" << vertexFile << ")";
 
         glShaderSource(vertexShader, 1, &vertexData, nullptr);
         glShaderSource(fragmentShader, 1, &fragmentData, nullptr);

@@ -9,6 +9,10 @@
 
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
+#include "plog/Log.h"
+#include "plog/Initializers/ConsoleInitializer.h"
+#include "plog/Appenders/ColorConsoleAppender.h"
+#include "plog/Formatters/TxtFormatter.h"
 
 #ifdef _MSC_VER
 #define strdup _strdup

@@ -29,6 +29,8 @@ enpitsu::Screen::Screen
         glfwTerminate();
         throw BadInitException();
     }
+    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::verbose, &consoleAppender);
 }
 
 enpitsu::Screen::~Screen()
