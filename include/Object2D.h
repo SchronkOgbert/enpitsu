@@ -5,14 +5,14 @@
 #ifndef LIBTEST_OBJECT2D_H
 #define LIBTEST_OBJECT2D_H
 
+#include "defines.h"
+
 #include "Object.h"
 #include "GeometryEssentials.h"
 #include "VAO.h"
 #include "EBO.h"
 #include "SolidColor.h"
 #include "Exception.h"
-#include <memory>
-#include <vector>
 
 namespace enpitsu
 {

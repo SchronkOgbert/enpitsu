@@ -5,8 +5,7 @@
 #ifndef LIBTEST_GEOMETRYESSENTIALS_H
 #define LIBTEST_GEOMETRYESSENTIALS_H
 
-#include "glm/glm.hpp"
-#include "ostream"
+#include "defines.h"
 
 namespace enpitsu
 {
@@ -187,6 +186,8 @@ namespace enpitsu
     float toGLCoord(const float &screenCoord, const float &maxDimension);
 
     float fromGLCoord(const float& GLCoord, const float &maxDimension);
+
+    glm::vec3 toGLMVec3(const Vector3 &obj);
 }
 
 #endif //LIBTEST_GEOMETRYESSENTIALS_H

@@ -5,13 +5,19 @@
 #ifndef LIBTEST_TEXTURE2D_H
 #define LIBTEST_TEXTURE2D_H
 
-#include "glad/glad.h"
-#include "memory"
+#include "defines.h"
 #include "ShaderProgram.h"
-
+#include "Exception.h"
 
 namespace enpitsu
 {
+    class BadTextureException : public Exception
+    {
+    public:
+        BadTextureException() : Exception("Texture could not be loaded")
+        {}
+    };
+
     class Texture2D
     {
         enum DisplayType

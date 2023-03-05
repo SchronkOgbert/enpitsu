@@ -5,7 +5,7 @@
 #ifndef LIBTEST_EBO_H
 #define LIBTEST_EBO_H
 
-#include <glad/glad.h>
+#include "defines.h"
 
 class EBO
 {

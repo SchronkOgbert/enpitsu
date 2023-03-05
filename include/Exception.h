@@ -5,8 +5,7 @@
 #ifndef ENPITSU_EXCEPTION_H
 #define ENPITSU_EXCEPTION_H
 
-#include <exception>
-#include <string>
+#include "defines.h"
 
 namespace enpitsu
 {

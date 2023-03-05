@@ -7,7 +7,7 @@
 namespace enpitsu
 {
     enpitsu::Texture2DShader::Texture2DShader(Texture2D *textureObject) :
-            ShaderProgram("shaders/texture.vert", "shaders/texture.frag")
+            ShaderProgram("texture.vert", "texture.frag")
     {
         this->textureObject = std::unique_ptr<Texture2D>(textureObject);
     }

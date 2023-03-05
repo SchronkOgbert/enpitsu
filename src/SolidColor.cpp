@@ -8,7 +8,7 @@
 namespace enpitsu
 {
     SolidColor::SolidColor(const Vector4 &rgbaColor) :
-            ShaderProgram("shaders/default.vert", "shaders/default.frag"), color(rgbaColor)
+            ShaderProgram("default.vert", "default.frag"), color(rgbaColor)
     {
 
     }

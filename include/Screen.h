@@ -1,22 +1,11 @@
 #ifndef ENPITSU_SCREEN_H
 #define ENPITSU_SCREEN_H
 
-#include "defines.h"
+#include "defines.h" // this contains pretty much every import the project needs from std and 3rd party libraries
 
-#include <functional>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "Exception.h"
 #include "GeometryEssentials.h"
 #include "InputEvents.h"
-#include <string>
-#include <memory>
-#include <mutex>
-#include <list>
-#include <chrono>
-#include <cstddef>
-#include <concepts>
-#include <iostream>
 
 namespace enpitsu
 {
@@ -86,13 +75,13 @@ namespace enpitsu
         friend class Camera3D;
 
         //props
-        Vector2 size; // TODO change this to Vector2
+        Vector2 size;
         bool fullScreen;
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
         Vector2 cursorPos;
-        Camera3D *camera{nullptr};
+        std::unique_ptr<Camera3D> camera;
 
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
@@ -109,6 +98,8 @@ namespace enpitsu
         void updateScreenDefaults();
 
         void removeObject(Object *obj);
+
+
 
     public:
         Screen() = delete;
@@ -128,21 +119,6 @@ namespace enpitsu
                 ) : Screen(size, fullScreen)
         {}
 
-        explicit Screen
-                (
-                        const Vector2 &size,
-                        Camera3D *camera,
-                        const bool &fullscreen = false
-                );
-
-        explicit Screen
-                (
-                        const Vector2 &&size,
-                        Camera3D *camera,
-                        const bool &&fullscreen = false
-                ) : Screen(size, camera, fullscreen)
-        {}
-
         //destructor
         virtual ~Screen();
 
@@ -150,10 +126,10 @@ namespace enpitsu
         type *addObject(type *obj)
         {
             if (!obj) throw BadObjectAdd();
-            std::cout << "Add object " << obj << " to screen\n";
+            PLOGD << "Add object " << obj << " to screen";
             objects->emplace_back(obj);
             obj->callInit();
-            std::cout << "There are " << objects->size() << " objects after this operation\n";
+            PLOGD << "There are " << objects->size() << " objects after this operation";
             return obj;
         }
 
@@ -181,6 +157,8 @@ namespace enpitsu
 
         void enableCursor(const bool &enable);
 
+        void showCursor(const bool &show);
+
         /**
          * get the window size
          * @return std::pair of <int, int>, first is width, second is height
@@ -188,6 +166,10 @@ namespace enpitsu
         [[nodiscard]] const Vector2 & getSize() const;
 
         void setSize(const Vector2 &size);
+
+        [[nodiscard]] const Camera3D* getCamera3D() const;
+
+        void setCamera3D(Camera3D* camera3D);
 
     protected:
 

@@ -1,15 +1,19 @@
 #include "ShaderProgram.h"
-#include <fstream>
-#include <iostream>
-#include "cstring"
+#include "defines.h"
+#include "ShaderSources.h"
 
 namespace enpitsu
 {
-
     ShaderProgram::ShaderProgram(const char *vertexFile, const char *fragmentFile)
     {
-        const auto *vertexData = readShaderFile(vertexFile);
-        const auto *fragmentData = readShaderFile(fragmentFile);
+        const bool defaultVertex = defaultShaderSources->count(std::string(vertexFile));
+        const bool defaultFrag = defaultShaderSources->count(std::string(fragmentFile));
+        const char *vertexData = defaultVertex ?
+                                 (*defaultShaderSources)[std::string(vertexFile)] :
+                                 readShaderFile(vertexFile);
+        const char *fragmentData = defaultFrag ?
+                                   (*defaultShaderSources)[std::string(fragmentFile)] :
+                                   readShaderFile(fragmentFile);
 
         if (strlen(vertexData) == 0)
         {
@@ -33,8 +37,14 @@ namespace enpitsu
         glAttachShader(ID, vertexShader);
         glAttachShader(ID, fragmentShader);
 
-        delete[] vertexData;
-        delete[] fragmentData;
+        if(!defaultVertex)
+        {
+            delete[] vertexData;
+        }
+        if(!defaultFrag)
+        {
+            delete[] fragmentData;
+        }
     }
 
     void ShaderProgram::Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices,
@@ -63,6 +73,7 @@ namespace enpitsu
 
     char *ShaderProgram::readShaderFile(const char *filename)
     {
+        PLOGD << "reading shader file " << filename;
         // TODO: replace this with something that runs in a reasonable amount of time
         std::ifstream fin(filename);
         std::string buffer;

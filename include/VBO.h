@@ -5,7 +5,7 @@
 #ifndef LIBTEST_VBO_H
 #define LIBTEST_VBO_H
 
-#include "glad/glad.h"
+#include "defines.h"
 
 class VBO
 {

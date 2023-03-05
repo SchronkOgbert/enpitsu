@@ -1,0 +1,59 @@
+#ifndef LIBTEST_SHADERSOURCES_H
+#define LIBTEST_SHADERSOURCES_H
+
+#include "defines.h"
+
+namespace enpitsu
+{
+    static std::unique_ptr<std::map<std::string, const char*>> defaultShaderSources(
+            new std::map<std::string, const char*>{
+                    {"default.vert", "#version 450\n"
+                                     "\n"
+                                     "layout (location = 0) in vec3 vertexPosition;\n"
+                                     "layout (location = 2) in vec4 inColor;\n"
+                                     "\n"
+                                     "out vec4 color;\n"
+                                     "\n"
+                                     "void main()\n"
+                                     "{\n"
+                                     "    gl_Position = vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1.0);\n"
+                                     "    color = inColor;\n"
+                                     "}"},
+                    {"default.frag", "#version 450\n"
+                                     "\n"
+                                     "in vec4 color;\n"
+                                     "out vec4 FragColor;\n"
+                                     "void main()\n"
+                                     "{\n"
+                                     "    FragColor = color;\n"
+                                     "}"},
+                    {"texture.vert", "#version 450\n"
+                                     "\n"
+                                     "layout (location = 0) in vec2 vertexPosition;\n"
+                                     "layout (location = 3) in vec2 textureData;\n"
+                                     "\n"
+                                     "uniform float scale;\n"
+                                     "\n"
+                                     "out vec2 textureCoords;\n"
+                                     "\n"
+                                     "void main()\n"
+                                     "{\n"
+                                     "    gl_Position = vec4(vertexPosition.x * scale, vertexPosition.y * scale, 0.0f * scale, 1.0);\n"
+                                     "    textureCoords = textureData;\n"
+                                     "}"},
+                    {"texture.frag", "#version 450\n"
+                                     "\n"
+                                     "out vec4 FragColor;\n"
+                                     "\n"
+                                     "in vec2 textureCoords;\n"
+                                     "\n"
+                                     "uniform sampler2D textureObject;\n"
+                                     "\n"
+                                     "void main()\n"
+                                     "{\n"
+                                     "    FragColor = texture(textureObject, textureCoords);\n"
+                                     "}"}
+            });
+}
+
+#endif //LIBTEST_SHADERSOURCES_H

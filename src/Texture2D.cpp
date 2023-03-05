@@ -1,9 +1,3 @@
-//
-// Created by weekendUM on 2/5/2023.
-//
-
-#define STB_IMAGE_IMPLEMENTATION // this piece of shit needs to be here for stb to work
-
 #include "Texture2D.h"
 #include "stb_image.h"
 
@@ -11,6 +5,10 @@ enpitsu::Texture2D::Texture2D(const char *textureFile)
 {
     stbi_set_flip_vertically_on_load(true);
     auto textureData = readTextureFile(textureFile);
+    if(!textureData)
+    {
+        throw BadTextureException();
+    }
     glGenTextures(1, &ID);
     glActiveTexture(GL_TEXTURE0);
     Bind();

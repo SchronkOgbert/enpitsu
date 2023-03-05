@@ -5,7 +5,6 @@
 #ifndef ENPITSU_INPUTEVENTS_H
 #define ENPITSU_INPUTEVENTS_H
 
-#include <utility>
 #include "Exception.h"
 #include "GeometryEssentials.h"
 

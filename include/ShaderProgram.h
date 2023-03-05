@@ -10,10 +10,6 @@
 #include "VAO.h"
 #include "EBO.h"
 
-#include <glad/glad.h>
-#include <memory>
-#include <vector>
-
 namespace enpitsu
 {
     class BadShaderCompile : public Exception

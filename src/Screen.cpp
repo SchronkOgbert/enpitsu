@@ -48,6 +48,10 @@ enpitsu::Screen::~Screen()
 
 void enpitsu::Screen::start()
 {
+    if(!camera)
+    {
+        PLOG_WARNING << "This screen has no camera";
+    }
     this->init();
 
     this->callInit(); //call this after the init actually runs the code and adds the objects
@@ -89,6 +93,10 @@ void enpitsu::Screen::callTick(const float &delta)
     for (auto &obj: *objects)
     {
         obj->callTick(delta);
+    }
+    if(camera)
+    {
+        camera->callTick(delta);
     }
 }
 
@@ -162,7 +170,8 @@ void enpitsu::Screen::init()
     //load opengl
     gladLoadGL();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glEnable(GL_ALPHA_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 }
 
 void enpitsu::Screen::destroy()
@@ -172,10 +181,15 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
-    std::cout << "Calling init for " << objects->size() << " objects\n";
+    PLOGI << "Calling init for " << objects->size() << " objects";
     for (auto &obj: *objects)
     {
         obj->callInit();
+    }
+    if(camera)
+    {
+        PLOGI << "Calling init for camera";
+        camera->callInit();
     }
 }
 
@@ -224,6 +238,10 @@ void enpitsu::Screen::sendPress(KeyEvent event) const
     {
         obj->callKeyPressed(event);
     }
+    if(camera)
+    {
+        camera->callKeyPressed(event);
+    }
 }
 
 void enpitsu::Screen::sendRelease(const KeyEvent &event)
@@ -231,6 +249,10 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
     for (auto &obj: *objects)
     {
         obj->callKeyReleased(event);
+    }
+    if(camera)
+    {
+        camera->callKeyReleased(event);
     }
 }
 
@@ -282,6 +304,10 @@ void enpitsu::Screen::callMouseEvents(const int &button, const int &action, cons
     {
         action ? obj->callMousePressed(event) : obj->callMouseReleased(event);
     }
+    if(camera)
+    {
+        action ? camera->callMousePressed(event) : camera->callMouseReleased(event);
+    }
 }
 
 void enpitsu::Screen::enableCursor(const bool &enable)
@@ -300,11 +326,18 @@ void enpitsu::Screen::setSize(const Vector2 &size)
     glfwSetWindowSize(window, size.x, size.y);
 }
 
-enpitsu::Screen::Screen(const enpitsu::Vector2 &size, Camera3D *camera, const bool &fullscreen)
+const enpitsu::Camera3D *enpitsu::Screen::getCamera3D() const
 {
-    this->size = size;
-    if(camera == nullptr) throw BadWindow();
-    this->camera = camera;
-    this->fullScreen = fullscreen;
+    return this->camera.get();
+}
+
+void enpitsu::Screen::setCamera3D(enpitsu::Camera3D *camera3D)
+{
+    this->camera = std::unique_ptr<Camera3D>(camera3D);
+}
+
+void enpitsu::Screen::showCursor(const bool &show)
+{
+    glfwSetInputMode(window, GLFW_CURSOR, show ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
 }
 
