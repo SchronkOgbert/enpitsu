@@ -24,6 +24,8 @@ namespace enpitsu
     {
         friend class Screen;
         InputEvents* eventHandler{nullptr};
+
+        bool queueDestroy{false};
     protected:
         Screen* screen;
     public:
@@ -44,6 +46,8 @@ namespace enpitsu
         virtual ~Object();
 
         void destroy();
+
+        [[nodiscard]] bool isDestroyed() const { return queueDestroy; }
 
     protected:
         //events

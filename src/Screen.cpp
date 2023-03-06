@@ -23,6 +23,7 @@ enpitsu::Screen::Screen
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
+    this->destroyQueue = std::make_unique<std::vector<Object*>>();
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -48,7 +49,7 @@ enpitsu::Screen::~Screen()
 
 void enpitsu::Screen::start()
 {
-    if(!camera)
+    if (!camera)
     {
         PLOG_WARNING << "This screen has no camera";
     }
@@ -94,7 +95,7 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         obj->callTick(delta);
     }
-    if(camera)
+    if (camera)
     {
         camera->callTick(delta);
     }
@@ -117,8 +118,9 @@ void enpitsu::Screen::tick(const float &delta)
     }
     updateScreenDefaults();
     this->callTick(delta);
-    glfwSwapBuffers(window);
     glfwPollEvents();
+    this->destroyObjectsFromQueue();
+    glfwSwapBuffers(window);
 }
 
 void enpitsu::Screen::init()
@@ -139,7 +141,7 @@ void enpitsu::Screen::init()
     });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *glfwWindow, int width, int height)
     {
-        auto* screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
+        auto *screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
         screen->size = Vector2(width, height);
         glViewport(0, 0, width, height);
         screen->now = std::chrono::system_clock::now();
@@ -186,7 +188,7 @@ void enpitsu::Screen::callInit()
     {
         obj->callInit();
     }
-    if(camera)
+    if (camera)
     {
         PLOGI << "Calling init for camera";
         camera->callInit();
@@ -238,7 +240,7 @@ void enpitsu::Screen::sendPress(KeyEvent event) const
     {
         obj->callKeyPressed(event);
     }
-    if(camera)
+    if (camera)
     {
         camera->callKeyPressed(event);
     }
@@ -250,7 +252,7 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
     {
         obj->callKeyReleased(event);
     }
-    if(camera)
+    if (camera)
     {
         camera->callKeyReleased(event);
     }
@@ -263,14 +265,7 @@ void enpitsu::Screen::updateScreenDefaults()
 
 void enpitsu::Screen::removeObject(Object *obj)
 {
-    bool success = false;
-    objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
-                       {
-                           if (success) return false;
-                           success = obj == el.get();
-                           return obj == el.get();
-                       });
-    if (!success) throw BadObjectRemove(obj);
+    destroyQueue->push_back(obj);
 }
 
 void enpitsu::Screen::callMouseEvents(const int &button, const int &action, const int &mods,
@@ -304,7 +299,7 @@ void enpitsu::Screen::callMouseEvents(const int &button, const int &action, cons
     {
         action ? obj->callMousePressed(event) : obj->callMouseReleased(event);
     }
-    if(camera)
+    if (camera)
     {
         action ? camera->callMousePressed(event) : camera->callMouseReleased(event);
     }
@@ -315,7 +310,7 @@ void enpitsu::Screen::enableCursor(const bool &enable)
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
-const enpitsu::Vector2 & enpitsu::Screen::getSize() const
+const enpitsu::Vector2 &enpitsu::Screen::getSize() const
 {
     return size;
 }
@@ -339,5 +334,27 @@ void enpitsu::Screen::setCamera3D(enpitsu::Camera3D *camera3D)
 void enpitsu::Screen::showCursor(const bool &show)
 {
     glfwSetInputMode(window, GLFW_CURSOR, show ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+}
+
+void enpitsu::Screen::removeObjectNow(Object *obj)
+{
+    bool success = false;
+    objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
+                       {
+                           if (success) return false;
+                           success = obj == el.get();
+                           return obj == el.get();
+                       });
+    if (!success) throw BadObjectRemove(obj);
+}
+
+void enpitsu::Screen::destroyObjectsFromQueue()
+{
+    if(this->destroyQueue->empty()) return;
+    for(auto& el : *destroyQueue)
+    {
+        removeObjectNow(el);
+    }
+    this->destroyQueue->clear();
 }
 

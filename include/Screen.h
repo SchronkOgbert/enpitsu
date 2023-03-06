@@ -89,6 +89,7 @@ namespace enpitsu
 
         //references
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
+        std::unique_ptr<std::vector<Object*>> destroyQueue;
 
         //private events
         void sendPress(KeyEvent event) const;
@@ -97,9 +98,19 @@ namespace enpitsu
 
         void updateScreenDefaults();
 
+        /**
+         * adds the object to a destruction queue, it will get removed at the end of the frame
+         * @param obj object to be removed
+         */
         void removeObject(Object *obj);
 
+        /**
+         * removes an object immediately, without waiting, in exceedingly bad conditions it may cause lag spikes
+         * @param obj
+         */
+        void removeObjectNow(Object* obj);
 
+        void destroyObjectsFromQueue();
 
     public:
         Screen() = delete;
