@@ -23,7 +23,7 @@ enpitsu::Screen::Screen
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
-    this->destroyQueue = std::make_unique<std::vector<Object*>>();
+    this->destroyQueue = std::make_unique<std::vector<Object *>>();
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -119,8 +119,11 @@ void enpitsu::Screen::tick(const float &delta)
     updateScreenDefaults();
     this->callTick(delta);
     glfwPollEvents();
-    this->destroyObjectsFromQueue();
-    glfwSwapBuffers(window);
+    std::jthread destroyer([this]
+                        {
+                            this->destroyObjectsFromQueue();
+                        });
+    glfwSwapBuffers(this->window);
 }
 
 void enpitsu::Screen::init()
@@ -350,8 +353,8 @@ void enpitsu::Screen::removeObjectNow(Object *obj)
 
 void enpitsu::Screen::destroyObjectsFromQueue()
 {
-    if(this->destroyQueue->empty()) return;
-    for(auto& el : *destroyQueue)
+    if (this->destroyQueue->empty()) return;
+    for (auto &el: *destroyQueue)
     {
         removeObjectNow(el);
     }
