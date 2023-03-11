@@ -57,6 +57,7 @@ enpitsu::Object::Object(Screen *screen)
 void enpitsu::Object::destroy()
 {
     this->onDestroy();
+    queueDestroy = true;
     this->screen->removeObject(this);
 }
 
