@@ -47,19 +47,9 @@ namespace enpitsu
             return lhs.x == rhs.x && lhs.y == rhs.y;
         }
 
-        friend bool operator==(const glm::vec2 &lhs, const Vector2 &rhs) noexcept
+        explicit operator glm::vec2 () const
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y;
-        }
-
-        friend bool operator!=(const Vector2 &lhs, const glm::vec2 &rhs) noexcept
-        {
-            return !(lhs == rhs);
-        }
-
-        friend bool operator!=(const glm::vec2 &lhs, const Vector2 &rhs) noexcept
-        {
-            return !(lhs == rhs);
+            return {x, y};
         }
     };
 
@@ -101,24 +91,31 @@ namespace enpitsu
             return !(rhs == *this);
         }
 
-        friend bool operator==(const Vector3 &lhs, const glm::vec3 &rhs) noexcept
+        explicit operator glm::vec3 () const
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+            return {x, y, z};
         }
 
-        friend bool operator==(const glm::vec3 &lhs, const Vector3 &rhs) noexcept
+        Vector3& operator+(const glm::vec3& other)
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+            x += other.x;
+            y += other.y;
+            z += other.z;
+            return *this;
         }
 
-        friend bool operator!=(const Vector3 &lhs, const glm::vec3 &rhs) noexcept
+        Vector3& operator+(const Vector3& other)
         {
-            return !(lhs == rhs);
+            x += other.x;
+            y += other.y;
+            z += other.z;
+            return *this;
         }
 
-        friend bool operator!=(const glm::vec3 &lhs, const Vector3 &rhs) noexcept
+        Vector3& operator+=(const glm::vec3& other)
         {
-            return !(lhs == rhs);
+            *this = *this + other;
+            return *this;
         }
     };
 
@@ -162,24 +159,9 @@ namespace enpitsu
             return !(rhs == *this);
         }
 
-        friend bool operator==(const Vector4 &lhs, const glm::vec4 &rhs) noexcept
+        explicit operator glm::vec4 () const
         {
-            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.a == rhs.w;
-        }
-
-        friend bool operator==(const glm::vec4 &lhs, const Vector4 &rhs) noexcept
-        {
-            return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z  && lhs.w == rhs.a;
-        }
-
-        friend bool operator!=(const Vector4 &lhs, const glm::vec4 &rhs) noexcept
-        {
-            return !(lhs == rhs);
-        }
-
-        friend bool operator!=(const glm::vec4 &lhs, const Vector4 &rhs) noexcept
-        {
-            return !(lhs == rhs);
+            return {x, y, z, a};
         }
     };
 
