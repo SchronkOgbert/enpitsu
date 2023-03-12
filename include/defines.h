@@ -32,9 +32,10 @@
 #include <fstream>
 #include <cstring>
 #include <map>
+#include <type_traits>
 
 // 3rd party stuff
-#include <glad/glad.h>
+#include <GL/glew.h>
 #include "GLFW/glfw3.h"
 #include "plog/Log.h"
 #include "plog/Initializers/ConsoleInitializer.h"
