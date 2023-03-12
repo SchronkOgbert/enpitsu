@@ -22,9 +22,7 @@ void VAO::LinkVBO(VBO vbo)
     switch (vbo.getLayout())
     {
         case VBO::objectLayout::VERTEX2D:
-            glVertexAttribPointer(static_cast<GLuint>(layout), 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-            break;
-        case VBO::objectLayout::TEXTURE2D:
+        case VBO::objectLayout::TEXTURE2D: // these are both vec2 so we only need 1 branch for both
             glVertexAttribPointer(static_cast<GLuint>(layout), 2, GL_FLOAT, GL_FALSE, 0, nullptr);
             break;
         case VBO::objectLayout::VERTEX3D:

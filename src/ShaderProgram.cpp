@@ -51,6 +51,10 @@ namespace enpitsu
                                const int &vertexSize,
                                const bool &isStatic)
     {
+        if(vertices.empty() || indices.empty())
+        {
+            throw BadShaderInfo();
+        }
         setVao(new VAO(vertexSize));
         getVao()->Bind();
         setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),

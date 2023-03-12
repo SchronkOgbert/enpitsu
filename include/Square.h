@@ -5,12 +5,12 @@
 #ifndef LIBTEST_SQUARE_H
 #define LIBTEST_SQUARE_H
 
-#include "Triangles.h"
+#include "Triangles2D.h"
 
 namespace enpitsu
 {
 
-    class Square : public Triangles
+    class Square : public Triangles2D
     {
     public:
         /**

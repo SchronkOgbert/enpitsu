@@ -13,9 +13,9 @@ namespace enpitsu
         unsigned moving{0};
     protected:
         Vector2 size;
-        glm::vec3 position;
-        glm::vec3 orientation{0, 0, -1};
-        glm::vec3 up{0, 1, 0};
+        Vector3 position;
+        Vector3 orientation{0, 0, -1};
+        Vector3 up{0, 1, 0};
         float speed{0.1f};
 
         void tick(const float &delta) override;

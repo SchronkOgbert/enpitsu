@@ -77,6 +77,21 @@ namespace enpitsu
         //props
         Vector2 size;
         bool fullScreen;
+    public:
+        /**
+         * check whether the depth is checked(used in 3D rendering)
+         * @return value, default is false
+         */
+        [[nodiscard]] bool getCheckDepth() const;
+
+        /**
+         * enables or disables depth checking(used in 3D rendering)
+         * @param checkDepth true for enable, false for disable, default false
+         */
+        void setCheckDepth(bool checkDepth);
+
+    private:
+        bool checkDepth{false};
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;

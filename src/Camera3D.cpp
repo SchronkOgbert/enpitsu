@@ -12,7 +12,7 @@ enpitsu::Camera3D::Camera3D(enpitsu::Screen *screen, const Vector3 &position, co
 void enpitsu::Camera3D::OnMousePressed(const enpitsu::MouseEvent &event)
 {
     PLOGD << "mouse pressed";
-    if(event.button == MouseEvent::LEFT_MOUSE_BUTTON)
+    if (event.button == MouseEvent::LEFT_MOUSE_BUTTON)
     {
         screen->showCursor(false);
         moving++;
@@ -22,7 +22,7 @@ void enpitsu::Camera3D::OnMousePressed(const enpitsu::MouseEvent &event)
 void enpitsu::Camera3D::OnMouseReleased(const enpitsu::MouseEvent &event)
 {
     PLOGD << "mouse released";
-    if(event.button == MouseEvent::LEFT_MOUSE_BUTTON)
+    if (event.button == MouseEvent::LEFT_MOUSE_BUTTON)
     {
         screen->showCursor(true);
         moving--;
@@ -35,22 +35,22 @@ void enpitsu::Camera3D::OnKeyPressed(const enpitsu::KeyEvent &event)
     {
         case KeyEvent::KEY_A:
         {
-            position += speed * -glm::normalize(glm::cross(orientation, up));
+            position += speed * -glm::normalize(glm::cross(glm::vec3(orientation), glm::vec3(up)));
             break;
         }
         case KeyEvent::KEY_W:
         {
-            position += speed * orientation;
+            position += speed * glm::vec3(orientation);
             break;
         }
         case KeyEvent::KEY_S:
         {
-            position += speed * -orientation;
+            position += speed * -glm::vec3(orientation);
             break;
         }
         case KeyEvent::KEY_D:
         {
-            position += speed * glm::normalize(glm::cross(orientation, up));
+            position += speed * glm::normalize(glm::cross(glm::vec3(orientation), glm::vec3(up)));
             break;
         }
         default:
@@ -79,7 +79,7 @@ void enpitsu::Camera3D::updateMatrix(const float &FOV, const float &nearPlane, c
                                      const enpitsu::ShaderProgram *shaderProgram, const char *uniformName)
 {
     glm::mat4 view(1.0f);
-    view = glm::lookAt(position, position + orientation, up);
+    view = glm::lookAt(glm::vec3 (position), glm::vec3 (position + orientation), glm::vec3 (up));
 
     glm::mat4 projection = glm::perspective(glm::radians(FOV),
                                             static_cast<float>(size.x / size.y), nearPlane, farPlane);
@@ -99,7 +99,7 @@ void enpitsu::Camera3D::tick(const float &delta)
      * 3. have the object share shader objects(the best and most complex for many reasons) and only cycle
      * through the shaders directly to update them only once, not for every object
      */
-    if(moving)
+    if (moving)
     {
         for (auto &object: *(screen->objects))
         {

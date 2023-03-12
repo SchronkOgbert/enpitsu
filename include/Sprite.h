@@ -5,13 +5,13 @@
 #ifndef LIBTEST_SPRITE_H
 #define LIBTEST_SPRITE_H
 
-#include "Triangles.h"
+#include "Triangles2D.h"
 #include "Texture2DShader.h"
 
 namespace enpitsu
 {
 
-    class Sprite : public Triangles
+    class Sprite : public Triangles2D
     {
     protected:
         Texture2DShader* textureObject;

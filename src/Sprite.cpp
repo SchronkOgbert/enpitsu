@@ -7,18 +7,18 @@
 namespace enpitsu
 {
     Sprite::Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin) :
-            Triangles(screen,
-                      {
+            Triangles2D(screen,
+                        {
                               Vector2(0, 0),
                               Vector2(0, static_cast<GLfloat >(shader->getWidth())),
                               Vector2(static_cast<GLfloat >(shader->getHeight()),
                                       static_cast<GLfloat >(shader->getWidth())),
                               Vector2(static_cast<GLfloat >(shader->getHeight()), 0)
                       },
-                      origin,
-                      shader,
-                      isStatic,
-                      {
+                        origin,
+                        shader,
+                        isStatic,
+                        {
                               0, 1, 2, 0, 2, 3
                       }
             )
@@ -38,7 +38,7 @@ namespace enpitsu
 
     void Sprite::draw()
     {
-        Triangles::draw();
+        Triangles2D::draw();
 //        println("drawing sprite");
     }
 

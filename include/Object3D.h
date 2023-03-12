@@ -6,8 +6,8 @@
 #define LIBTEST_OBJECT3D_H
 
 #include "Object.h"
-#include "ShaderProgram.h"
-#include <vector>
+#include "defines.h"
+#include "SolidColor.h"
 
 namespace enpitsu
 {
@@ -15,8 +15,8 @@ namespace enpitsu
     class Object3D : public Object
     {
     protected:
-        std::vector<GLfloat > vertices;
-        std::vector<GLuint > indices;
+        std::vector<GLfloat> vertices;
+        std::vector<GLuint> indices;
         std::unique_ptr<ShaderProgram> shaderProgram;
         bool isStatic;
         Vector3 origin;
@@ -26,15 +26,21 @@ namespace enpitsu
 
     public:
         using Object::Object;
-        Object3D(
-                Screen* screen,
-                const std::vector<Vector3> points,
+
+        explicit Object3D(
+                Screen *screen,
+                std::vector<Vector3> *points,
                 const Vector3 &origin,
                 const Vector3 &size,
-                ShaderProgram* shader,
+                ShaderProgram *shader,
                 const bool &isStatic = true,
-                const std::vector<unsigned int> drawOrder = {0}
-                );
+                std::vector<unsigned int> *drawOrder = {0}
+        );
+
+    protected:
+        void tick(const float &delta) override;
+
+        void draw() override;
     };
 
 } // enpitsu

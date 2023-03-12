@@ -36,6 +36,11 @@ namespace enpitsu
         {}
     };
 
+    class BadShaderInfo : public Exception
+    {
+    public:
+        BadShaderInfo() : Exception("The vertices or indices provided are empty") {}
+    };
     class ShaderProgram
     {
     protected:

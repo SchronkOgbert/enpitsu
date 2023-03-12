@@ -1,6 +1,3 @@
-#include <tuple>
-#include <iostream>
-#include <chrono>
 #include "Screen.h"
 #include "Object.h"
 #include "InputEvents.h"
@@ -264,7 +261,8 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
 
 void enpitsu::Screen::updateScreenDefaults()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    checkDepth ? glClear(GL_COLOR_BUFFER_BIT) :
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void enpitsu::Screen::removeObject(Object *obj)
@@ -314,7 +312,7 @@ void enpitsu::Screen::enableCursor(const bool &enable)
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
-const enpitsu::Vector2 &enpitsu::Screen::getSize() const
+inline const enpitsu::Vector2 &enpitsu::Screen::getSize() const
 {
     return size;
 }
@@ -325,7 +323,7 @@ void enpitsu::Screen::setSize(const Vector2 &size)
     glfwSetWindowSize(window, size.x, size.y);
 }
 
-const enpitsu::Camera3D *enpitsu::Screen::getCamera3D() const
+inline const enpitsu::Camera3D *enpitsu::Screen::getCamera3D() const
 {
     return this->camera.get();
 }
@@ -360,5 +358,16 @@ void enpitsu::Screen::destroyObjectsFromQueue()
         removeObjectNow(el);
     }
     this->destroyQueue->clear();
+}
+
+inline bool enpitsu::Screen::getCheckDepth() const
+{
+    return checkDepth;
+}
+
+void enpitsu::Screen::setCheckDepth(bool checkDepth)
+{
+    checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+    this->checkDepth = checkDepth;
 }
 
