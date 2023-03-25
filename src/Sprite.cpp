@@ -2,7 +2,7 @@
 // Created by weekendUM on 2/5/2023.
 //
 
-#include "Sprite.h"
+#include "objects/Sprite.h"
 
 namespace enpitsu
 {

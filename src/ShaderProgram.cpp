@@ -1,6 +1,6 @@
-#include "ShaderProgram.h"
-#include "defines.h"
-#include "ShaderSources.h"
+#include "shading/ShaderProgram.h"
+#include "helpers/defines.h"
+#include "shading/ShaderSources.h"
 
 namespace enpitsu
 {
@@ -108,6 +108,7 @@ namespace enpitsu
         {
             char shaderInfo[1024];
             glGetShaderInfoLog(ID, 1024, nullptr, shaderInfo);
+            PLOGE << shaderInfo;
             throw BadShaderCompile(shaderInfo);
         }
     }

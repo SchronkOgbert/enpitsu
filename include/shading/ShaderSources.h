@@ -1,7 +1,7 @@
 #ifndef LIBTEST_SHADERSOURCES_H
 #define LIBTEST_SHADERSOURCES_H
 
-#include "defines.h"
+#include "helpers/defines.h"
 
 namespace enpitsu
 {
@@ -52,7 +52,40 @@ namespace enpitsu
                                      "void main()\n"
                                      "{\n"
                                      "    FragColor = texture(textureObject, textureCoords);\n"
-                                     "}"}
+                                     "}"},
+                    {
+                        "texture3D.vert", "#version 450\n"
+                                          "\n"
+                                          "layout (location = 0) in vec3 inPos;\n"
+                                          "\n"
+                                          "layout (location = 3) in vec2 inTex;\n"
+                                          "\n"
+                                          "out vec4 outCol;\n"
+                                          "\n"
+                                          "out vec2 textureCoords;\n"
+                                          "\n"
+                                          "uniform mat4 camMatrix;\n"
+                                          "\n"
+                                          "void main()\n"
+                                          "{\n"
+                                          "    gl_Position = camMatrix * vec4(inPos, 1.0);\n"
+                                          "    textureCoords = inTex;\n"
+                                          "}"
+                    },
+                    {
+                        "texture3D.frag", "#version 450\n"
+                                          "\n"
+                                          "out vec4 FragColor;\n"
+                                          "\n"
+                                          "in vec2 textureCoords; // coordinates\n"
+                                          "\n"
+                                          "uniform sampler2D textureObject; // data\n"
+                                          "\n"
+                                          "void main()\n"
+                                          "{\n"
+                                          "    FragColor = texture(textureObject, textureCoords);\n"
+                                          "}"
+                    }
             });
 }
 

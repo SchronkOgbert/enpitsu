@@ -2,10 +2,10 @@
 // Created by weekendUM on 1/27/2023.
 //
 
-#include "Object2D.h"
-#include "Screen.h"
-#include "SolidColor.h"
-#include "GeometryEssentials.h"
+#include "objects/Object2D.h"
+#include "objects/Screen.h"
+#include "shading/SolidColor.h"
+#include "helpers/GeometryEssentials.h"
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
                             ShaderProgram *shader,

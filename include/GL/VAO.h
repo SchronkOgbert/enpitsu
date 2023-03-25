@@ -5,7 +5,7 @@
 #ifndef LIBTEST_VAO_H
 #define LIBTEST_VAO_H
 
-#include "defines.h"
+#include "helpers/defines.h"
 #include "VBO.h"
 
 class VAO

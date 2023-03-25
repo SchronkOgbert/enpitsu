@@ -5,9 +5,9 @@
 #ifndef ENPITSU_OBJECT_H
 #define ENPITSU_OBJECT_H
 
-#include "defines.h"
-#include "InputEvents.h"
-#include "Exception.h"
+#include "helpers/defines.h"
+#include "helpers/InputEvents.h"
+#include "helpers/Exception.h"
 
 namespace enpitsu
 {

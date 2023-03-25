@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 3/5/2023.
-//
-
 #ifndef LIBTEST_TRIANGLES3D_H
 #define LIBTEST_TRIANGLES3D_H
 
@@ -17,11 +13,7 @@ namespace enpitsu
         Triangles3D(Screen* screen) = delete;
 
     protected:
-        void draw() override
-        {
-            Object3D::draw();
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
-        };
+        void draw() override;
     };
 
 } // enpitsu

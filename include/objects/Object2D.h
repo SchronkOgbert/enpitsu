@@ -5,14 +5,14 @@
 #ifndef LIBTEST_OBJECT2D_H
 #define LIBTEST_OBJECT2D_H
 
-#include "defines.h"
+#include "helpers/defines.h"
 
 #include "Object.h"
-#include "GeometryEssentials.h"
-#include "VAO.h"
-#include "EBO.h"
-#include "SolidColor.h"
-#include "Exception.h"
+#include "helpers/GeometryEssentials.h"
+#include "GL/VAO.h"
+#include "GL/EBO.h"
+#include "shading/SolidColor.h"
+#include "helpers/Exception.h"
 
 namespace enpitsu
 {
@@ -46,7 +46,8 @@ namespace enpitsu
         void setOrigin(const Vector2 &origin);
 
         explicit Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
-                          ShaderProgram *shader = new SolidColor(Vector4(0.8f, 0.3f, 0.02f, 1.0f)),
+                          ShaderProgram *shader = new SolidColor(Vector4(0.8f, 0.3f, 0.02f, 1.0f), "default.vert",
+                                                                 "default.frag"),
                           const bool &isStatic = true,
                           const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 

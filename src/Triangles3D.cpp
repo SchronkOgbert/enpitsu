@@ -1,8 +1,4 @@
-//
-// Created by weekendUM on 3/5/2023.
-//
-
-#include "Triangles3D.h"
+#include "objects/Triangles3D.h"
 
 namespace enpitsu
 {

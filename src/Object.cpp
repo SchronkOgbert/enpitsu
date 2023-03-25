@@ -2,10 +2,9 @@
 // Created by weekendUM on 1/24/2023.
 //
 
-#include "Object.h"
-#include "Screen.h"
-#include <iostream>
-#include "InputEvents.h"
+#include "objects/Object.h"
+#include "objects/Screen.h"
+#include "helpers/InputEvents.h"
 
 void enpitsu::Object::tick(const float &delta)
 {

@@ -2,8 +2,8 @@
 // Created by weekendUM on 2/3/2023.
 //
 
-#include "Triangles2D.h"
-#include "Screen.h"
+#include "objects/Triangles2D.h"
+#include "objects/Screen.h"
 
 namespace enpitsu
 {

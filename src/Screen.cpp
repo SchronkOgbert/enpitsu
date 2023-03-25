@@ -1,7 +1,7 @@
-#include "Screen.h"
-#include "Object.h"
-#include "InputEvents.h"
-#include "Camera3D.h"
+#include "objects/Screen.h"
+#include "objects/Object.h"
+#include "helpers/InputEvents.h"
+#include "objects/Camera3D.h"
 
 bool enpitsu::Screen::exists = false;
 
@@ -107,7 +107,6 @@ void enpitsu::Screen::setGLFWHints()
 
 void enpitsu::Screen::tick(const float &delta)
 {
-//    std::cout << "delta: " << delta << '\n';
     if (glfwWindowShouldClose(window))
     {
         this->destroy();
@@ -230,7 +229,7 @@ void enpitsu::Screen::callKeyEvents(const int &key,
         }
         default:
         {
-            std::cerr << "Event not implemented\n";
+            PLOGE << "Event not implemented";
         }
     }
 }

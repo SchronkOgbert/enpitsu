@@ -2,13 +2,12 @@
 // Created by weekendUM on 2/8/2023.
 //
 
-#include "SolidColor.h"
-#include "iostream"
+#include "shading/SolidColor.h"
 
 namespace enpitsu
 {
-    SolidColor::SolidColor(const Vector4 &rgbaColor) :
-            ShaderProgram("default.vert", "default.frag"), color(rgbaColor)
+    SolidColor::SolidColor(const Vector4 &rgbaColor, const char *vertexFile, const char *fragmentFile) :
+            ShaderProgram(vertexFile, fragmentFile), color(rgbaColor)
     {
 
     }

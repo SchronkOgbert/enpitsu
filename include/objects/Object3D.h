@@ -6,8 +6,8 @@
 #define LIBTEST_OBJECT3D_H
 
 #include "Object.h"
-#include "defines.h"
-#include "SolidColor.h"
+#include "helpers/defines.h"
+#include "shading/SolidColor.h"
 
 namespace enpitsu
 {
@@ -17,12 +17,11 @@ namespace enpitsu
     protected:
         std::vector<GLfloat> vertices;
         std::vector<GLuint> indices;
-        std::unique_ptr<ShaderProgram> shaderProgram;
+        std::shared_ptr<ShaderProgram> shaderProgram;
         bool isStatic;
         Vector3 origin;
-        std::shared_ptr<ShaderProgram> shader;
     public:
-        [[nodiscard]] const std::unique_ptr<ShaderProgram> &getShaderProgram() const;
+        [[nodiscard]] const std::shared_ptr<ShaderProgram> & getShaderProgram() const;
 
     public:
         using Object::Object;

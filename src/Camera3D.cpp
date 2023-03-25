@@ -1,6 +1,6 @@
-#include "Camera3D.h"
-#include "Screen.h"
-#include "Object3D.h"
+#include "objects/Camera3D.h"
+#include "objects/Screen.h"
+#include "objects/Object3D.h"
 
 enpitsu::Camera3D::Camera3D(enpitsu::Screen *screen, const Vector3 &position, const Vector2 &size) :
         ControlObject(screen)
@@ -99,16 +99,16 @@ void enpitsu::Camera3D::tick(const float &delta)
      * 3. have the object share shader objects(the best and most complex for many reasons) and only cycle
      * through the shaders directly to update them only once, not for every object
      */
+    for (auto &object: *(screen->objects))
+    {
+        auto *tmp = dynamic_cast<Object3D *>(object.get());
+        if (tmp)
+        {
+            updateMatrix(90, 0.1f, 100.0f,
+                         tmp->getShaderProgram().get(), "camera");
+        }
+    }
     if (moving)
     {
-        for (auto &object: *(screen->objects))
-        {
-            auto *tmp = dynamic_cast<Object3D *>(object.get());
-            if (tmp)
-            {
-                updateMatrix(90, 0.1f, 100.0f,
-                             tmp->getShaderProgram().get(), "camera");
-            }
-        }
     }
 }

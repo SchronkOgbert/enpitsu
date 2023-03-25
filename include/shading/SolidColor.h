@@ -6,7 +6,7 @@
 #define LIBTEST_SOLIDCOLOR_H
 
 #include "ShaderProgram.h"
-#include "GeometryEssentials.h"
+#include "helpers/GeometryEssentials.h"
 
 namespace enpitsu
 {
@@ -18,7 +18,9 @@ namespace enpitsu
         std::vector<GLfloat > colorInfo;
         std::unique_ptr<VBO> colorVertex;
     public:
-        explicit SolidColor(const Vector4& rgbaColor);
+        explicit SolidColor(const Vector4 &rgbaColor,
+                            const char *vertexFile = "default.vert",
+                            const char *fragmentFile = "default.frag");
 
         void Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, const int &vertexSize,
                     const bool &isStatic) override;

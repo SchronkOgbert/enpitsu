@@ -1,10 +1,10 @@
 #ifndef LIBTEST_CAMERA3D_H
 #define LIBTEST_CAMERA3D_H
 
-#include "GeometryEssentials.h"
+#include "helpers/GeometryEssentials.h"
 #include "ControlObject.h"
-#include "InputEvents.h"
-#include "ShaderProgram.h"
+#include "helpers/InputEvents.h"
+#include "shading/ShaderProgram.h"
 
 namespace enpitsu
 {

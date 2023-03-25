@@ -5,10 +5,10 @@
 #ifndef ENPITSU_SHADERPROGRAM_H
 #define ENPITSU_SHADERPROGRAM_H
 
-#include "defines.h"
-#include "Exception.h"
-#include "VAO.h"
-#include "EBO.h"
+#include "helpers/defines.h"
+#include "helpers/Exception.h"
+#include "GL/VAO.h"
+#include "GL/EBO.h"
 
 namespace enpitsu
 {
