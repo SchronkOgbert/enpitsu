@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 
 class EnpitsuConan(ConanFile):
-    version = 0.1
+    version = 0.2
     name = "enpitsu"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -28,7 +28,10 @@ class EnpitsuConan(ConanFile):
         cmake_debug.build()
 
     def package(self):
-        self.copy('*.h', dst="include/enpitsu", keep_path=False)
+        self.copy('include/GL/*.h', dst="include/GL", keep_path=False)
+        self.copy('include/helpers/*.h', dst="include/helpers", keep_path=False)
+        self.copy('include/objects/*.h', dst="include/objects", keep_path=False)
+        self.copy('include/shading/*.h', dst="include/shading", keep_path=False)
         self.copy("*.lib", dst="lib", keep_path=False)
         self.copy("*.dll", dst="bin", keep_path=False)
         self.copy("*.dylib*", dst="lib", keep_path=False)
