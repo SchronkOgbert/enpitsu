@@ -370,3 +370,8 @@ void enpitsu::Screen::setCheckDepth(bool checkDepth)
     this->checkDepth = checkDepth;
 }
 
+enpitsu::Screen::Screen(const enpitsu::Vector2 &&size, const bool &&fullScreen) : Screen(size, fullScreen)
+{
+
+}
+

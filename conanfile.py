@@ -38,3 +38,5 @@ class EnpitsuConan(ConanFile):
         self.copy("*.so", dst="lib", keep_path=False)
         self.copy("*.a", dst="lib", keep_path=False)
 
+    def package_info(self):
+        self.cpp_info.libs = ['enpitsu']

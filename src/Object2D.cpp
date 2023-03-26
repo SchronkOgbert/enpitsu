@@ -121,3 +121,8 @@ void enpitsu::Object2D::tick(const float &delta)
     this->draw();
     shaderProgram->Unbind();
 }
+
+void enpitsu::Object2D::setSize(const enpitsu::Vector2 &newSize)
+{
+    
+}

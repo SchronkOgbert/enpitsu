@@ -26,6 +26,7 @@ namespace enpitsu
     class Object2D : public Object
     {
         Vector2 origin{};
+        Vector2 size{1, 1};
         bool isStatic;
 
         void forceSetLocation(const Vector2& newLocation) noexcept;
@@ -60,9 +61,17 @@ namespace enpitsu
 
         void onDestroy() override;
 
+        /**
+         * Sets location in absolute screen coordinates
+         * @param newLocation new screen coords
+         */
         void setLocation(const Vector2& newLocation);
 
-        virtual void resize() = 0;
+        /**
+         * The default size is (1.0, 1.0). This new size should also be in percentages
+         * @param newSize
+         */
+        void setSize(const Vector2& newSize);
 
     protected:
         void draw() override;

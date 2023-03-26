@@ -142,8 +142,7 @@ namespace enpitsu
                 (
                         const Vector2 &&size, // TODO change this to Vector2
                         const bool &&fullScreen = false
-                ) : Screen(size, fullScreen)
-        {}
+                );
 
         //destructor
         virtual ~Screen();
