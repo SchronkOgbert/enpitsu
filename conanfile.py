@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 
 class EnpitsuConan(ConanFile):
-    version = 0.2
+    version = '0.2.1'
     name = "enpitsu"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
