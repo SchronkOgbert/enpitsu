@@ -112,6 +112,7 @@ void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) no
                 screen->getSize().y
         );
     }
+    origin = newLocation;
     shaderProgram->Create(vertices, indices, 2, isStatic);
 }
 

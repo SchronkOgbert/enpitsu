@@ -67,6 +67,8 @@ namespace enpitsu
          */
         void setLocation(const Vector2& newLocation);
 
+        [[nodiscard]] Vector2 getLocation() const { return this->origin; }
+
         /**
          * The default size is (1.0, 1.0). This new size should also be in percentages
          * @param newSize
