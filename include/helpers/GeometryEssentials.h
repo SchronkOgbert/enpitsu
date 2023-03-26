@@ -13,7 +13,8 @@ namespace enpitsu
     class BadDimensionException : public Exception
     {
     public:
-        BadDimensionException() : Exception("The dimension you asked for does not exist") {}
+        BadDimensionException() : Exception("The dimension you asked for does not exist")
+        {}
     };
 
     struct Vector2
@@ -66,7 +67,7 @@ namespace enpitsu
             return {x, y};
         }
 
-        double operator[](const char& dimension) const
+        double operator[](const char &dimension) const
         {
             switch (dimension)
             {
@@ -77,6 +78,23 @@ namespace enpitsu
                 default:
                     throw BadDimensionException();
             }
+        }
+
+        friend Vector2 operator+(const Vector2 &first, const Vector2 &second)
+        {
+            return {first.x + second.x, first.y + second.y};
+        }
+
+        friend Vector2 operator-(const Vector2 &first, const Vector2 &second)
+        {
+            return {first.x - second.x, first.y - second.y};
+        }
+
+        Vector2 operator*(const double &mul)
+        {
+            this->y *= mul;
+            this->x *= mul;
+            return *this;
         }
     };
 
@@ -144,13 +162,13 @@ namespace enpitsu
             return *this;
         }
 
-        Vector3& operator+=(const glm::vec3& other)
+        Vector3 &operator+=(const glm::vec3 &other)
         {
             *this = *this + other;
             return *this;
         }
 
-        double operator[](const char& dimension) const
+        double operator[](const char &dimension) const
         {
             switch (dimension)
             {
@@ -216,7 +234,7 @@ namespace enpitsu
             return {x, y, z, a};
         }
 
-        double operator[](const char& dimension) const
+        double operator[](const char &dimension) const
         {
             switch (dimension)
             {
@@ -255,15 +273,13 @@ namespace enpitsu
     linearizePointsVector(const std::vector<T> &points, const float &screenWidth, const float &screenHeight)
     {
         size_t dimensions;
-        if(typeid(T) == typeid(Vector2))
+        if (typeid(T) == typeid(Vector2))
         {
             dimensions = 2;
-        }
-        else if(typeid(T) == typeid(Vector3))
+        } else if (typeid(T) == typeid(Vector3))
         {
             dimensions = 3;
-        }
-        else
+        } else
         {
             dimensions = 4;
         }

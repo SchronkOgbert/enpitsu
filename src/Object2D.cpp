@@ -100,20 +100,29 @@ void enpitsu::Object2D::setLocation(const enpitsu::Vector2 &newLocation)
 
 void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) noexcept
 {
+    Vector2 distance = newLocation - origin;
+    origin = newLocation;
     for (auto i = 0; i < vertices.size(); i += 2)
     {
         vertices[i] = toGLCoord(
-                fromGLCoord(vertices[i], screen->getSize().x) + newLocation.x,
+                fromGLCoord(vertices[i], screen->getSize().x) + distance.x,
                 screen->getSize().x
         );
         vertices[i + 1] = toGLCoord(
                 fromGLCoord(vertices[i + 1], screen->getSize().y) +
-                newLocation.y, // this is because y starts form the bottom in glfw
+                distance.y, // this is because y starts form the bottom in glfw
                 screen->getSize().y
         );
     }
-    origin = newLocation;
     shaderProgram->Create(vertices, indices, 2, isStatic);
+    if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
+    {
+        throw BadGLObject();
+    }
+    shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
+    shaderProgram->getVao()->Unbind();
+    shaderProgram->getVertexPosition()->Unbind();
+    shaderProgram->getEbo()->Unbind();
 }
 
 void enpitsu::Object2D::tick(const float &delta)
