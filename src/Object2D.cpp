@@ -114,15 +114,7 @@ void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) no
                 screen->getSize().y
         );
     }
-    shaderProgram->Create(vertices, indices, 2, isStatic);
-    if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
-    {
-        throw BadGLObject();
-    }
-    shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
-    shaderProgram->getVao()->Unbind();
-    shaderProgram->getVertexPosition()->Unbind();
-    shaderProgram->getEbo()->Unbind();
+    shaderProgram->getVertexPosition()->Update(&vertices[0]);
 }
 
 void enpitsu::Object2D::tick(const float &delta)

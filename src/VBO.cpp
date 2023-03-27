@@ -10,7 +10,7 @@ GLuint VBO::getId() const
 }
 
 VBO::VBO(GLfloat *vertices, const GLsizeiptr &size, const VBO::objectLayout &layout, const bool &isStatic) :
-        layout(layout)
+        layout(layout), size(size)
 {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
@@ -31,4 +31,11 @@ void VBO::Unbind()
 void VBO::Delete()
 {
     glDeleteBuffers(1, &ID);
+}
+
+void VBO::Update(GLfloat *newVertices)
+{
+    this->Bind();
+    glBufferSubData(GL_ARRAY_BUFFER, 0, size, newVertices);
+    this->Unbind();
 }
