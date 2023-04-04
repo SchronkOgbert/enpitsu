@@ -126,5 +126,7 @@ void enpitsu::Object2D::tick(const float &delta)
 
 void enpitsu::Object2D::setSize(const enpitsu::Vector2 &newSize)
 {
-    
+
+    size = newSize;
+    shaderProgram->getVertexPosition()->UpdateScale({newSize.x, newSize.y, 1}, shaderProgram.get());
 }

@@ -5,6 +5,8 @@
 #include "enpitsu/GL/VAO.h"
 #include "enpitsu/GL/VBO.h"
 
+using namespace enpitsu;
+
 GLuint VAO::getId() const
 {
     return ID;

@@ -8,23 +8,26 @@
 #include "enpitsu/helpers/defines.h"
 #include "VBO.h"
 
-class VAO
+namespace enpitsu
 {
-    GLuint ID;
-    GLint vertexSize;
-public:
-    explicit VAO(const GLint &vertexSize);
+    class VAO
+    {
+        GLuint ID;
+        GLint vertexSize;
+    public:
+        explicit VAO(const GLint &vertexSize);
 
-    void LinkVBO(VBO vbo);
+        void LinkVBO(VBO vbo);
 
-    void Bind();
+        void Bind();
 
-    void Unbind();
+        void Unbind();
 
-    void Delete();
+        void Delete();
 
-    [[nodiscard]] GLuint getId() const;
-};
+        [[nodiscard]] GLuint getId() const;
+    };
+}
 
 
 #endif //LIBTEST_VAO_H

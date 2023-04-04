@@ -22,6 +22,11 @@ namespace enpitsu
         BadShaderObject() : Exception("The shader cannot be NULL pointer")
         {}
     };
+    class BadObjectSize : public Exception
+    {
+    public:
+        BadObjectSize() : Exception("The size of the object should be greater than Vector2(0, 0)") {}
+    };
 
     class Object2D : public Object
     {
