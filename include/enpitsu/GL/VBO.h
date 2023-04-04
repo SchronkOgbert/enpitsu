@@ -5,7 +5,7 @@
 #ifndef LIBTEST_VBO_H
 #define LIBTEST_VBO_H
 
-#include "helpers/defines.h"
+#include "enpitsu/helpers/defines.h"
 
 class VBO
 {

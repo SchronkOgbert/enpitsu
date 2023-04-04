@@ -5,7 +5,7 @@
 #ifndef LIBTEST_EBO_H
 #define LIBTEST_EBO_H
 
-#include "helpers/defines.h"
+#include "enpitsu/helpers/defines.h"
 
 class EBO
 {

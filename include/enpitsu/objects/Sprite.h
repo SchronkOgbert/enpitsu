@@ -6,7 +6,7 @@
 #define LIBTEST_SPRITE_H
 
 #include "Triangles2D.h"
-#include "shading/Texture2DShader.h"
+#include "enpitsu/shading/Texture2DShader.h"
 
 namespace enpitsu
 {

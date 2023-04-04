@@ -2,7 +2,7 @@
 // Created by weekendUM on 3/26/2023.
 //
 
-#include "objects/Lines2D.h"
+#include "enpitsu/objects/Lines2D.h"
 
 namespace enpitsu
 {

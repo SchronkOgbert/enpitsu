@@ -2,7 +2,7 @@
 // Created by weekendUM on 1/27/2023.
 //
 
-#include "GL/EBO.h"
+#include "enpitsu/GL/EBO.h"
 
 GLuint EBO::getId() const
 {

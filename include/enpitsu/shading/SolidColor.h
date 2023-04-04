@@ -6,7 +6,7 @@
 #define LIBTEST_SOLIDCOLOR_H
 
 #include "ShaderProgram.h"
-#include "helpers/GeometryEssentials.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
 
 namespace enpitsu
 {

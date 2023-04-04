@@ -1,7 +1,7 @@
-#include "objects/Screen.h"
-#include "objects/Object.h"
-#include "helpers/InputEvents.h"
-#include "objects/Camera3D.h"
+#include "enpitsu/objects/Screen.h"
+#include "enpitsu/objects/Object.h"
+#include "enpitsu/helpers/InputEvents.h"
+#include "enpitsu/objects/Camera3D.h"
 
 bool enpitsu::Screen::exists = false;
 

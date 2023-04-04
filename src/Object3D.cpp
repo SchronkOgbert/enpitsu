@@ -2,8 +2,8 @@
 // Created by weekendUM on 2/18/2023.
 //
 
-#include "objects/Object3D.h"
-#include "objects/Screen.h"
+#include "enpitsu/objects/Object3D.h"
+#include "enpitsu/objects/Screen.h"
 
 namespace enpitsu
 {

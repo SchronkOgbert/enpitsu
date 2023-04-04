@@ -1,7 +1,7 @@
 #ifndef LIBTEST_SHADERSOURCES_H
 #define LIBTEST_SHADERSOURCES_H
 
-#include "helpers/defines.h"
+#include "enpitsu/helpers/defines.h"
 
 namespace enpitsu
 {

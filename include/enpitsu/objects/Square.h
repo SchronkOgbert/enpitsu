@@ -6,7 +6,7 @@
 #define LIBTEST_SQUARE_H
 
 #include "Triangles2D.h"
-#include "shading/ShaderProgram.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {

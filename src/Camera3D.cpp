@@ -1,6 +1,6 @@
-#include "objects/Camera3D.h"
-#include "objects/Screen.h"
-#include "objects/Object3D.h"
+#include "enpitsu/objects/Camera3D.h"
+#include "enpitsu/objects/Screen.h"
+#include "enpitsu/objects/Object3D.h"
 
 enpitsu::Camera3D::Camera3D(enpitsu::Screen *screen, const Vector3 &position, const Vector2 &size) :
         ControlObject(screen)

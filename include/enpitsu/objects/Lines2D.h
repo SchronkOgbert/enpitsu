@@ -2,7 +2,7 @@
 #define CONANFILE_PY_LINES2D_H
 
 #include "Object2D.h"
-#include "shading/ShaderProgram.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {

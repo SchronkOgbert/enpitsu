@@ -1,6 +1,6 @@
-#include "shading/ShaderProgram.h"
-#include "helpers/defines.h"
-#include "shading/ShaderSources.h"
+#include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/helpers/defines.h"
+#include "enpitsu/shading/ShaderSources.h"
 
 namespace enpitsu
 {

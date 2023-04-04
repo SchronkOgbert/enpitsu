@@ -2,7 +2,7 @@
 // Created by weekendUM on 2/8/2023.
 //
 
-#include "shading/SolidColor.h"
+#include "enpitsu/shading/SolidColor.h"
 
 namespace enpitsu
 {

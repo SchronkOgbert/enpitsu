@@ -5,9 +5,9 @@
 #ifndef LIBTEST_TEXTURE2D_H
 #define LIBTEST_TEXTURE2D_H
 
-#include "helpers/defines.h"
+#include "enpitsu/helpers/defines.h"
 #include "ShaderProgram.h"
-#include "helpers/Exception.h"
+#include "enpitsu/helpers/Exception.h"
 
 namespace enpitsu
 {

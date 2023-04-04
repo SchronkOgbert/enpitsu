@@ -2,7 +2,7 @@
 // Created by weekendUM on 2/8/2023.
 //
 
-#include "objects/Square.h"
+#include "enpitsu/objects/Square.h"
 
 namespace enpitsu
 {

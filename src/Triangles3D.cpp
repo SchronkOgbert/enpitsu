@@ -1,4 +1,4 @@
-#include "objects/Triangles3D.h"
+#include "enpitsu/objects/Triangles3D.h"
 
 namespace enpitsu
 {

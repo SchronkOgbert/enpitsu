@@ -1,11 +1,11 @@
 #ifndef ENPITSU_SCREEN_H
 #define ENPITSU_SCREEN_H
 
-#include "helpers/defines.h" // this contains pretty much every import the project needs from std and 3rd party libraries
+#include "enpitsu/helpers/defines.h" // this contains pretty much every import the project needs from std and 3rd party libraries
 
-#include "helpers/Exception.h"
-#include "helpers/GeometryEssentials.h"
-#include "helpers/InputEvents.h"
+#include "enpitsu/helpers/Exception.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
+#include "enpitsu/helpers/InputEvents.h"
 
 namespace enpitsu
 {

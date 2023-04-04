@@ -1,4 +1,4 @@
-#include "objects/Cube.h"
+#include "enpitsu/objects/Cube.h"
 
 namespace enpitsu
 {

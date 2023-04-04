@@ -2,7 +2,7 @@
 // Created by weekendUM on 2/2/2023.
 //
 
-#include "helpers/GeometryEssentials.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
 
 float enpitsu::toGLCoord(const float &screenCoord, const float &maxDimension)
 {

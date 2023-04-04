@@ -6,8 +6,8 @@
 #define LIBTEST_OBJECT3D_H
 
 #include "Object.h"
-#include "helpers/defines.h"
-#include "shading/SolidColor.h"
+#include "enpitsu/helpers/defines.h"
+#include "enpitsu/shading/SolidColor.h"
 
 namespace enpitsu
 {

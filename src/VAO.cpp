@@ -2,8 +2,8 @@
 // Created by weekendUM on 1/27/2023.
 //
 
-#include "GL/VAO.h"
-#include "GL/VBO.h"
+#include "enpitsu/GL/VAO.h"
+#include "enpitsu/GL/VBO.h"
 
 GLuint VAO::getId() const
 {
