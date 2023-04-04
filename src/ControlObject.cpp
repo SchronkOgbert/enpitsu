@@ -2,7 +2,7 @@
 // Created by weekendUM on 2/3/2023.
 //
 
-#include "ControlObject.h"
+#include "objects/ControlObject.h"
 
 namespace enpitsu
 {

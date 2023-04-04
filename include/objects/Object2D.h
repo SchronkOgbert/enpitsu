@@ -5,14 +5,14 @@
 #ifndef LIBTEST_OBJECT2D_H
 #define LIBTEST_OBJECT2D_H
 
+#include "helpers/defines.h"
+
 #include "Object.h"
-#include "GeometryEssentials.h"
-#include "VAO.h"
-#include "EBO.h"
-#include "SolidColor.h"
-#include "Exception.h"
-#include <memory>
-#include <vector>
+#include "helpers/GeometryEssentials.h"
+#include "GL/VAO.h"
+#include "GL/EBO.h"
+#include "shading/SolidColor.h"
+#include "helpers/Exception.h"
 
 namespace enpitsu
 {
@@ -26,6 +26,7 @@ namespace enpitsu
     class Object2D : public Object
     {
         Vector2 origin{};
+        Vector2 size{1, 1};
         bool isStatic;
 
         void forceSetLocation(const Vector2& newLocation) noexcept;
@@ -46,7 +47,8 @@ namespace enpitsu
         void setOrigin(const Vector2 &origin);
 
         explicit Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
-                          ShaderProgram *shader = new SolidColor(Vector4(0.8f, 0.3f, 0.02f, 1.0f)),
+                          ShaderProgram *shader = new SolidColor(Vector4(0.8f, 0.3f, 0.02f, 1.0f), "default.vert",
+                                                                 "default.frag"),
                           const bool &isStatic = true,
                           const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 
@@ -59,9 +61,19 @@ namespace enpitsu
 
         void onDestroy() override;
 
+        /**
+         * Sets location in absolute screen coordinates
+         * @param newLocation new screen coords
+         */
         void setLocation(const Vector2& newLocation);
 
-        virtual void resize() = 0;
+        [[nodiscard]] Vector2 getLocation() const { return this->origin; }
+
+        /**
+         * The default size is (1.0, 1.0). This new size should also be in percentages
+         * @param newSize
+         */
+        void setSize(const Vector2& newSize);
 
     protected:
         void draw() override;

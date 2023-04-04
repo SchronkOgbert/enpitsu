@@ -5,7 +5,7 @@
 #ifndef LIBTEST_VBO_H
 #define LIBTEST_VBO_H
 
-#include "glad/glad.h"
+#include "helpers/defines.h"
 
 class VBO
 {
@@ -20,6 +20,7 @@ public:
     };
 private:
     objectLayout layout;
+    unsigned int size;
 public:
     [[nodiscard]] objectLayout getLayout() const
     {
@@ -34,6 +35,8 @@ public:
     void Unbind();
 
     void Delete();
+
+    void Update(GLfloat* newVertices);
 
     [[nodiscard]] GLuint getId() const;
 };

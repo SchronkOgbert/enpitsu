@@ -2,13 +2,12 @@
 // Created by weekendUM on 2/8/2023.
 //
 
-#include "SolidColor.h"
-#include "iostream"
+#include "shading/SolidColor.h"
 
 namespace enpitsu
 {
-    SolidColor::SolidColor(const Vector4 &rgbaColor) :
-            ShaderProgram("shaders/default.vert", "shaders/default.frag"), color(rgbaColor)
+    SolidColor::SolidColor(const Vector4 &rgbaColor, const char *vertexFile, const char *fragmentFile) :
+            ShaderProgram(vertexFile, fragmentFile), color(rgbaColor)
     {
 
     }
@@ -26,7 +25,7 @@ namespace enpitsu
             colorInfo[i++] = static_cast<float>(color.z) / 255.0f;
             colorInfo[i] = static_cast<float>(color.a) / 255.0f;
         }
-        std::cout << "size of color info: " << sizeof(GLfloat) * colorInfo.size() << '\n';
+        PLOGD << "size of color info: " << sizeof(GLfloat) * colorInfo.size();
 //        for (auto &vertex: colorInfo)
 //        {
 //            std::cout << "color vertex: " << vertex << '\n';

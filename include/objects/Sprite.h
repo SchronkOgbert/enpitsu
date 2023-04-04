@@ -5,13 +5,13 @@
 #ifndef LIBTEST_SPRITE_H
 #define LIBTEST_SPRITE_H
 
-#include "Triangles.h"
-#include "Texture2DShader.h"
+#include "Triangles2D.h"
+#include "shading/Texture2DShader.h"
 
 namespace enpitsu
 {
 
-    class Sprite : public Triangles
+    class Sprite : public Triangles2D
     {
     protected:
         Texture2DShader* textureObject;
@@ -27,8 +27,6 @@ namespace enpitsu
         void init() override;
 
         ~Sprite() override;
-
-        void resize() override;
 
     protected:
         void draw() override;

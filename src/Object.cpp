@@ -2,10 +2,9 @@
 // Created by weekendUM on 1/24/2023.
 //
 
-#include "Object.h"
-#include "Screen.h"
-#include <iostream>
-#include "InputEvents.h"
+#include "objects/Object.h"
+#include "objects/Screen.h"
+#include "helpers/InputEvents.h"
 
 void enpitsu::Object::tick(const float &delta)
 {
@@ -25,7 +24,7 @@ void enpitsu::Object::callInit()
 void enpitsu::Object::init()
 {
     eventHandler = dynamic_cast<InputEvents *>(this);
-    std::cout << "Accept events: " << (eventHandler != nullptr) << '\n';
+    PLOGD << "Accept events: " << (eventHandler != nullptr);
 }
 
 void enpitsu::Object::callKeyPressed(const enpitsu::KeyEvent &event)
@@ -57,6 +56,7 @@ enpitsu::Object::Object(Screen *screen)
 void enpitsu::Object::destroy()
 {
     this->onDestroy();
+    queueDestroy = true;
     this->screen->removeObject(this);
 }
 

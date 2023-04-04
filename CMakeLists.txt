@@ -13,9 +13,10 @@ endif()
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 find_package(glfw3 REQUIRED)
-find_package(glad REQUIRED)
+find_package(GLEW REQUIRED)
 find_package(stb REQUIRED)
 find_package(glm REQUIRED)
+find_package(plog REQUIRED)
 
 file(GLOB HEADER_FILES include/*.h)
 file(GLOB SOURCE_FILES src/*.cpp)

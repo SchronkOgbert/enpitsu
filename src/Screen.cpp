@@ -1,35 +1,34 @@
-#include <tuple>
-#include <iostream>
-#include <chrono>
-#include "Screen.h"
-#include "Object.h"
-#include "InputEvents.h"
+#include "objects/Screen.h"
+#include "objects/Object.h"
+#include "helpers/InputEvents.h"
+#include "objects/Camera3D.h"
 
 bool enpitsu::Screen::exists = false;
 
 using enpitsu::Object;
 
 enpitsu::Screen::Screen
-        (const std::pair<int, int> &size,
+        (const Vector2 &size,
          const bool &fullScreen
-        )
+        ) : size(size), fullScreen(fullScreen)
 {
     if (exists)
     {
         throw BadProcessCreation();
     }
     exists = true;
-    this->size = size;
-    this->fullScreen = fullScreen;
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
+    this->destroyQueue = std::make_unique<std::vector<Object *>>();
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
         throw BadInitException();
     }
+    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::verbose, &consoleAppender);
 }
 
 enpitsu::Screen::~Screen()
@@ -47,6 +46,10 @@ enpitsu::Screen::~Screen()
 
 void enpitsu::Screen::start()
 {
+    if (!camera)
+    {
+        PLOG_WARNING << "This screen has no camera";
+    }
     this->init();
 
     this->callInit(); //call this after the init actually runs the code and adds the objects
@@ -66,8 +69,8 @@ void enpitsu::Screen::start()
 void enpitsu::Screen::createGLFWWindow()
 {
     window = glfwCreateWindow(
-            std::get<0>(size),
-            std::get<1>(size),
+            static_cast<int>(size.x),
+            static_cast<int>(size.y),
             name.c_str(),
             nullptr,
             nullptr
@@ -89,6 +92,10 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         obj->callTick(delta);
     }
+    if (camera)
+    {
+        camera->callTick(delta);
+    }
 }
 
 void enpitsu::Screen::setGLFWHints()
@@ -100,7 +107,6 @@ void enpitsu::Screen::setGLFWHints()
 
 void enpitsu::Screen::tick(const float &delta)
 {
-//    std::cout << "delta: " << delta << '\n';
     if (glfwWindowShouldClose(window))
     {
         this->destroy();
@@ -108,8 +114,12 @@ void enpitsu::Screen::tick(const float &delta)
     }
     updateScreenDefaults();
     this->callTick(delta);
-    glfwSwapBuffers(window);
     glfwPollEvents();
+    std::jthread destroyer([this]
+                        {
+                            this->destroyObjectsFromQueue();
+                        });
+    glfwSwapBuffers(this->window);
 }
 
 void enpitsu::Screen::init()
@@ -130,8 +140,8 @@ void enpitsu::Screen::init()
     });
     glfwSetWindowSizeCallback(window, [](GLFWwindow *glfwWindow, int width, int height)
     {
-        auto* screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
-        screen->size = std::make_pair(width, height);
+        auto *screen = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
+        screen->size = Vector2(width, height);
         glViewport(0, 0, width, height);
         screen->now = std::chrono::system_clock::now();
         std::chrono::duration<float> delta = screen->now - screen->before;
@@ -147,9 +157,9 @@ void enpitsu::Screen::init()
     {
         auto obj = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
         auto *pos = &(obj->cursorPos);
-        glfwGetCursorPos(glfwWindow, &(pos->first), &(pos->second));
+        glfwGetCursorPos(glfwWindow, &(pos->x), &(pos->y));
 //        println(pos->first, ' ', pos->second);
-        pos->second = obj->getSize().second - pos->second;
+        pos->y = obj->getSize().y - pos->y;
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -159,9 +169,11 @@ void enpitsu::Screen::init()
                          });
 
     //load opengl
-    gladLoadGL();
+//    glewExperimental = true;
+    glewInit();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glEnable(GL_ALPHA_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 }
 
 void enpitsu::Screen::destroy()
@@ -171,10 +183,15 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
-    std::cout << "Calling init for " << objects->size() << " objects\n";
+    PLOGI << "Calling init for " << objects->size() << " objects";
     for (auto &obj: *objects)
     {
         obj->callInit();
+    }
+    if (camera)
+    {
+        PLOGI << "Calling init for camera";
+        camera->callInit();
     }
 }
 
@@ -212,7 +229,7 @@ void enpitsu::Screen::callKeyEvents(const int &key,
         }
         default:
         {
-            std::cerr << "Event not implemented\n";
+            PLOGE << "Event not implemented";
         }
     }
 }
@@ -223,6 +240,10 @@ void enpitsu::Screen::sendPress(KeyEvent event) const
     {
         obj->callKeyPressed(event);
     }
+    if (camera)
+    {
+        camera->callKeyPressed(event);
+    }
 }
 
 void enpitsu::Screen::sendRelease(const KeyEvent &event)
@@ -231,27 +252,25 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
     {
         obj->callKeyReleased(event);
     }
+    if (camera)
+    {
+        camera->callKeyReleased(event);
+    }
 }
 
 void enpitsu::Screen::updateScreenDefaults()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    checkDepth ? glClear(GL_COLOR_BUFFER_BIT) :
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void enpitsu::Screen::removeObject(Object *obj)
 {
-    bool success = false;
-    objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
-                       {
-                           if (success) return false;
-                           success = obj == el.get();
-                           return obj == el.get();
-                       });
-    if (!success) throw BadObjectRemove(obj);
+    destroyQueue->push_back(obj);
 }
 
 void enpitsu::Screen::callMouseEvents(const int &button, const int &action, const int &mods,
-                                      const std::pair<double, double> &pos)
+                                      const Vector2 &pos)
 {
     MouseEvent event{};
     event.screenPos = pos;
@@ -281,6 +300,10 @@ void enpitsu::Screen::callMouseEvents(const int &button, const int &action, cons
     {
         action ? obj->callMousePressed(event) : obj->callMouseReleased(event);
     }
+    if (camera)
+    {
+        action ? camera->callMousePressed(event) : camera->callMouseReleased(event);
+    }
 }
 
 void enpitsu::Screen::enableCursor(const bool &enable)
@@ -288,14 +311,67 @@ void enpitsu::Screen::enableCursor(const bool &enable)
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
-const std::pair<int, int> &enpitsu::Screen::getSize() const
+inline const enpitsu::Vector2 &enpitsu::Screen::getSize() const
 {
     return size;
 }
 
-void enpitsu::Screen::setSize(const std::pair<int, int> &size)
+void enpitsu::Screen::setSize(const Vector2 &size)
 {
     this->size = size;
-    glfwSetWindowSize(window, size.first, size.second);
+    glfwSetWindowSize(window, size.x, size.y);
+}
+
+inline const enpitsu::Camera3D *enpitsu::Screen::getCamera3D() const
+{
+    return this->camera.get();
+}
+
+void enpitsu::Screen::setCamera3D(enpitsu::Camera3D *camera3D)
+{
+    this->camera = std::unique_ptr<Camera3D>(camera3D);
+}
+
+void enpitsu::Screen::showCursor(const bool &show)
+{
+    glfwSetInputMode(window, GLFW_CURSOR, show ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+}
+
+void enpitsu::Screen::removeObjectNow(Object *obj)
+{
+    bool success = false;
+    objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
+                       {
+                           if (success) return false;
+                           success = obj == el.get();
+                           return obj == el.get();
+                       });
+    if (!success) throw BadObjectRemove(obj);
+}
+
+void enpitsu::Screen::destroyObjectsFromQueue()
+{
+    if (this->destroyQueue->empty()) return;
+    for (auto &el: *destroyQueue)
+    {
+        removeObjectNow(el);
+    }
+    this->destroyQueue->clear();
+}
+
+inline bool enpitsu::Screen::getCheckDepth() const
+{
+    return checkDepth;
+}
+
+void enpitsu::Screen::setCheckDepth(bool checkDepth)
+{
+    checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+    this->checkDepth = checkDepth;
+}
+
+enpitsu::Screen::Screen(const enpitsu::Vector2 &&size, const bool &&fullScreen) : Screen(size, fullScreen)
+{
+
 }
 

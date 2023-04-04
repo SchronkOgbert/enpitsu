@@ -5,12 +5,9 @@
 #ifndef ENPITSU_OBJECT_H
 #define ENPITSU_OBJECT_H
 
-#include "defines.h"
-#include "InputEvents.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "Exception.h"
+#include "helpers/defines.h"
+#include "helpers/InputEvents.h"
+#include "helpers/Exception.h"
 
 namespace enpitsu
 {
@@ -27,6 +24,8 @@ namespace enpitsu
     {
         friend class Screen;
         InputEvents* eventHandler{nullptr};
+
+        bool queueDestroy{false};
     protected:
         Screen* screen;
     public:
@@ -47,6 +46,8 @@ namespace enpitsu
         virtual ~Object();
 
         void destroy();
+
+        [[nodiscard]] bool isDestroyed() const { return queueDestroy; }
 
     protected:
         //events

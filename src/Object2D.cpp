@@ -2,10 +2,10 @@
 // Created by weekendUM on 1/27/2023.
 //
 
-#include "Object2D.h"
-#include "Screen.h"
-#include "SolidColor.h"
-#include "GeometryEssentials.h"
+#include "objects/Object2D.h"
+#include "objects/Screen.h"
+#include "shading/SolidColor.h"
+#include "helpers/GeometryEssentials.h"
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
                             ShaderProgram *shader,
@@ -21,9 +21,9 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     this->vertices.reserve(points.size() * 2U);
     for (auto &point: points)
     {
-        this->vertices.push_back(toGLCoord(origin.x + point.x, screen->getSize().first));
+        this->vertices.push_back(toGLCoord(origin.x + point.x, screen->getSize().x));
         this->vertices.push_back(toGLCoord(origin.y + point.y,
-                                           screen->getSize().second));
+                                           screen->getSize().y));
     }
     if (drawOrder.empty())
     {
@@ -100,19 +100,21 @@ void enpitsu::Object2D::setLocation(const enpitsu::Vector2 &newLocation)
 
 void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) noexcept
 {
+    Vector2 distance = newLocation - origin;
+    origin = newLocation;
     for (auto i = 0; i < vertices.size(); i += 2)
     {
         vertices[i] = toGLCoord(
-                fromGLCoord(vertices[i], screen->getSize().first) + newLocation.x,
-                screen->getSize().first
+                fromGLCoord(vertices[i], screen->getSize().x) + distance.x,
+                screen->getSize().x
         );
         vertices[i + 1] = toGLCoord(
-                fromGLCoord(vertices[i + 1], screen->getSize().second) +
-                newLocation.y, // this is because y starts form the bottom in glfw
-                screen->getSize().second
+                fromGLCoord(vertices[i + 1], screen->getSize().y) +
+                distance.y, // this is because y starts form the bottom in glfw
+                screen->getSize().y
         );
     }
-    shaderProgram->Create(vertices, indices, 2, isStatic);
+    shaderProgram->getVertexPosition()->Update(&vertices[0]);
 }
 
 void enpitsu::Object2D::tick(const float &delta)
@@ -120,4 +122,9 @@ void enpitsu::Object2D::tick(const float &delta)
     Object::tick(delta);
     this->draw();
     shaderProgram->Unbind();
+}
+
+void enpitsu::Object2D::setSize(const enpitsu::Vector2 &newSize)
+{
+    
 }

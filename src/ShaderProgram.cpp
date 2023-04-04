@@ -1,15 +1,19 @@
-#include "ShaderProgram.h"
-#include <fstream>
-#include <iostream>
-#include "cstring"
+#include "shading/ShaderProgram.h"
+#include "helpers/defines.h"
+#include "shading/ShaderSources.h"
 
 namespace enpitsu
 {
-
     ShaderProgram::ShaderProgram(const char *vertexFile, const char *fragmentFile)
     {
-        const auto *vertexData = readShaderFile(vertexFile);
-        const auto *fragmentData = readShaderFile(fragmentFile);
+        const bool defaultVertex = defaultShaderSources->count(std::string(vertexFile));
+        const bool defaultFrag = defaultShaderSources->count(std::string(fragmentFile));
+        const char *vertexData = defaultVertex ?
+                                 (*defaultShaderSources)[std::string(vertexFile)] :
+                                 readShaderFile(vertexFile);
+        const char *fragmentData = defaultFrag ?
+                                   (*defaultShaderSources)[std::string(fragmentFile)] :
+                                   readShaderFile(fragmentFile);
 
         if (strlen(vertexData) == 0)
         {
@@ -23,7 +27,7 @@ namespace enpitsu
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         ID = glCreateProgram();
-        std::cout << "compiling shader " << ID << "(" << vertexFile << ")\n";
+        PLOGD << "compiling shader " << ID << "(" << vertexFile << ")";
 
         glShaderSource(vertexShader, 1, &vertexData, nullptr);
         glShaderSource(fragmentShader, 1, &fragmentData, nullptr);
@@ -33,14 +37,24 @@ namespace enpitsu
         glAttachShader(ID, vertexShader);
         glAttachShader(ID, fragmentShader);
 
-        delete[] vertexData;
-        delete[] fragmentData;
+        if(!defaultVertex)
+        {
+            delete[] vertexData;
+        }
+        if(!defaultFrag)
+        {
+            delete[] fragmentData;
+        }
     }
 
     void ShaderProgram::Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices,
                                const int &vertexSize,
                                const bool &isStatic)
     {
+        if(vertices.empty() || indices.empty())
+        {
+            throw BadShaderInfo();
+        }
         setVao(new VAO(vertexSize));
         getVao()->Bind();
         setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),
@@ -63,6 +77,7 @@ namespace enpitsu
 
     char *ShaderProgram::readShaderFile(const char *filename)
     {
+        PLOGD << "reading shader file " << filename;
         // TODO: replace this with something that runs in a reasonable amount of time
         std::ifstream fin(filename);
         std::string buffer;
@@ -93,6 +108,7 @@ namespace enpitsu
         {
             char shaderInfo[1024];
             glGetShaderInfoLog(ID, 1024, nullptr, shaderInfo);
+            PLOGE << shaderInfo;
             throw BadShaderCompile(shaderInfo);
         }
     }

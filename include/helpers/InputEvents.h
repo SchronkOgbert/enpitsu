@@ -5,8 +5,8 @@
 #ifndef ENPITSU_INPUTEVENTS_H
 #define ENPITSU_INPUTEVENTS_H
 
-#include <utility>
 #include "Exception.h"
+#include "GeometryEssentials.h"
 
 namespace enpitsu
 {
@@ -27,11 +27,11 @@ namespace enpitsu
         };
         MouseEvent::Event button;
         float scrollValue;
-        std::pair<double, double> screenPos;
+        Vector2 screenPos;
 
         MouseEvent() = default;
 
-        MouseEvent(const MouseEvent::Event &button, const std::pair<double, double> &screenPos,
+        MouseEvent(const MouseEvent::Event &button, const Vector2 &screenPos,
                    const float &scrollValue = 0) :
                 button(button),
                 screenPos(screenPos),
@@ -95,6 +95,10 @@ namespace enpitsu
     class InputEvents
     {
     public:
+        InputEvents() = default;
+        InputEvents(const InputEvents&) = delete;
+        InputEvents(const InputEvents&&) = delete;
+
         virtual void OnMousePressed(const MouseEvent &event) = 0;
 
         virtual void OnMouseReleased(const MouseEvent &event) = 0;

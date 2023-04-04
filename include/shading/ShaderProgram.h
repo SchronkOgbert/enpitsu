@@ -5,14 +5,10 @@
 #ifndef ENPITSU_SHADERPROGRAM_H
 #define ENPITSU_SHADERPROGRAM_H
 
-#include "defines.h"
-#include "Exception.h"
-#include "VAO.h"
-#include "EBO.h"
-
-#include <glad/glad.h>
-#include <memory>
-#include <vector>
+#include "helpers/defines.h"
+#include "helpers/Exception.h"
+#include "GL/VAO.h"
+#include "GL/EBO.h"
 
 namespace enpitsu
 {
@@ -40,6 +36,11 @@ namespace enpitsu
         {}
     };
 
+    class BadShaderInfo : public Exception
+    {
+    public:
+        BadShaderInfo() : Exception("The vertices or indices provided are empty") {}
+    };
     class ShaderProgram
     {
     protected:

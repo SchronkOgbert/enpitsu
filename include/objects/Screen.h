@@ -1,28 +1,21 @@
 #ifndef ENPITSU_SCREEN_H
 #define ENPITSU_SCREEN_H
 
-#include "defines.h"
+#include "helpers/defines.h" // this contains pretty much every import the project needs from std and 3rd party libraries
 
-#include <functional>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include "Exception.h"
-#include <string>
-#include "InputEvents.h"
-#include <memory>
-#include <mutex>
-#include <list>
-#include <chrono>
-#include <cstddef>
-#include <concepts>
-#include <iostream>
+#include "helpers/Exception.h"
+#include "helpers/GeometryEssentials.h"
+#include "helpers/InputEvents.h"
 
 namespace enpitsu
 {
     class Object;
 
+    class Camera3D;
+
     template<class Object>
-    concept objectType = requires(Object t)
+    concept objectType =
+    requires(Object t)
     {
         { t.callInit() };
     };
@@ -66,25 +59,44 @@ namespace enpitsu
     class BadObjectRemove : public Exception
     {
     public:
-        explicit BadObjectRemove(void* obj) : Exception("Could not remove object. "
-                                      "Are you sure you added it using Screen::addObject?")
+        explicit BadObjectRemove(void *obj) : Exception("Could not remove object. "
+                                                        "Are you sure you added it using Screen::addObject?")
         {
             std::cerr << "object " << obj << '\n';
         }
     };
+
     class Screen
     {
         static bool exists;
 
         friend class Object;
 
+        friend class Camera3D;
+
         //props
-        std::pair<int, int> size;
+        Vector2 size;
         bool fullScreen;
+    public:
+        /**
+         * check whether the depth is checked(used in 3D rendering)
+         * @return value, default is false
+         */
+        [[nodiscard]] bool getCheckDepth() const;
+
+        /**
+         * enables or disables depth checking(used in 3D rendering)
+         * @param checkDepth true for enable, false for disable, default false
+         */
+        void setCheckDepth(bool checkDepth);
+
+    private:
+        bool checkDepth{false};
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
-        std::pair<double, double> cursorPos;
+        Vector2 cursorPos;
+        std::unique_ptr<Camera3D> camera;
 
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
@@ -92,6 +104,7 @@ namespace enpitsu
 
         //references
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
+        std::unique_ptr<std::vector<Object*>> destroyQueue;
 
         //private events
         void sendPress(KeyEvent event) const;
@@ -100,7 +113,19 @@ namespace enpitsu
 
         void updateScreenDefaults();
 
+        /**
+         * adds the object to a destruction queue, it will get removed at the end of the frame
+         * @param obj object to be removed
+         */
         void removeObject(Object *obj);
+
+        /**
+         * removes an object immediately, without waiting, in exceedingly bad conditions it may cause lag spikes
+         * @param obj
+         */
+        void removeObjectNow(Object* obj);
+
+        void destroyObjectsFromQueue();
 
     public:
         Screen() = delete;
@@ -108,17 +133,16 @@ namespace enpitsu
         // default constructor
         explicit Screen
                 (
-                        const std::pair<int, int> &size,
+                        const Vector2 &size,
                         const bool &fullScreen = false
                 );
 
         //move constructor
         explicit Screen
                 (
-                        const std::pair<int, int> &&size,
+                        const Vector2 &&size, // TODO change this to Vector2
                         const bool &&fullScreen = false
-                ) : Screen(size, fullScreen)
-        {}
+                );
 
         //destructor
         virtual ~Screen();
@@ -127,10 +151,10 @@ namespace enpitsu
         type *addObject(type *obj)
         {
             if (!obj) throw BadObjectAdd();
-            std::cout << "Add object " << obj << " to screen\n";
+            PLOGD << "Add object " << obj << " to screen";
             objects->emplace_back(obj);
             obj->callInit();
-            std::cout << "There are " << objects->size() << " objects after this operation\n";
+            PLOGD << "There are " << objects->size() << " objects after this operation";
             return obj;
         }
 
@@ -154,17 +178,23 @@ namespace enpitsu
         void callMouseEvents(const int &button,
                              const int &action,
                              const int &mods,
-                             const std::pair<double, double> &pos);
+                             const Vector2 &pos);
 
         void enableCursor(const bool &enable);
+
+        void showCursor(const bool &show);
 
         /**
          * get the window size
          * @return std::pair of <int, int>, first is width, second is height
          */
-        [[nodiscard]] const std::pair<int, int> &getSize() const;
+        [[nodiscard]] const Vector2 & getSize() const;
 
-        void setSize(const std::pair<int, int> &size);
+        void setSize(const Vector2 &size);
+
+        [[nodiscard]] const Camera3D* getCamera3D() const;
+
+        void setCamera3D(Camera3D* camera3D);
 
     protected:
 
