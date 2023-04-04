@@ -25,6 +25,5 @@ namespace enpitsu
     {
         Object2D::draw();
         glDrawArrays(GL_LINES, 0, indices.size());
-        PLOGD << "Error: " << glGetError();
     }
 } // enpitsu
