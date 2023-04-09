@@ -24,23 +24,11 @@ void enpitsu::Object::callInit()
 void enpitsu::Object::init()
 {
     eventHandler = dynamic_cast<InputEvents *>(this);
+    if(eventHandler)
+    {
+        screen->addEventHandler(eventHandler);
+    }
     PLOGD << "Accept events: " << (eventHandler != nullptr);
-}
-
-void enpitsu::Object::callKeyPressed(const enpitsu::KeyEvent &event)
-{
-    if(eventHandler)
-    {
-        eventHandler->OnKeyPressed(event);
-    }
-}
-
-void enpitsu::Object::callKeyReleased(const enpitsu::KeyEvent &event)
-{
-    if(eventHandler)
-    {
-        eventHandler->OnKeyReleased(event);
-    }
 }
 
 enpitsu::Object::~Object()
@@ -58,22 +46,6 @@ void enpitsu::Object::destroy()
     this->onDestroy();
     queueDestroy = true;
     this->screen->removeObject(this);
-}
-
-void enpitsu::Object::callMousePressed(const enpitsu::MouseEvent &event)
-{
-    if(eventHandler)
-    {
-        eventHandler->OnMousePressed(event);
-    }
-}
-
-void enpitsu::Object::callMouseReleased(const enpitsu::MouseEvent &event)
-{
-    if(eventHandler)
-    {
-        eventHandler->OnMouseReleased(event);
-    }
 }
 
 void enpitsu::Object::onDestroy()

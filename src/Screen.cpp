@@ -21,6 +21,7 @@ enpitsu::Screen::Screen
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
     this->destroyQueue = std::make_unique<std::vector<Object *>>();
+    this->callableEvents = std::make_unique<std::vector<InputEvents*>>();
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -183,11 +184,6 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
-    PLOGI << "Calling init for " << objects->size() << " objects";
-    for (auto &obj: *objects)
-    {
-        obj->callInit();
-    }
     if (camera)
     {
         PLOGI << "Calling init for camera";
@@ -236,29 +232,29 @@ void enpitsu::Screen::callKeyEvents(const int &key,
 
 void enpitsu::Screen::sendPress(KeyEvent event) const
 {
-    for (auto &obj: *objects)
+    for (auto obj: *callableEvents)
     {
-        obj->callKeyPressed(event);
+        obj->OnKeyPressed(event);
     }
     if (camera)
     {
-        camera->callKeyPressed(event);
+        camera->OnKeyPressed(event);
     }
 }
 
 void enpitsu::Screen::sendRelease(const KeyEvent &event)
 {
-    for (auto &obj: *objects)
+    for (auto &obj: *callableEvents)
     {
-        obj->callKeyReleased(event);
+        obj->OnKeyReleased(event);
     }
     if (camera)
     {
-        camera->callKeyReleased(event);
+        camera->OnKeyReleased(event);
     }
 }
 
-void enpitsu::Screen::updateScreenDefaults()
+void enpitsu::Screen::updateScreenDefaults() const
 {
     checkDepth ? glClear(GL_COLOR_BUFFER_BIT) :
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -296,13 +292,13 @@ void enpitsu::Screen::callMouseEvents(const int &button, const int &action, cons
             throw BadMouseInput();
         }
     }
-    for (auto &obj: *objects)
+    for (auto &obj: *callableEvents)
     {
-        action ? obj->callMousePressed(event) : obj->callMouseReleased(event);
+        action ? obj->OnMousePressed(event) : obj->OnMouseReleased(event);
     }
     if (camera)
     {
-        action ? camera->callMousePressed(event) : camera->callMouseReleased(event);
+        action ? camera->OnMousePressed(event) : camera->OnMouseReleased(event);
     }
 }
 
@@ -340,6 +336,7 @@ void enpitsu::Screen::showCursor(const bool &show)
 void enpitsu::Screen::removeObjectNow(Object *obj)
 {
     bool success = false;
+    std::erase(*callableEvents, dynamic_cast<InputEvents*>(obj));
     objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
                        {
                            if (success) return false;
@@ -373,5 +370,11 @@ void enpitsu::Screen::setCheckDepth(bool checkDepth)
 enpitsu::Screen::Screen(const enpitsu::Vector2 &&size, const bool &&fullScreen) : Screen(size, fullScreen)
 {
 
+}
+
+void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
+{
+    callableEvents->push_back(eventHandler);
+    PLOGD << "Callables: " << callableEvents->size();
 }
 

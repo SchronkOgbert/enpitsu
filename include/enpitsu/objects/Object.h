@@ -35,14 +35,6 @@ namespace enpitsu
 
         void callInit();
 
-        void callKeyPressed(const KeyEvent & event);
-
-        void callKeyReleased(const KeyEvent &event);
-
-        void callMousePressed(const MouseEvent &event);
-
-        void callMouseReleased(const MouseEvent &event);
-
         virtual ~Object();
 
         void destroy();

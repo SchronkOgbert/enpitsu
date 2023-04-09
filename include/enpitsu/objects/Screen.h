@@ -13,6 +13,8 @@ namespace enpitsu
 
     class Camera3D;
 
+    class InputEvents;
+
     template<class Object>
     concept objectType =
     requires(Object t)
@@ -59,10 +61,8 @@ namespace enpitsu
     class BadObjectRemove : public Exception
     {
     public:
-        explicit BadObjectRemove(void *obj) : Exception("Could not remove object. "
-                                                        "Are you sure you added it using Screen::addObject?")
+        explicit BadObjectRemove(void *obj) : Exception(std::format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
         {
-            std::cerr << "object " << obj << '\n';
         }
     };
 
@@ -105,13 +105,14 @@ namespace enpitsu
         //references
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
         std::unique_ptr<std::vector<Object*>> destroyQueue;
+        std::unique_ptr<std::vector<InputEvents*>> callableEvents;
 
         //private events
         void sendPress(KeyEvent event) const;
 
         void sendRelease(const KeyEvent &event);
 
-        void updateScreenDefaults();
+        void updateScreenDefaults() const;
 
         /**
          * adds the object to a destruction queue, it will get removed at the end of the frame
@@ -195,6 +196,8 @@ namespace enpitsu
         [[nodiscard]] const Camera3D* getCamera3D() const;
 
         void setCamera3D(Camera3D* camera3D);
+
+        void addEventHandler(InputEvents* eventHandler);
 
     protected:
 

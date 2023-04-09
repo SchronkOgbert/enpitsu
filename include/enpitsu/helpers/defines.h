@@ -34,6 +34,7 @@
 #include <map>
 #include <type_traits>
 #include <thread>
+#include <set>
 
 // 3rd party stuff
 #include <GL/glew.h>
