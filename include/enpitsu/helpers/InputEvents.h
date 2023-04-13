@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/25/2023.
-//
-
 #ifndef ENPITSU_INPUTEVENTS_H
 #define ENPITSU_INPUTEVENTS_H
 

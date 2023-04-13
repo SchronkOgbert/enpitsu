@@ -1,5 +1,5 @@
-#ifndef LIBTEST_TRIANGLES3D_H
-#define LIBTEST_TRIANGLES3D_H
+#ifndef ENPITSU_TRIANGLES3D_H
+#define ENPITSU_TRIANGLES3D_H
 
 #include "Object3D.h"
 
@@ -18,4 +18,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_TRIANGLES3D_H
+#endif //ENPITSU_TRIANGLES3D_H

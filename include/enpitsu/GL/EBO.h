@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
-
-#ifndef LIBTEST_EBO_H
-#define LIBTEST_EBO_H
+#ifndef ENPITSU_EBO_H
+#define ENPITSU_EBO_H
 
 #include "enpitsu/helpers/defines.h"
 
@@ -23,4 +19,4 @@ public:
 };
 
 
-#endif //LIBTEST_EBO_H
+#endif //ENPITSU_EBO_H

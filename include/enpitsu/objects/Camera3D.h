@@ -1,5 +1,5 @@
-#ifndef LIBTEST_CAMERA3D_H
-#define LIBTEST_CAMERA3D_H
+#ifndef ENPITSU_CAMERA3D_H
+#define ENPITSU_CAMERA3D_H
 
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "ControlObject.h"
@@ -41,4 +41,4 @@ namespace enpitsu
 }
 
 
-#endif //LIBTEST_CAMERA3D_H
+#endif //ENPITSU_CAMERA3D_H

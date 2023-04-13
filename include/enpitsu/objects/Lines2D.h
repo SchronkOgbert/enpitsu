@@ -1,5 +1,5 @@
-#ifndef CONANFILE_PY_LINES2D_H
-#define CONANFILE_PY_LINES2D_H
+#ifndef ENPITSU_LINES2D_H
+#define ENPITSU_LINES2D_H
 
 #include "Object2D.h"
 #include "enpitsu/shading/ShaderProgram.h"
@@ -25,4 +25,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //CONANFILE_PY_LINES2D_H
+#endif //ENPITSU_LINES2D_H

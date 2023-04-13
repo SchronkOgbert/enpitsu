@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/24/2023.
-//
-
 #ifndef ENPITSU_EXCEPTION_H
 #define ENPITSU_EXCEPTION_H
 

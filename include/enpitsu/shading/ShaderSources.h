@@ -1,5 +1,5 @@
-#ifndef LIBTEST_SHADERSOURCES_H
-#define LIBTEST_SHADERSOURCES_H
+#ifndef ENPITSU_SHADERSOURCES_H
+#define ENPITSU_SHADERSOURCES_H
 
 #include "enpitsu/helpers/defines.h"
 
@@ -93,4 +93,4 @@ namespace enpitsu
             });
 }
 
-#endif //LIBTEST_SHADERSOURCES_H
+#endif //ENPITSU_SHADERSOURCES_H

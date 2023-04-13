@@ -1,5 +1,5 @@
-//
-// Created by weekendUM on 2/2/2023.
+#ifndef ENPITSU_GEOMETRYESSENTIALS_H
+#define ENPITSU_GEOMETRYESSENTIALS_H
 //
 
 #ifndef LIBTEST_GEOMETRYESSENTIALS_H
@@ -310,4 +310,4 @@ namespace enpitsu
     }
 }
 
-#endif //LIBTEST_GEOMETRYESSENTIALS_H
+#endif //ENPITSU_GEOMETRYESSENTIALS_H

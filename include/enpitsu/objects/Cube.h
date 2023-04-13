@@ -1,5 +1,5 @@
-#ifndef LIBTEST_CUBE_H
-#define LIBTEST_CUBE_H
+#ifndef ENPITSU_CUBE_H
+#define ENPITSU_CUBE_H
 
 #include "Triangles3D.h"
 
@@ -14,4 +14,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_CUBE_H
+#endif //ENPITSU_CUBE_H

@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/3/2023.
-//
-
-#ifndef LIBTEST_TRIANGLES2D_H
-#define LIBTEST_TRIANGLES2D_H
+#ifndef ENPITSU_TRIANGLES2D_H
+#define ENPITSU_TRIANGLES2D_H
 
 #include "Object2D.h"
 
@@ -22,4 +18,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_TRIANGLES2D_H
+#endif //ENPITSU_TRIANGLES2D_H

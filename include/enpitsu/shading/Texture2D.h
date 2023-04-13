@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/5/2023.
-//
-
-#ifndef LIBTEST_TEXTURE2D_H
-#define LIBTEST_TEXTURE2D_H
+#ifndef ENPITSU_TEXTURE2D_H
+#define ENPITSU_TEXTURE2D_H
 
 #include "enpitsu/helpers/defines.h"
 #include "ShaderProgram.h"
@@ -53,4 +49,4 @@ namespace enpitsu
 }
 
 
-#endif //LIBTEST_TEXTURE2D_H
+#endif //ENPITSU_TEXTURE2D_H

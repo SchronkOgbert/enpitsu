@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
-
-#ifndef LIBTEST_VAO_H
-#define LIBTEST_VAO_H
+#ifndef ENPITSU_VAO_H
+#define ENPITSU_VAO_H
 
 #include "enpitsu/helpers/defines.h"
 #include "VBO.h"
@@ -30,4 +26,4 @@ namespace enpitsu
 }
 
 
-#endif //LIBTEST_VAO_H
+#endif //ENPITSU_VAO_H

@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/8/2023.
-//
-
-#ifndef LIBTEST_SQUARE_H
-#define LIBTEST_SQUARE_H
+#ifndef ENPITSU_SQUARE_H
+#define ENPITSU_SQUARE_H
 
 #include "Triangles2D.h"
 #include "enpitsu/shading/ShaderProgram.h"
@@ -24,4 +20,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_SQUARE_H
+#endif //ENPITSU_SQUARE_H

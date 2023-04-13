@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/3/2023.
-//
-
-#ifndef LIBTEST_CONTROLOBJECT_H
-#define LIBTEST_CONTROLOBJECT_H
+#ifndef ENPITSU_CONTROLOBJECT_H
+#define ENPITSU_CONTROLOBJECT_H
 
 #include "Object.h"
 
@@ -23,4 +19,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_CONTROLOBJECT_H
+#endif //ENPITSU_CONTROLOBJECT_H

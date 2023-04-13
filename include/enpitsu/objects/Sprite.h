@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/5/2023.
-//
-
-#ifndef LIBTEST_SPRITE_H
-#define LIBTEST_SPRITE_H
+#ifndef ENPITSU_SPRITE_H
+#define ENPITSU_SPRITE_H
 
 #include "Triangles2D.h"
 #include "enpitsu/shading/Texture2DShader.h"
@@ -34,4 +30,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_SPRITE_H
+#endif //ENPITSU_SPRITE_H

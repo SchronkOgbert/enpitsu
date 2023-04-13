@@ -1,5 +1,5 @@
-//
-// Created by weekendUM on 2/18/2023.
+#ifndef ENPITSU_OBJECT3D_H
+#define ENPITSU_OBJECT3D_H
 //
 
 #ifndef LIBTEST_OBJECT3D_H
@@ -44,4 +44,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_OBJECT3D_H
+#endif //ENPITSU_OBJECT3D_H

@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/8/2023.
-//
-
-#ifndef LIBTEST_SOLIDCOLOR_H
-#define LIBTEST_SOLIDCOLOR_H
+#ifndef ENPITSU_SOLIDCOLOR_H
+#define ENPITSU_SOLIDCOLOR_H
 
 #include "ShaderProgram.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
@@ -28,4 +24,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //LIBTEST_SOLIDCOLOR_H
+#endif //ENPITSU_SOLIDCOLOR_H

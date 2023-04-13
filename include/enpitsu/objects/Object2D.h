@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
-
-#ifndef LIBTEST_OBJECT2D_H
-#define LIBTEST_OBJECT2D_H
+#ifndef ENPITSU_OBJECT2D_H
+#define ENPITSU_OBJECT2D_H
 
 #include "enpitsu/helpers/defines.h"
 
@@ -86,4 +82,4 @@ namespace enpitsu
 }
 
 
-#endif //LIBTEST_OBJECT2D_H
+#endif //ENPITSU_OBJECT2D_H

@@ -1,9 +1,5 @@
-//
-// Created by weekendUM on 2/3/2023.
-//
-
-#ifndef LIBTEST_LINE2D_H
-#define LIBTEST_LINE2D_H
+#ifndef ENPITSU_LINE2D_H
+#define ENPITSU_LINE2D_H
 
 #include "Object2D.h"
 
@@ -26,4 +22,4 @@ namespace enpitsu
 }
 
 
-#endif //LIBTEST_LINE2D_H
+#endif //ENPITSU_LINE2D_H
