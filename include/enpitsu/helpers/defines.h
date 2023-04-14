@@ -35,6 +35,7 @@
 #include <type_traits>
 #include <thread>
 #include <set>
+#include <queue>
 
 // 3rd party stuff
 #include <GL/glew.h>
@@ -46,5 +47,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtx/vector_angle.hpp"
 
 #endif //ENPITSU_DEFINES_H

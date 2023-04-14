@@ -89,6 +89,26 @@ namespace enpitsu
                                           "{\n"
                                           "    FragColor = texture(textureObject, textureCoords);\n"
                                           "}"
+                    },
+                    {
+                        "default3D.vert", "#version 450\n"
+                                          "\n"
+                                          "layout (location = 1) in vec3 vertexPosition;\n"
+                                          "layout (location = 2) in vec4 inColor;\n"
+                                          "\n"
+                                          "out vec4 color;\n"
+                                          "\n"
+                                          "uniform float scaleX = 1;\n"
+                                          "uniform float scaleY = 1;\n"
+                                          "uniform float scaleZ = 1;\n"
+                                          "\n"
+                                          "uniform mat4 camMatrix;\n"
+                                          "\n"
+                                          "void main()\n"
+                                          "{\n"
+                                          "    gl_Position = camMatrix * vec4(vertexPosition.x * scaleX, vertexPosition.y * scaleY, vertexPosition.z * scaleZ, 1.0);\n"
+                                          "    color = inColor;\n"
+                                          "}"
                     }
             });
 }

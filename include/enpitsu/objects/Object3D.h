@@ -1,13 +1,10 @@
 #ifndef ENPITSU_OBJECT3D_H
 #define ENPITSU_OBJECT3D_H
-//
-
-#ifndef LIBTEST_OBJECT3D_H
-#define LIBTEST_OBJECT3D_H
 
 #include "Object.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/SolidColor.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
 
 namespace enpitsu
 {
@@ -20,6 +17,9 @@ namespace enpitsu
         std::shared_ptr<ShaderProgram> shaderProgram;
         bool isStatic;
         Vector3 origin;
+
+        std::unique_ptr<glm::mat4> model = std::make_unique<glm::mat4>(1.0f);
+
     public:
         [[nodiscard]] const std::shared_ptr<ShaderProgram> & getShaderProgram() const;
 
@@ -40,6 +40,8 @@ namespace enpitsu
         void tick(const float &delta) override;
 
         void draw() override;
+
+        void init() override;
     };
 
 } // enpitsu

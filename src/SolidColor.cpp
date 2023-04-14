@@ -3,6 +3,7 @@
 //
 
 #include "enpitsu/shading/SolidColor.h"
+#include <format>
 
 namespace enpitsu
 {

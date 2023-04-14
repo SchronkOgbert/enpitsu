@@ -18,6 +18,12 @@ namespace enpitsu
         Vector3 up{0, 1, 0};
         float speed{0.1f};
 
+        int speedLeft{0};
+        int speedForward{0};
+
+        std::unique_ptr<glm::mat4> view = std::make_unique<glm::mat4>(1.0f);
+        std::unique_ptr<glm::mat4> projection = std::make_unique<glm::mat4>(1.0f);
+
         void tick(const float &delta) override;
     public:
         Camera3D(Screen* screen, const Vector3 &position, const Vector2 &size);
@@ -26,7 +32,7 @@ namespace enpitsu
                 const float &FOV,
                 const float &nearPlane,
                 const float &farPlane,
-                const ShaderProgram* shaderProgram,
+                enpitsu::ShaderProgram *shaderProgram,
                 const char *uniformName
                 );
 

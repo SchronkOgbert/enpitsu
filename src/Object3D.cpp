@@ -4,6 +4,7 @@
 
 #include "enpitsu/objects/Object3D.h"
 #include "enpitsu/objects/Screen.h"
+#include "enpitsu/objects/Camera3D.h"
 
 namespace enpitsu
 {
@@ -18,17 +19,17 @@ namespace enpitsu
     {
         this->vertices = linearizePointsVector<Vector3>
                 (*points, screen->getSize().x, screen->getSize().y);
-//        this->vertices = {
-//                -0.5f, 0, 0.5f,
-//                -0.5f, 0, -0.5f,
-//                0.5f, 0, -0.5f,
-//                0.5f, 0, 0.5f,
-//                0, 0.8f, 0
-//        };
-        PLOGD << "Vertices count: " << vertices.size();
-        for(auto& vertex : vertices)
+        PLOGD << "Vertices:";
+        this->vertices = {
+                -0.5f, 0, 0.5f,
+                -0.5f, 0, -0.5f,
+                0.5f, 0, -0.5f,
+                0.5f, 0, 0.5f,
+                0, 0.8f, 0
+        };
+        for(size_t i = 0; i < vertices.size(); i+=3)
         {
-            PLOGD << vertex;
+            PLOGD << std::format("vertex: ({}, {}, {})", vertices[i], vertices[i + 1], vertices[i + 2]);
         }
         PLOGD << "Draw order ";
         for(auto& index : indices)
@@ -36,7 +37,6 @@ namespace enpitsu
             PLOGD << index << ' ';
         }
         this->shaderProgram = std::shared_ptr<ShaderProgram> (shader);
-        this->shaderProgram->Create(vertices, indices, 3, isStatic);
     }
 
     void Object3D::tick(const float &delta)
@@ -49,5 +49,20 @@ namespace enpitsu
     void Object3D::draw()
     {
         shaderProgram->Bind();
+    }
+
+    void Object3D::init()
+    {
+        Object::init();
+        shaderProgram->Create(vertices, indices, 3, isStatic);
+        if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
+        {
+            throw BadGLObject();
+        }
+        shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
+        shaderProgram->getVao()->Unbind();
+        shaderProgram->getVertexPosition()->Unbind();
+        shaderProgram->getEbo()->Unbind();
+        screen->getCamera3D()->updateMatrix(45, 0.1f, 100.0f, this->shaderProgram.get(), "camMatrix");
     }
 } // enpitsu

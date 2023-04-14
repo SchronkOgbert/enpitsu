@@ -23,12 +23,7 @@ void enpitsu::Object::callInit()
 
 void enpitsu::Object::init()
 {
-    eventHandler = dynamic_cast<InputEvents *>(this);
-    if(eventHandler)
-    {
-        screen->addEventHandler(eventHandler);
-    }
-    PLOGD << "Accept events: " << (eventHandler != nullptr);
+    
 }
 
 enpitsu::Object::~Object()

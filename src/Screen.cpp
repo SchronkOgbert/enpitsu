@@ -2,6 +2,7 @@
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
+#include <memory>
 
 bool enpitsu::Screen::exists = false;
 
@@ -20,6 +21,7 @@ enpitsu::Screen::Screen
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
+    this->objectsQueue = std::make_unique<std::queue<std::unique_ptr<Object>>>();
     this->destroyQueue = std::make_unique<std::vector<Object *>>();
     this->callableEvents = std::make_unique<std::vector<InputEvents*>>();
     this->shouldDestroy = false;
@@ -97,6 +99,7 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         camera->callTick(delta);
     }
+    moveObjectsFromQueue();
 }
 
 void enpitsu::Screen::setGLFWHints()
@@ -175,6 +178,7 @@ void enpitsu::Screen::init()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    moveObjectsFromQueue();
 }
 
 void enpitsu::Screen::destroy()
@@ -318,7 +322,7 @@ void enpitsu::Screen::setSize(const Vector2 &size)
     glfwSetWindowSize(window, size.x, size.y);
 }
 
-inline const enpitsu::Camera3D *enpitsu::Screen::getCamera3D() const
+enpitsu::Camera3D* enpitsu::Screen::getCamera3D()
 {
     return this->camera.get();
 }
@@ -376,5 +380,27 @@ void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
 {
     callableEvents->push_back(eventHandler);
     PLOGD << "Callables: " << callableEvents->size();
+}
+
+void enpitsu::Screen::moveObjectsFromQueue()
+{
+    while(!objectsQueue->empty())
+    {
+        PLOGD << "Adding " << objectsQueue->front().get();
+        objectsQueue->front()->callInit();
+        auto eventHandler = dynamic_cast<InputEvents*>(objectsQueue->front().get());
+        if(eventHandler)
+        {
+            callableEvents->push_back(eventHandler);
+        }
+        objects->push_back(std::move(objectsQueue->front()));
+        objectsQueue->pop();
+        PLOGD << std::format("{} elements left in queue", objectsQueue->size());
+    }
+}
+
+void enpitsu::Screen::setBackgroundColor(const Vector4 &newColor)
+{
+    glClearColor(newColor.x, newColor.y, newColor.z, newColor.a);
 }
 

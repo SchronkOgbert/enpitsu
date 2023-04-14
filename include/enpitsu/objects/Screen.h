@@ -6,6 +6,8 @@
 #include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/InputEvents.h"
+#include <memory>
+#include <vector>
 
 namespace enpitsu
 {
@@ -103,6 +105,7 @@ namespace enpitsu
         std::chrono::time_point<std::chrono::system_clock> now;
 
         //references
+        std::unique_ptr<std::queue<std::unique_ptr<Object>>> objectsQueue;
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
         std::unique_ptr<std::vector<Object*>> destroyQueue;
         std::unique_ptr<std::vector<InputEvents*>> callableEvents;
@@ -127,6 +130,8 @@ namespace enpitsu
         void removeObjectNow(Object* obj);
 
         void destroyObjectsFromQueue();
+
+        void moveObjectsFromQueue();
 
     public:
         Screen() = delete;
@@ -153,9 +158,8 @@ namespace enpitsu
         {
             if (!obj) throw BadObjectAdd();
             PLOGD << "Add object " << obj << " to screen";
-            objects->emplace_back(obj);
-            obj->callInit();
-            PLOGD << "There are " << objects->size() << " objects after this operation";
+            objectsQueue->emplace(obj);
+            PLOGD << "There are " << objectsQueue->size() << " objects to be added after this operation";
             return obj;
         }
 
@@ -193,11 +197,13 @@ namespace enpitsu
 
         void setSize(const Vector2 &size);
 
-        [[nodiscard]] const Camera3D* getCamera3D() const;
+        [[nodiscard]] Camera3D* getCamera3D();
 
         void setCamera3D(Camera3D* camera3D);
 
         void addEventHandler(InputEvents* eventHandler);
+
+        void setBackgroundColor(const Vector4& newColor);
 
     protected:
 

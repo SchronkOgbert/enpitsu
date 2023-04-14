@@ -21,6 +21,7 @@ void VAO::LinkVBO(VBO vbo)
 {
     vbo.Bind();
     auto layout = vbo.getLayout();
+    PLOGE << std::format("Binding to layout {}", static_cast<int>(layout));
     switch (vbo.getLayout())
     {
         case VBO::objectLayout::VERTEX2D:

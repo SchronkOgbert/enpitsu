@@ -35,8 +35,10 @@ namespace enpitsu
     class BadShaderInfo : public Exception
     {
     public:
-        BadShaderInfo() : Exception("The vertices or indices provided are empty") {}
+        BadShaderInfo() : Exception("The vertices or indices provided are empty")
+        {}
     };
+
     class ShaderProgram
     {
     protected:
@@ -64,17 +66,17 @@ namespace enpitsu
             return ebo;
         }
 
-        void setVao(VAO* vao)
+        void setVao(VAO *vao)
         {
             this->vao = std::unique_ptr<VAO>(vao);
         }
 
-        void setVertexPosition(VBO* vertexPosition)
+        void setVertexPosition(VBO *vertexPosition)
         {
             this->vertexPosition = std::unique_ptr<VBO>(vertexPosition);
         }
 
-        void setEbo(EBO* ebo)
+        void setEbo(EBO *ebo)
         {
             ShaderProgram::ebo = std::unique_ptr<EBO>(ebo);
         }
@@ -102,6 +104,10 @@ namespace enpitsu
         virtual ~ShaderProgram();
 
         [[nodiscard]] GLuint getId() const;
+
+        // uniform updaters
+
+        void updateMat4UniformF(const std::string& uniformName, const float* value);
     };
 }
 

@@ -57,10 +57,10 @@ namespace enpitsu
         }
         setVao(new VAO(vertexSize));
         getVao()->Bind();
-        setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),
+        setVertexPosition(new VBO(&vertices[0U], sizeof(vertices[0]) * vertices.size(),
                                   vertexSize == 2 ? VBO::objectLayout::VERTEX2D : VBO::objectLayout::VERTEX3D,
                                   isStatic));
-        setEbo(new EBO(&indices[0U], sizeof(&indices[0]) * indices.size(), isStatic));
+        setEbo(new EBO(&indices[0U], sizeof(indices[0]) * indices.size(), isStatic));
         glLinkProgram(ID);
         hasCompiled(vertexShader);
         hasCompiled(fragmentShader);
@@ -140,5 +140,13 @@ namespace enpitsu
     {
         vao->Unbind();
         glUseProgram(0);
+    }
+
+    void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value)
+    {
+        this->Bind();
+        glUniformMatrix4fv(glGetUniformLocation(this->getId(), uniformName.c_str()),
+                           1, GL_FALSE, value);
+        this->Unbind();
     }
 }

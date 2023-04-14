@@ -17,7 +17,7 @@ VBO::VBO(GLfloat *vertices, const GLsizeiptr &size, const VBO::objectLayout &lay
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
     glBufferData(GL_ARRAY_BUFFER, size, vertices,
-                 isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW); // NOLINT(clion-misra-cpp2008-5-0-4)
+                 isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 }
 
 void VBO::Bind() const

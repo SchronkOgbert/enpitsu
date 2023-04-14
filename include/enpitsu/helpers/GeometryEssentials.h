@@ -1,12 +1,9 @@
 #ifndef ENPITSU_GEOMETRYESSENTIALS_H
 #define ENPITSU_GEOMETRYESSENTIALS_H
-//
-
-#ifndef LIBTEST_GEOMETRYESSENTIALS_H
-#define LIBTEST_GEOMETRYESSENTIALS_H
 
 #include "defines.h"
 #include "Exception.h"
+#include <format>
 
 namespace enpitsu
 {
@@ -293,13 +290,13 @@ namespace enpitsu
             {
                 case 3:
                 {
-                    res[counter++] = toGLCoord(el['z'], 500);
+                    res[counter++] = toGLCoord(el['z'] * 2, 100);
                     break;
                 }
                 case 4:
                 {
-                    res[counter++] = toGLCoord(el['z'], 500);
-                    res[counter++] = toGLCoord(el['a'], 500);
+                    res[counter++] = toGLCoord(el['z'] * 2, 100);
+                    res[counter++] = toGLCoord(el['a'] * 2, 100);
                     break;
                 }
                 default:
@@ -308,6 +305,36 @@ namespace enpitsu
         }
         return res;
     }
-}
+} // namespace enpitsu
+
+namespace std
+{
+    template<>
+    struct std::formatter<enpitsu::Vector2> : std::formatter<std::string>
+    {
+        auto format(const enpitsu::Vector2 &v, format_context &context)
+        {
+            return formatter<string>::format(std::format("({}, {})", v.x, v.y), context);
+        }
+    };
+
+    template<>
+    struct std::formatter<enpitsu::Vector3> : std::formatter<std::string>
+    {
+        auto format(const enpitsu::Vector3 &v, format_context &context)
+        {
+            return formatter<string>::format(std::format("({}, {}, {})", v.x, v.y, v.z), context);
+        }
+    };
+
+    template<>
+    struct std::formatter<enpitsu::Vector4> : std::formatter<std::string>
+    {
+        auto format(const enpitsu::Vector4 &v, format_context &context)
+        {
+            return formatter<string>::format(std::format("({}, {}, {}, {})", v.x, v.y, v.z, v.a), context);
+        }
+    };
+} // namespace std
 
 #endif //ENPITSU_GEOMETRYESSENTIALS_H
