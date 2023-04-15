@@ -17,9 +17,14 @@ namespace enpitsu
         Vector3 orientation{0, 0, -1};
         Vector3 up{0, 1, 0};
         float speed{0.1f};
+        int FOV{80};
 
         int speedLeft{0};
         int speedForward{0};
+        float mouseSensitivity{0.5f};
+        bool justClicked{false};
+        Vector2 prevMousePos;
+        Vector2 currMousePos;
 
         std::unique_ptr<glm::mat4> view = std::make_unique<glm::mat4>(1.0f);
         std::unique_ptr<glm::mat4> projection = std::make_unique<glm::mat4>(1.0f);
@@ -28,13 +33,8 @@ namespace enpitsu
     public:
         Camera3D(Screen* screen, const Vector3 &position, const Vector2 &size);
 
-        virtual void updateMatrix(
-                const float &FOV,
-                const float &nearPlane,
-                const float &farPlane,
-                enpitsu::ShaderProgram *shaderProgram,
-                const char *uniformName
-                );
+        virtual void updateMatrix(const float &nearPlane, const float &farPlane, enpitsu::ShaderProgram *shaderProgram,
+                                  const char *uniformName);
 
         void OnMousePressed(const MouseEvent &event) override;
 
@@ -43,6 +43,8 @@ namespace enpitsu
         void OnKeyPressed(const KeyEvent &event) override;
 
         void OnKeyReleased(const KeyEvent &event) override;
+
+        void move();
     };
 }
 

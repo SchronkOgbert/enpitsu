@@ -205,6 +205,10 @@ namespace enpitsu
 
         void setBackgroundColor(const Vector4& newColor);
 
+        [[nodiscard]] Vector2 getMousePosition() const;
+
+        void setMousePosition(const Vector2& newPosition);
+
     protected:
 
         //all the events below run sometime during the Screen::start function

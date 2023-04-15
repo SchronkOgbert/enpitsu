@@ -63,6 +63,6 @@ namespace enpitsu
         shaderProgram->getVao()->Unbind();
         shaderProgram->getVertexPosition()->Unbind();
         shaderProgram->getEbo()->Unbind();
-        screen->getCamera3D()->updateMatrix(45, 0.1f, 100.0f, this->shaderProgram.get(), "camMatrix");
+        screen->getCamera3D()->updateMatrix(0.1f, 100.0f, this->shaderProgram.get(), "camMatrix");
     }
 } // enpitsu

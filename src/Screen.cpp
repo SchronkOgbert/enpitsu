@@ -1,4 +1,5 @@
 #include "enpitsu/objects/Screen.h"
+#include "GLFW/glfw3.h"
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
@@ -23,7 +24,7 @@ enpitsu::Screen::Screen
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
     this->objectsQueue = std::make_unique<std::queue<std::unique_ptr<Object>>>();
     this->destroyQueue = std::make_unique<std::vector<Object *>>();
-    this->callableEvents = std::make_unique<std::vector<InputEvents*>>();
+    this->callableEvents = std::make_unique<std::vector<InputEvents *>>();
     this->shouldDestroy = false;
     if (glfwInit() == GLFW_FALSE)
     {
@@ -120,9 +121,9 @@ void enpitsu::Screen::tick(const float &delta)
     this->callTick(delta);
     glfwPollEvents();
     std::jthread destroyer([this]
-                        {
-                            this->destroyObjectsFromQueue();
-                        });
+                           {
+                               this->destroyObjectsFromQueue();
+                           });
     glfwSwapBuffers(this->window);
 }
 
@@ -261,7 +262,7 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
 void enpitsu::Screen::updateScreenDefaults() const
 {
     checkDepth ? glClear(GL_COLOR_BUFFER_BIT) :
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void enpitsu::Screen::removeObject(Object *obj)
@@ -322,7 +323,7 @@ void enpitsu::Screen::setSize(const Vector2 &size)
     glfwSetWindowSize(window, size.x, size.y);
 }
 
-enpitsu::Camera3D* enpitsu::Screen::getCamera3D()
+enpitsu::Camera3D *enpitsu::Screen::getCamera3D()
 {
     return this->camera.get();
 }
@@ -340,7 +341,7 @@ void enpitsu::Screen::showCursor(const bool &show)
 void enpitsu::Screen::removeObjectNow(Object *obj)
 {
     bool success = false;
-    std::erase(*callableEvents, dynamic_cast<InputEvents*>(obj));
+    std::erase(*callableEvents, dynamic_cast<InputEvents *>(obj));
     objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
                        {
                            if (success) return false;
@@ -384,12 +385,12 @@ void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
 
 void enpitsu::Screen::moveObjectsFromQueue()
 {
-    while(!objectsQueue->empty())
+    while (!objectsQueue->empty())
     {
         PLOGD << "Adding " << objectsQueue->front().get();
         objectsQueue->front()->callInit();
-        auto eventHandler = dynamic_cast<InputEvents*>(objectsQueue->front().get());
-        if(eventHandler)
+        auto eventHandler = dynamic_cast<InputEvents *>(objectsQueue->front().get());
+        if (eventHandler)
         {
             callableEvents->push_back(eventHandler);
         }
@@ -402,5 +403,17 @@ void enpitsu::Screen::moveObjectsFromQueue()
 void enpitsu::Screen::setBackgroundColor(const Vector4 &newColor)
 {
     glClearColor(newColor.x, newColor.y, newColor.z, newColor.a);
+}
+
+enpitsu::Vector2 enpitsu::Screen::getMousePosition() const
+{
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    return {x, y};
+}
+
+void enpitsu::Screen::setMousePosition(const enpitsu::Vector2 &newPosition)
+{
+    glfwSetCursorPos(window, newPosition.x, newPosition.y);
 }
 
