@@ -35,6 +35,10 @@ void enpitsu::Camera3D::OnMouseReleased(const enpitsu::MouseEvent &event)
 
 void enpitsu::Camera3D::OnKeyPressed(const enpitsu::KeyEvent &event)
 {
+    if(!justClicked)
+    {
+        justClicked = true;
+    }
     switch (event.event)
     {
         case KeyEvent::KEY_A:
@@ -106,10 +110,7 @@ void
 enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane, enpitsu::ShaderProgram *shaderProgram,
                                 const char *uniformName)
 {
-    *view = glm::lookAt(glm::vec3(position), glm::vec3(position) + glm::vec3(orientation), glm::vec3(up));
-    auto lookat = (glm::vec3(position) + glm::vec3(orientation));
-//    PLOGD << std::format("Position: {}", position);
-//    PLOGD << std::format("Look at ({}, {}, {})", lookat.x, lookat.y, lookat.z);
+    *view = glm::lookAt(position, position + orientation, up);
 
     *projection = glm::perspective(glm::radians(static_cast<float>(FOV)),
                                    static_cast<float>(size.x / size.y), nearPlane, farPlane);
@@ -131,16 +132,6 @@ void enpitsu::Camera3D::tick(const float &delta)
      */
 
     move();
-
-    for (auto &object: *(screen->objects))
-    {
-        auto *tmp = dynamic_cast<Object3D *>(object.get());
-        if (tmp)
-        {
-            updateMatrix(0.1f, 100.0f,
-                         tmp->getShaderProgram().get(), "camMatrix");
-        }
-    }
 }
 
 void enpitsu::Camera3D::move()
@@ -153,9 +144,8 @@ void enpitsu::Camera3D::move()
         // movement
         this->screen->showCursor(false);
         this->position +=
-                this->speed * this->speedLeft * glm::normalize(glm::cross(glm::vec3(this->orientation), glm::vec3(
-                        this->up)));
-        this->position += this->speed * this->speedForward * glm::vec3(this->orientation);
+                this->speed * this->speedLeft * glm::normalize(glm::cross(glm::vec3(this->orientation), this->up));
+        this->position += this->speed * this->speedForward * this->orientation;
 
         // orientation
         if (justClicked)
@@ -171,15 +161,26 @@ void enpitsu::Camera3D::move()
         float rotationX = mouseSensitivity * (currMousePos.y - prevMousePos.y);
         float rotationY = mouseSensitivity * (currMousePos.x - prevMousePos.x);
 
-        auto newOrientation = glm::rotate(glm::vec3(orientation), glm::radians(-rotationX),
-                                          glm::normalize(glm::cross(glm::vec3(orientation), glm::vec3(up))));
+        auto newOrientation = glm::rotate(orientation, glm::radians(-rotationX),
+                                          glm::normalize(glm::cross(orientation, up)));
 
-        if (abs(glm::angle(newOrientation, glm::vec3 (up)) - glm::radians(90.0f)) <= glm::radians(85.0f))
+        if (abs(glm::angle(newOrientation, up) - glm::radians(90.0f)) <= glm::radians(85.0f))
         {
             orientation = newOrientation;
         }
 
-        orientation = glm::rotate(glm::vec3(orientation), glm::radians(-rotationY), glm::vec3(up));
+        orientation = glm::rotate(orientation, glm::radians(-rotationY), up);
+
+        // update matrices
+        for (auto &object: *(screen->objects))
+        {
+            auto *tmp = dynamic_cast<Object3D *>(object.get());
+            if (tmp)
+            {
+                updateMatrix(0.1f, 100.0f,
+                             tmp->getShaderProgram().get(), "camMatrix");
+            }
+        }
     }
     else
     {

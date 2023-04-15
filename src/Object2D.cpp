@@ -21,10 +21,12 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     this->vertices.reserve(points.size() * 2U);
     for (auto &point: points)
     {
+        PLOGD << std::format("Origin: {} Point {}", origin.x, point.y);
+        PLOGD << std::format("Point x: {}", toGLCoord(origin.x + point.x, screen->getSize().x));
         this->vertices.push_back(toGLCoord(origin.x + point.x, screen->getSize().x));
-        this->vertices.push_back(toGLCoord(origin.y + point.y,
-                                           screen->getSize().y));
+        this->vertices.push_back(toGLCoord(origin.y + point.y, screen->getSize().y));
     }
+//    vertices = linearizePointsVector(points, screen->getSize().x, screen->getSize().y);
     if (drawOrder.empty())
     {
         this->indices = std::vector<GLuint>(this->vertices.size());

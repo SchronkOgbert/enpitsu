@@ -193,7 +193,7 @@ namespace enpitsu
          * get the window size
          * @return std::pair of <int, int>, first is width, second is height
          */
-        [[nodiscard]] const Vector2 & getSize() const;
+        [[nodiscard]] const Vector2 & getSize() const { return size; }
 
         void setSize(const Vector2 &size);
 

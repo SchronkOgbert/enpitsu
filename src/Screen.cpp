@@ -3,6 +3,7 @@
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
+#include <format>
 #include <memory>
 
 bool enpitsu::Screen::exists = false;
@@ -161,10 +162,11 @@ void enpitsu::Screen::init()
     glfwSetMouseButtonCallback(window, [](GLFWwindow *glfwWindow, int button, int action, int mods)
     {
         auto obj = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
-        auto *pos = &(obj->cursorPos);
-        glfwGetCursorPos(glfwWindow, &(pos->x), &(pos->y));
-//        println(pos->first, ' ', pos->second);
-        pos->y = obj->getSize().y - pos->y;
+        double x, y;
+        glfwGetCursorPos(glfwWindow, &x, &y);
+        y = obj->getSize().y - y;
+        obj->cursorPos = {x, y};
+        PLOGD << std::format("Sending mouse position {}", obj->cursorPos);
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -174,7 +176,6 @@ void enpitsu::Screen::init()
                          });
 
     //load opengl
-//    glewExperimental = true;
     glewInit();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -311,12 +312,6 @@ void enpitsu::Screen::enableCursor(const bool &enable)
 {
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
-
-inline const enpitsu::Vector2 &enpitsu::Screen::getSize() const
-{
-    return size;
-}
-
 void enpitsu::Screen::setSize(const Vector2 &size)
 {
     this->size = size;
