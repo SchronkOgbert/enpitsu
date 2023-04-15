@@ -6,7 +6,7 @@
 namespace enpitsu
 {
 
-    class Cube : public Triangles3D
+    class Pyramid : public Triangles3D
     {
     public:
         using Triangles3D::Triangles3D;
