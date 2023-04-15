@@ -2,6 +2,8 @@
 #define ENPITSU_CUBE_H
 
 #include "Triangles3D.h"
+#include "enpitsu/objects/Screen.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {
@@ -10,6 +12,7 @@ namespace enpitsu
     {
     public:
         using Triangles3D::Triangles3D;
+        Pyramid(Screen* screen, Vector3 origin, ShaderProgram* shader, const bool& isStatic = true);
     };
 
 } // enpitsu
