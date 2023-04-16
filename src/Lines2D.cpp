@@ -3,11 +3,12 @@
 //
 
 #include "enpitsu/objects/Lines2D.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {
-    Lines2D::Lines2D(Screen *screen, const std::vector<Vector2> &points, ShaderProgram *shader, const bool &isStatic):
-            Object2D(screen, points, Vector2(0, 0), shader, isStatic)
+    Lines2D::Lines2D(Screen *screen, const std::vector<Vector2> &points, std::shared_ptr<ShaderProgram> &&shader, const bool &isStatic):
+            Object2D(screen, points, Vector2(0, 0), std::forward<std::shared_ptr<ShaderProgram>>(shader), isStatic)
     {
         if(points.size() < 2)
         {

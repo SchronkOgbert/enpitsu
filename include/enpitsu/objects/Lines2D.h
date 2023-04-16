@@ -2,7 +2,9 @@
 #define ENPITSU_LINES2D_H
 
 #include "Object2D.h"
+#include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/shading/SolidColor.h"
 
 namespace enpitsu
 {
@@ -19,7 +21,8 @@ namespace enpitsu
         void draw() override;
 
     public:
-        Lines2D(Screen *screen, const std::vector<Vector2> &points, ShaderProgram* shader = new SolidColor(Vector4(128.0f, 0.0f, 0.0f, 255)), const bool &isStatic = true);
+        Lines2D(Screen *screen, const std::vector<Vector2> &points,
+                std::shared_ptr<ShaderProgram> &&shader = newShader<SolidColor>(Vector4(128.0f, 0.0f, 0.0f, 255)), const bool &isStatic = true);
         Lines2D(Screen* screen) = delete;
     };
 

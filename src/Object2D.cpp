@@ -3,12 +3,14 @@
 //
 
 #include "enpitsu/objects/Object2D.h"
+#include "enpitsu/helpers/defines.h"
 #include "enpitsu/objects/Screen.h"
+#include "enpitsu/shading/ShaderProgram.h"
 #include "enpitsu/shading/SolidColor.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
-                            ShaderProgram *shader,
+                            std::shared_ptr<ShaderProgram> &&shader,
                             const bool &isStatic, const std::vector<unsigned int> &drawOrder) :
         Object(screen),
         isStatic(isStatic),
@@ -38,7 +40,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     {
         this->indices = drawOrder;
     }
-    shaderProgram = std::unique_ptr<ShaderProgram>(shader);
+    shaderProgram = std::move(shader);
 }
 
 void enpitsu::Object2D::init()

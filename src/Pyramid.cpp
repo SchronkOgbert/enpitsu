@@ -1,9 +1,10 @@
 #include "enpitsu/objects/Pyramid.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {
 
-    Pyramid::Pyramid(Screen *screen, Vector3 origin, ShaderProgram *shader, const bool &isStatic) :
+    Pyramid::Pyramid(Screen *screen, Vector3 origin, std::shared_ptr<ShaderProgram> &&shader, const bool &isStatic) :
             Triangles3D(screen, new std::vector<Vector3>{
                                 {100, 100, 10},
                                 {100, 100, 30},
@@ -13,7 +14,7 @@ namespace enpitsu
                         },
                         origin,
                         {1, 1, 1},
-                        shader,
+                        std::forward<std::shared_ptr<ShaderProgram>>(shader),
                         isStatic,
                         new std::vector<unsigned>{0, 1, 2,
                                                   0, 2, 3,

@@ -12,7 +12,7 @@ namespace enpitsu
     protected:
         Texture2DShader* textureObject;
     public:
-        Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin);
+        Sprite(enpitsu::Screen *screen, std::shared_ptr<Texture2DShader> &&shader, const bool &isStatic, const Vector2 &origin);
 
         [[nodiscard]] int getWidth() const;
 

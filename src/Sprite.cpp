@@ -3,27 +3,29 @@
 //
 
 #include "enpitsu/objects/Sprite.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {
-    Sprite::Sprite(enpitsu::Screen *screen, Texture2DShader *shader, const bool &isStatic, const Vector2 &origin) :
+    Sprite::Sprite(enpitsu::Screen *screen, std::shared_ptr<Texture2DShader> &&shader, const bool &isStatic,
+                   const Vector2 &origin) :
             Triangles2D(screen,
                         {
-                              Vector2(0, 0),
-                              Vector2(0, static_cast<GLfloat >(shader->getWidth())),
-                              Vector2(static_cast<GLfloat >(shader->getHeight()),
-                                      static_cast<GLfloat >(shader->getWidth())),
-                              Vector2(static_cast<GLfloat >(shader->getHeight()), 0)
-                      },
+                                Vector2(0, 0),
+                                Vector2(0, static_cast<GLfloat >(shader->getWidth())),
+                                Vector2(static_cast<GLfloat >(shader->getHeight()),
+                                        static_cast<GLfloat >(shader->getWidth())),
+                                Vector2(static_cast<GLfloat >(shader->getHeight()), 0)
+                        },
                         origin,
-                        shader,
+                        std::forward<std::shared_ptr<ShaderProgram>>(shader),
                         isStatic,
                         {
-                              0, 1, 2, 0, 2, 3
-                      }
+                                0, 1, 2, 0, 2, 3
+                        }
             )
     {
-        textureObject = shader;
+        textureObject = shader.get();
     }
 
     int Sprite::getWidth() const

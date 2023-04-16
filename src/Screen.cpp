@@ -323,9 +323,9 @@ enpitsu::Camera3D *enpitsu::Screen::getCamera3D()
     return this->camera.get();
 }
 
-void enpitsu::Screen::setCamera3D(enpitsu::Camera3D *camera3D)
+void enpitsu::Screen::setCamera3D(std::unique_ptr<Camera3D>&& camera3D)
 {
-    this->camera = std::unique_ptr<Camera3D>(camera3D);
+    this->camera = std::move(camera3D);
 }
 
 void enpitsu::Screen::showCursor(const bool &show)

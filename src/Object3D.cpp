@@ -14,7 +14,7 @@ namespace enpitsu
     }
 
     Object3D::Object3D(Screen *screen, std::vector<Vector3> *points, const Vector3 &origin, const Vector3 &size,
-                       ShaderProgram *shader, const bool &isStatic, std::vector<unsigned int> *drawOrder)
+                       std::shared_ptr<ShaderProgram> &&shader, const bool &isStatic, std::vector<unsigned int> *drawOrder)
                        : Object(screen), isStatic(isStatic), origin(origin), indices(*drawOrder)
     {
         this->vertices = linearizePointsVector<Vector3>

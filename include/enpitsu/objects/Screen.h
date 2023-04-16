@@ -7,6 +7,7 @@
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace enpitsu
@@ -16,13 +17,6 @@ namespace enpitsu
     class Camera3D;
 
     class InputEvents;
-
-    template<class Object>
-    concept objectType =
-    requires(Object t)
-    {
-        { t.callInit() };
-    };
 
     class BadInitException : public Exception
     {
@@ -63,7 +57,8 @@ namespace enpitsu
     class BadObjectRemove : public Exception
     {
     public:
-        explicit BadObjectRemove(void *obj) : Exception(std::format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
+        explicit BadObjectRemove(void *obj) : Exception(
+                std::format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
         {
         }
     };
@@ -107,8 +102,8 @@ namespace enpitsu
         //references
         std::unique_ptr<std::queue<std::unique_ptr<Object>>> objectsQueue;
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
-        std::unique_ptr<std::vector<Object*>> destroyQueue;
-        std::unique_ptr<std::vector<InputEvents*>> callableEvents;
+        std::unique_ptr<std::vector<Object *>> destroyQueue;
+        std::unique_ptr<std::vector<InputEvents *>> callableEvents;
 
         //private events
         void sendPress(KeyEvent event) const;
@@ -127,7 +122,7 @@ namespace enpitsu
          * removes an object immediately, without waiting, in exceedingly bad conditions it may cause lag spikes
          * @param obj
          */
-        void removeObjectNow(Object* obj);
+        void removeObjectNow(Object *obj);
 
         void destroyObjectsFromQueue();
 
@@ -154,13 +149,13 @@ namespace enpitsu
         virtual ~Screen();
 
         template<objectType type>
-        type *addObject(type *obj)
+        type *addObject(std::unique_ptr<type> &&obj)
         {
             if (!obj) throw BadObjectAdd();
-            PLOGD << "Add object " << obj << " to screen";
-            objectsQueue->emplace(obj);
+            PLOGD << "Add object " << obj.get() << " to screen";
+            objectsQueue->push(std::move(obj));
             PLOGD << "There are " << objectsQueue->size() << " objects to be added after this operation";
-            return obj;
+            return static_cast<type*>(objectsQueue->back().get()); // after moving, obj loses its pointer
         }
 
         //events
@@ -199,7 +194,7 @@ namespace enpitsu
 
         [[nodiscard]] Camera3D* getCamera3D();
 
-        void setCamera3D(Camera3D* camera3D);
+        void setCamera3D(std::unique_ptr<Camera3D>&& camera3D);
 
         void addEventHandler(InputEvents* eventHandler);
 
