@@ -142,11 +142,9 @@ namespace enpitsu
         glUseProgram(0);
     }
 
-    void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value)
+    void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value) const
     {
-        this->Bind();
         glUniformMatrix4fv(glGetUniformLocation(this->getId(), uniformName.c_str()),
                            1, GL_FALSE, value);
-        this->Unbind();
     }
 }

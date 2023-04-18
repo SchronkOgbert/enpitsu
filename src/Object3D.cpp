@@ -8,6 +8,8 @@
 
 namespace enpitsu
 {
+    GLfloat* Object3D::camMatrix = nullptr;
+
     const std::shared_ptr<ShaderProgram> & Object3D::getShaderProgram() const
     {
         return shaderProgram;
@@ -49,6 +51,10 @@ namespace enpitsu
     void Object3D::draw()
     {
         shaderProgram->Bind();
+        if(shouldUpdateCamera())
+        {
+            shaderProgram->updateMat4UniformF("camMatrix", screen->getCamMatrix());
+        }
     }
 
     void Object3D::init()
@@ -63,6 +69,6 @@ namespace enpitsu
         shaderProgram->getVao()->Unbind();
         shaderProgram->getVertexPosition()->Unbind();
         shaderProgram->getEbo()->Unbind();
-        screen->getCamera3D()->updateMatrix(0.1f, 100.0f, this->shaderProgram.get(), "camMatrix");
+        shaderProgram->updateMat4UniformF("camMatrix", screen->getCamMatrix());
     }
 } // enpitsu

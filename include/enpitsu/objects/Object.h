@@ -41,6 +41,7 @@ namespace enpitsu
 
         [[nodiscard]] bool isDestroyed() const { return queueDestroy; }
 
+
     protected:
         //events
         virtual void tick(const float &delta);
@@ -53,6 +54,8 @@ namespace enpitsu
         virtual void onDestroy();
 
         virtual void draw() = 0;
+
+        [[nodiscard]] bool shouldUpdateCamera() const;
     };
 }
 

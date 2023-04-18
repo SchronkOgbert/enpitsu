@@ -3,8 +3,12 @@
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
+#include "enpitsu/objects/Object3D.h"
+#include <algorithm>
 #include <format>
+#include <iterator>
 #include <memory>
+#include <vector>
 
 bool enpitsu::Screen::exists = false;
 
@@ -27,6 +31,8 @@ enpitsu::Screen::Screen
     this->destroyQueue = std::make_unique<std::vector<Object *>>();
     this->callableEvents = std::make_unique<std::vector<InputEvents *>>();
     this->shouldDestroy = false;
+    this->camMatrix = std::vector<GLfloat>(16);
+    this->setCamMatrix(glm::value_ptr(glm::mat4(1)));
     if (glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
@@ -97,6 +103,7 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         obj->callTick(delta);
     }
+    updateCamera = false;
     if (camera)
     {
         camera->callTick(delta);
@@ -312,6 +319,7 @@ void enpitsu::Screen::enableCursor(const bool &enable)
 {
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
+
 void enpitsu::Screen::setSize(const Vector2 &size)
 {
     this->size = size;
@@ -323,7 +331,7 @@ enpitsu::Camera3D *enpitsu::Screen::getCamera3D()
     return this->camera.get();
 }
 
-void enpitsu::Screen::setCamera3D(std::unique_ptr<Camera3D>&& camera3D)
+void enpitsu::Screen::setCamera3D(std::unique_ptr<Camera3D> &&camera3D)
 {
     this->camera = std::move(camera3D);
 }
@@ -410,5 +418,17 @@ enpitsu::Vector2 enpitsu::Screen::getMousePosition() const
 void enpitsu::Screen::setMousePosition(const enpitsu::Vector2 &newPosition)
 {
     glfwSetCursorPos(window, newPosition.x, newPosition.y);
+}
+
+void enpitsu::Screen::setCamMatrix(const GLfloat *camMatrix)
+{
+    for(int i = 0; i < 16; i++)
+    {
+        if(this->camMatrix[i] != camMatrix[i])
+        {
+            updateCamera = true;
+            this->camMatrix[i] = camMatrix[i];
+        }
+    }
 }
 

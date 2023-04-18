@@ -33,8 +33,7 @@ namespace enpitsu
     public:
         Camera3D(Screen* screen, const Vector3 &position, const Vector2 &size);
 
-        virtual void updateMatrix(const float &nearPlane, const float &farPlane, enpitsu::ShaderProgram *shaderProgram,
-                                  const char *uniformName);
+        virtual void updateMatrix(const float &nearPlane, const float &farPlane, const char *uniformName);
 
         void OnMousePressed(const MouseEvent &event) override;
 

@@ -47,3 +47,8 @@ void enpitsu::Object::onDestroy()
 {
 //    println("destroying ", this);
 }
+
+bool enpitsu::Object::shouldUpdateCamera() const
+{
+    return screen->updateCamera;
+}

@@ -20,6 +20,8 @@ namespace enpitsu
 
         std::unique_ptr<glm::mat4> model = std::make_unique<glm::mat4>(1.0f);
 
+        static GLfloat *camMatrix;
+
     public:
         [[nodiscard]] const std::shared_ptr<ShaderProgram> & getShaderProgram() const;
 

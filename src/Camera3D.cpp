@@ -107,15 +107,13 @@ void enpitsu::Camera3D::OnKeyReleased(const enpitsu::KeyEvent &event)
 }
 
 void
-enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane, enpitsu::ShaderProgram *shaderProgram,
-                                const char *uniformName)
+enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane, const char *uniformName)
 {
     *view = glm::lookAt(position, position + orientation, up);
 
     *projection = glm::perspective(glm::radians(static_cast<float>(FOV)),
                                    static_cast<float>(size.x / size.y), nearPlane, farPlane);
-
-    shaderProgram->updateMat4UniformF(uniformName, glm::value_ptr(*projection * *view));
+    screen->setCamMatrix(glm::value_ptr(*projection * *view));
 }
 
 void enpitsu::Camera3D::tick(const float &delta)
@@ -170,17 +168,7 @@ void enpitsu::Camera3D::move()
         }
 
         orientation = glm::rotate(orientation, glm::radians(-rotationY), up);
-
-        // update matrices
-        for (auto &object: *(screen->objects))
-        {
-            auto *tmp = dynamic_cast<Object3D *>(object.get());
-            if (tmp)
-            {
-                updateMatrix(0.1f, 100.0f,
-                             tmp->getShaderProgram().get(), "camMatrix");
-            }
-        }
+        updateMatrix(0.1f, 100.0f, "camMatrix");
     }
     else
     {

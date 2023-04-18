@@ -6,6 +6,7 @@
 #include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/InputEvents.h"
+#include <cstring>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -88,6 +89,7 @@ namespace enpitsu
         void setCheckDepth(bool checkDepth);
 
     private:
+        // misc
         bool checkDepth{false};
         GLFWwindow *window;
         std::string name;
@@ -98,12 +100,16 @@ namespace enpitsu
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
         std::chrono::time_point<std::chrono::system_clock> now;
+        bool updateCamera = false;
 
         //references
         std::unique_ptr<std::queue<std::unique_ptr<Object>>> objectsQueue;
         std::unique_ptr<std::list<std::unique_ptr<Object>>> objects;
         std::unique_ptr<std::vector<Object *>> destroyQueue;
         std::unique_ptr<std::vector<InputEvents *>> callableEvents;
+
+        // geometry
+        std::vector<GLfloat> camMatrix;
 
         //private events
         void sendPress(KeyEvent event) const;
@@ -203,6 +209,10 @@ namespace enpitsu
         [[nodiscard]] Vector2 getMousePosition() const;
 
         void setMousePosition(const Vector2& newPosition);
+
+        [[nodiscard]] const GLfloat *getCamMatrix() const { return &camMatrix[0]; }
+
+        void setCamMatrix(const GLfloat *camMatrix);
 
     protected:
 
