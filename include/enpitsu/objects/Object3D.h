@@ -18,7 +18,7 @@ namespace enpitsu
         bool isStatic;
         Vector3 origin;
 
-        std::unique_ptr<glm::mat4> model = std::make_unique<glm::mat4>(1.0f);
+        glm::mat4 model{1};
 
         static GLfloat *camMatrix;
 

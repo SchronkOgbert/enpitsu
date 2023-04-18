@@ -108,6 +108,8 @@ namespace enpitsu
         // uniform updaters
 
         void updateMat4UniformF(const std::string& uniformName, const float* value) const;
+
+        void updateVec3Uniform(const std::string& uniformName, const float* value) const;
     };
 }
 

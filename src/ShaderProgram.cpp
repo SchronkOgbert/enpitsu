@@ -147,4 +147,9 @@ namespace enpitsu
         glUniformMatrix4fv(glGetUniformLocation(this->getId(), uniformName.c_str()),
                            1, GL_FALSE, value);
     }
+
+    void ShaderProgram::updateVec3Uniform(const std::string &uniformName, const float *value) const
+    {
+        glUniform3fv(glGetUniformLocation(this->getId(), uniformName.c_str()), 1, value);
+    }
 }
