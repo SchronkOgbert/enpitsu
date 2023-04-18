@@ -7,6 +7,7 @@
 #include "enpitsu/objects/Camera3D.h"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "glm/gtx/transform.hpp"
 
 namespace enpitsu
 {
@@ -25,13 +26,6 @@ namespace enpitsu
         this->vertices = linearizePointsVector<Vector3>
                 (*points, screen->getSize().x, screen->getSize().y);
         PLOGD << "Vertices:";
-        this->vertices = {
-                -0.5f, 0, 0.5f,
-                -0.5f, 0, -0.5f,
-                0.5f, 0, -0.5f,
-                0.5f, 0, 0.5f,
-                0, 0.8f, 0
-        };
         for (size_t i = 0; i < vertices.size(); i += 3)
         {
             PLOGD << std::format("vertex: ({}, {}, {})", vertices[i], vertices[i + 1], vertices[i + 2]);
@@ -43,6 +37,11 @@ namespace enpitsu
         }
         this->shaderProgram = std::shared_ptr<ShaderProgram>(shader);
         PLOGD << std::format("origin: {}", origin);
+        model = glm::translate(glm::mat4(1), origin);
+        model = glm::rotate(model,glm::radians(0.0f),glm::vec3(1,0,0));
+        model = glm::rotate(model,glm::radians(0.0f),glm::vec3(0,1,0));
+        model = glm::rotate(model,glm::radians(0.0f),glm::vec3(0,0,1));
+        model = glm::scale(model,Vector3(1,1,1));
     }
 
     void Object3D::tick(const float &delta)
@@ -75,6 +74,6 @@ namespace enpitsu
         shaderProgram->getEbo()->Unbind();
         shaderProgram->updateMat4UniformF("camMatrix", screen->getCamMatrix());
         shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
-        shaderProgram->updateVec3Uniform("worldLocation", glm::value_ptr(origin));
+        shaderProgram->updateVec3Uniform("cameraPosition", glm::value_ptr(screen->getCamera3D()->getPosition()));
     }
 } // enpitsu

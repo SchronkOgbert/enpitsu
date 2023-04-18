@@ -12,10 +12,11 @@ uniform float scaleZ = 1;
 
 uniform mat4 camMatrix;
 uniform mat4 modelMatrix;
-uniform vec3 worldLocation = vec3(0, 0, 0);
+uniform vec3 cameraPosition;
 
 void main()
 {
-    gl_Position = modelMatrix * camMatrix * vec4(vertexPosition.x * scaleX, vertexPosition.y * scaleY, vertexPosition.z * scaleZ, 1.0) + vec4(worldLocation, 1);
+    float w = distance(vertexPosition, cameraPosition);
+    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x * scaleX, vertexPosition.y * scaleY, vertexPosition.z * scaleZ, 1);
     color = inColor;
 }

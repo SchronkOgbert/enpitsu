@@ -4,7 +4,9 @@
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/objects/Object3D.h"
 #include "glm/ext/quaternion_geometric.hpp"
+#include "glm/ext/scalar_constants.hpp"
 #include "glm/fwd.hpp"
+#include "glm/geometric.hpp"
 #include "glm/gtx/transform.hpp"
 #include <format>
 
@@ -35,7 +37,7 @@ void enpitsu::Camera3D::OnMouseReleased(const enpitsu::MouseEvent &event)
 
 void enpitsu::Camera3D::OnKeyPressed(const enpitsu::KeyEvent &event)
 {
-    if(!justClicked)
+    if (!justClicked)
     {
         justClicked = true;
     }
@@ -109,10 +111,11 @@ void enpitsu::Camera3D::OnKeyReleased(const enpitsu::KeyEvent &event)
 void
 enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane, const char *uniformName)
 {
-    *view = glm::lookAt(position, position + orientation, up);
+    Vector3 center = position + orientation;
+    *view = glm::lookAt(position, center, up);
 
     *projection = glm::perspective(glm::radians(static_cast<float>(FOV)),
-                                   static_cast<float>(size.x / size.y), nearPlane, farPlane);
+                                   static_cast<float>(size.x) / size.y, nearPlane, farPlane);
     screen->setCamMatrix(glm::value_ptr(*projection * *view));
 }
 
@@ -150,28 +153,39 @@ void enpitsu::Camera3D::move()
         {
             prevMousePos = this->screen->getMousePosition();
             justClicked = false;
-        }
-        else
+        } else
         {
             prevMousePos = currMousePos;
         }
         currMousePos = this->screen->getMousePosition();
-        float rotationX = mouseSensitivity * (currMousePos.y - prevMousePos.y);
-        float rotationY = mouseSensitivity * (currMousePos.x - prevMousePos.x);
+        float rotationX = mouseSensitivity * (currMousePos.x - prevMousePos.x);
+        float rotationY = mouseSensitivity * (prevMousePos.y - currMousePos.y);
 
-        auto newOrientation = glm::rotate(orientation, glm::radians(-rotationX),
-                                          glm::normalize(glm::cross(orientation, up)));
+        yaw += rotationX;
+        pitch += rotationY;
 
-        if (abs(glm::angle(newOrientation, up) - glm::radians(90.0f)) <= glm::radians(85.0f))
-        {
-            orientation = newOrientation;
-        }
+        if (pitch > 89) pitch = 89;
+        if (pitch < -89) pitch = -89;
 
-        orientation = glm::rotate(orientation, glm::radians(-rotationY), up);
+        Vector3 front(cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+                      sin(glm::radians(pitch)),
+                      sin(glm::radians(yaw)) * cos(glm::radians(pitch)));
+
+        orientation = glm::normalize(front);
         updateMatrix(0.1f, 100.0f, "camMatrix");
     }
     else
     {
         this->screen->showCursor(true);
     }
+}
+
+const enpitsu::Vector3 &enpitsu::Camera3D::getPosition() const
+{
+    return position;
+}
+
+void enpitsu::Camera3D::setPosition(const enpitsu::Vector3 &position)
+{
+    this->position = position;
 }

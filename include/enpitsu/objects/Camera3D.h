@@ -25,6 +25,14 @@ namespace enpitsu
         bool justClicked{false};
         Vector2 prevMousePos;
         Vector2 currMousePos;
+        float yaw{-90.0f};
+        float pitch = 0;
+    public:
+        const Vector3 &getPosition() const;
+
+        void setPosition(const Vector3 &position);
+
+    protected:
 
         std::unique_ptr<glm::mat4> view = std::make_unique<glm::mat4>(1.0f);
         std::unique_ptr<glm::mat4> projection = std::make_unique<glm::mat4>(1.0f);
