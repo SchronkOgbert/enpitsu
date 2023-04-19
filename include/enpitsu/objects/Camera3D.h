@@ -27,6 +27,9 @@ namespace enpitsu
         Vector2 currMousePos;
         float yaw{-90.0f};
         float pitch = 0;
+
+        void init() override;
+
     public:
         const Vector3 &getPosition() const;
 

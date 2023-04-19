@@ -33,7 +33,7 @@ namespace enpitsu
                 std::vector<Vector3> *points,
                 const Vector3 &origin,
                 const Vector3 &size,
-                std::shared_ptr<ShaderProgram> &&shader,
+                const std::shared_ptr<ShaderProgram> &shader,
                 const bool &isStatic = true,
                 std::vector<unsigned int> *drawOrder = {0}
         );

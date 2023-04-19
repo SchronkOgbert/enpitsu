@@ -19,7 +19,7 @@ namespace enpitsu
     }
 
     Object3D::Object3D(Screen *screen, std::vector<Vector3> *points, const Vector3 &origin, const Vector3 &size,
-                       std::shared_ptr<ShaderProgram> &&shader, const bool &isStatic,
+                       const std::shared_ptr<ShaderProgram> &shader, const bool &isStatic,
                        std::vector<unsigned int> *drawOrder)
             : Object(screen), isStatic(isStatic), origin(origin), indices(*drawOrder)
     {
@@ -35,7 +35,7 @@ namespace enpitsu
         {
             PLOGD << index << ' ';
         }
-        this->shaderProgram = std::shared_ptr<ShaderProgram>(shader);
+        this->shaderProgram = shader;
         PLOGD << std::format("origin: {}", origin);
         model = glm::translate(glm::mat4(1), origin);
         model = glm::rotate(model,glm::radians(0.0f),glm::vec3(1,0,0));

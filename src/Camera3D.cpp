@@ -189,3 +189,9 @@ void enpitsu::Camera3D::setPosition(const enpitsu::Vector3 &position)
 {
     this->position = position;
 }
+
+void enpitsu::Camera3D::init()
+{
+    Object::init();
+    updateMatrix(0.1f, 100.0f, "camMatrix");
+}
