@@ -33,13 +33,13 @@ namespace enpitsu
 
         void Bind() const;
 
-        void Unbind();
+        void Unbind() const;
 
         void Delete();
 
-        void Update(GLfloat *newVertices);
+        void Update(GLfloat *newVertices) const;
 
-        void UpdateScale(const enpitsu::Vector3 &newScale, ShaderProgram *shader);
+        void UpdateScale(const enpitsu::Vector3 &newScale, ShaderProgram *shader) const;
 
         [[nodiscard]] GLuint getId() const;
     };

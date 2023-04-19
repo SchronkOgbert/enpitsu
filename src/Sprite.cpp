@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 2/5/2023.
-//
-
 #include "enpitsu/objects/Sprite.h"
 #include "enpitsu/shading/ShaderProgram.h"
 

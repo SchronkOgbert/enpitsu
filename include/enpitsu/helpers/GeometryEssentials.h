@@ -3,8 +3,6 @@
 
 #include "defines.h"
 #include "Exception.h"
-#include "glm/fwd.hpp"
-#include <format>
 
 namespace enpitsu
 {

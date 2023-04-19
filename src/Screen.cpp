@@ -4,13 +4,6 @@
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
 #include "enpitsu/objects/Object3D.h"
-#include <algorithm>
-#include <format>
-#include <iterator>
-#include <memory>
-#include <vector>
-
-bool enpitsu::Screen::exists = false;
 
 using enpitsu::Object;
 
@@ -19,11 +12,6 @@ enpitsu::Screen::Screen
          const bool &fullScreen
         ) : size(size), fullScreen(fullScreen)
 {
-    if (exists)
-    {
-        throw BadProcessCreation();
-    }
-    exists = true;
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
@@ -95,6 +83,11 @@ void enpitsu::Screen::createGLFWWindow()
     {
         glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
     }
+    else
+    {
+        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
+        PLOGW << "Raw mouse motion not supported";
+    }
 }
 
 void enpitsu::Screen::callTick(const float &delta)
@@ -131,7 +124,7 @@ void enpitsu::Screen::tick(const float &delta)
     std::jthread destroyer([this]
                            {
                                this->destroyObjectsFromQueue();
-                           });
+                           }); // this may not actually be needed
     glfwSwapBuffers(this->window);
 }
 
@@ -198,7 +191,7 @@ void enpitsu::Screen::callInit()
 {
     if (camera)
     {
-        PLOGI << "Calling init for camera";
+        PLOGD << "Calling init for camera";
         camera->callInit();
     }
 }
@@ -239,7 +232,7 @@ void enpitsu::Screen::callKeyEvents(const int &key,
         {
 //            PLOGE << "Event not implemented";
         }
-        break;
+            break;
     }
 }
 
@@ -261,8 +254,8 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
 
 void enpitsu::Screen::updateScreenDefaults() const
 {
-    checkDepth ? glClear(GL_COLOR_BUFFER_BIT) :
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    checkDepth ? glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) :
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void enpitsu::Screen::removeObject(Object *obj)
@@ -363,11 +356,6 @@ void enpitsu::Screen::setCheckDepth(bool checkDepth)
     this->checkDepth = checkDepth;
 }
 
-enpitsu::Screen::Screen(const enpitsu::Vector2 &&size, const bool &&fullScreen) : Screen(size, fullScreen)
-{
-
-}
-
 void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
 {
     callableEvents->push_back(eventHandler);
@@ -410,9 +398,9 @@ void enpitsu::Screen::setMousePosition(const enpitsu::Vector2 &newPosition)
 
 void enpitsu::Screen::setCamMatrix(const GLfloat *camMatrix)
 {
-    for(int i = 0; i < 16; i++)
+    for (int i = 0; i < 16; i++)
     {
-        if(this->camMatrix[i] != camMatrix[i])
+        if (this->camMatrix[i] != camMatrix[i])
         {
             updateCamera = true;
             this->camMatrix[i] = camMatrix[i];

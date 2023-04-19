@@ -9,9 +9,9 @@ class EBO
 public:
     EBO(GLuint *indices, const GLsizeiptr &size, const bool &isStatic = true);
 
-    void Bind();
+    void Bind() const;
 
-    void Unbind();
+    void Unbind() const;
 
     void Delete();
 

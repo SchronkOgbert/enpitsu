@@ -17,7 +17,7 @@ namespace enpitsu
 
         void Bind() const;
 
-        void Unbind();
+        void Unbind() const;
 
         void Delete();
 

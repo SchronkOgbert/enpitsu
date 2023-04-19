@@ -1,9 +1,4 @@
-//
-// Created by weekendUM on 2/8/2023.
-//
-
 #include "enpitsu/shading/SolidColor.h"
-#include <format>
 
 namespace enpitsu
 {

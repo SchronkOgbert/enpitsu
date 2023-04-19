@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
-
 #include "enpitsu/GL/VAO.h"
 #include "enpitsu/GL/VBO.h"
 
@@ -44,7 +40,7 @@ void VAO::Bind() const
     glBindVertexArray(ID);
 }
 
-void VAO::Unbind()
+void VAO::Unbind() const
 {
     glBindVertexArray(0U);
 }

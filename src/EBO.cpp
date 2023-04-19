@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
-
 #include "enpitsu/GL/EBO.h"
 
 GLuint EBO::getId() const
@@ -16,12 +12,12 @@ EBO::EBO(GLuint *indices, const GLsizeiptr &size, const bool &isStatic)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 }
 
-void EBO::Bind()
+void EBO::Bind() const
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
 }
 
-void EBO::Unbind()
+void EBO::Unbind() const
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLuint>(0));
 }

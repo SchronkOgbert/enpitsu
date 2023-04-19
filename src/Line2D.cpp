@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 2/3/2023.
-//
-
 #include "enpitsu/objects/Line2D.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/objects/Screen.h"

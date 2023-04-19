@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 2/13/2023.
-//
-
 #include "enpitsu/shading/Texture2DShader.h"
 
 namespace enpitsu

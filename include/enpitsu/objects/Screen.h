@@ -64,10 +64,12 @@ namespace enpitsu
         }
     };
 
+    /**
+     * Class that manages the window
+     * This is pretty much a god class
+     */
     class Screen
     {
-        static bool exists;
-
         friend class Object;
 
         friend class Camera3D;
@@ -75,20 +77,7 @@ namespace enpitsu
         //props
         Vector2 size;
         bool fullScreen;
-    public:
-        /**
-         * check whether the depth is checked(used in 3D rendering)
-         * @return value, default is false
-         */
-        [[nodiscard]] bool getCheckDepth() const;
 
-        /**
-         * enables or disables depth checking(used in 3D rendering)
-         * @param checkDepth true for enable, false for disable, default false
-         */
-        void setCheckDepth(bool checkDepth);
-
-    private:
         // misc
         bool checkDepth{false};
         GLFWwindow *window;
@@ -137,23 +126,27 @@ namespace enpitsu
     public:
         Screen() = delete;
 
-        // default constructor
+        /**
+         * The default constructor of the class
+         * @param size size in pixels(width x height)
+         * @param fullScreen whether it should be fullscreen or not(this doesn't actually work yet)
+         */
         explicit Screen
                 (
                         const Vector2 &size,
                         const bool &fullScreen = false
                 );
 
-        //move constructor
-        explicit Screen
-                (
-                        const Vector2 &&size, // TODO change this to Vector2
-                        const bool &&fullScreen = false
-                );
-
         //destructor
         virtual ~Screen();
 
+        /**
+         * Adds an object to the screen
+         * The object shall be added using the newObject<objectType T> function, where objectType is a concept
+         * @tparam type object class(must be derived from enpitsu::Object
+         * @param obj an r-value unique pointer that will be stripped(returned from newObject<objectType T>)
+         * @return a raw pointer to the added object, this is the only way to get its reference, it cannot be retrieved later
+         */
         template<objectType type>
         type *addObject(std::unique_ptr<type> &&obj)
         {
@@ -169,11 +162,12 @@ namespace enpitsu
          * Function that starts the screen activity\n
          * This is a blocking function, it should be placed just before the end of the program\n
          * Set all the properties of all the classes before calling this function
+         * A good practice would be to have an object derived from enpitsu::ControlObject added in the screen's init to control other objects
          */
         void start();
 
         /**
-         * Function that calls the input events for all objects\n
+         * Function that calls the keyboard events for all objects\n
          * It has to be public because of some quirks of glfw
          */
         void callKeyEvents(const int &key,
@@ -181,14 +175,28 @@ namespace enpitsu
                            const int &action,
                            const int &mods);
 
+        /**
+         * Function that calls the mouse events for all objects\n
+         * It has to be public because of some quirks of glfw
+         */
         void callMouseEvents(const int &button,
                              const int &action,
                              const int &mods,
                              const Vector2 &pos);
 
+        /**
+         * Enables or disables the cursor
+         * @param enable whether it should be enabled or disabled
+         */
         void enableCursor(const bool &enable);
 
+        /**
+         * Shows or hides the cursor
+         * @param show whether to show or hide the cursor
+         */
         void showCursor(const bool &show);
+
+        // getters and setters
 
         /**
          * get the window size
@@ -196,23 +204,71 @@ namespace enpitsu
          */
         [[nodiscard]] const Vector2 & getSize() const { return size; }
 
+        /**
+         * set the window size
+         * @param size width x height expressed as a Vector2
+         */
         void setSize(const Vector2 &size);
 
+        /**
+         * gets the camera attached to the screen
+         * @return raw pointer to camera
+         */
         [[nodiscard]] Camera3D* getCamera3D();
 
+        /**
+         * sets the screen camera
+         * @param camera3D r-value unique_ptr(will be stripped)
+         */
         void setCamera3D(std::unique_ptr<Camera3D>&& camera3D);
 
+        /**
+         * adds an object that should have input events called for it
+         * @param eventHandler raw pointer to object
+         */
         void addEventHandler(InputEvents* eventHandler);
 
+        /**
+         * sets the background color of the whole canvas(affects 2D and 3D)
+         * @param newColor
+         */
         void setBackgroundColor(const Vector4& newColor);
 
+        /**
+         * gets the current mouse position on the screen
+         * @return width and height expressed as Vector2
+         */
         [[nodiscard]] Vector2 getMousePosition() const;
 
+        /**
+         * sets the mouse position
+         * @param newPosition width and height expressed as Vector2
+         */
         void setMousePosition(const Vector2& newPosition);
 
+        /**
+         * this is only useful for OpenGL math, it gets the camera matrix, which is the projection matrix multiplied by the view matrix
+         * @return projection * view
+         */
         [[nodiscard]] const GLfloat *getCamMatrix() const { return &camMatrix[0]; }
 
+        /**
+         * sets the camera matrix(which should be a result of the projection matrix multiplied by the view matrix)
+         * @param camMatrix glm::mat4 with the desired data
+         */
         void setCamMatrix(const GLfloat *camMatrix);
+
+        /**
+         * check whether the depth is checked(used in 3D rendering)
+         * @return value, default is false
+         */
+        [[nodiscard]] bool getCheckDepth() const;
+
+        /**
+         * enables or disables depth checking(used in 3D rendering)
+         * @param checkDepth true for enable, false for disable, default false
+         */
+        void setCheckDepth(bool checkDepth);
 
     protected:
 

@@ -84,7 +84,7 @@ namespace enpitsu
 
         KeyEvent() = default;
 
-        KeyEvent(const KeyEvent::Event &event) : event(event)
+        explicit KeyEvent(const KeyEvent::Event &event) : event(event)
         {}
     };
 

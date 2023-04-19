@@ -1,13 +1,6 @@
-//
-// Created by weekendUM on 2/18/2023.
-//
-
 #include "enpitsu/objects/Object3D.h"
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/objects/Camera3D.h"
-#include "glm/fwd.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "glm/gtx/transform.hpp"
 
 namespace enpitsu
 {

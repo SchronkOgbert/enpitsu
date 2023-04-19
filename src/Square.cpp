@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 2/8/2023.
-//
-
 #include "enpitsu/objects/Square.h"
 #include "enpitsu/shading/ShaderProgram.h"
 

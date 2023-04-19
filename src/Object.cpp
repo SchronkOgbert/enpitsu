@@ -1,7 +1,3 @@
-//
-// Created by weekendUM on 1/24/2023.
-//
-
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/helpers/InputEvents.h"
