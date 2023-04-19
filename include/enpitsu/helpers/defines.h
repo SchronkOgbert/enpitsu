@@ -1,17 +1,6 @@
 #ifndef ENPITSU_DEFINES_H
 #define ENPITSU_DEFINES_H
 
-// VS compiler workaround
-#include <format>
-#include <initializer_list>
-
-#define _CRT_SECURE_NO_DEPRECATE
-
-// also VS compiler workaround
-#ifdef _MSC_VER
-#define strdup _strdup
-#endif
-
 // this piece of shit needs to be here for stb to work
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -39,6 +28,8 @@
 #include <thread>
 #include <set>
 #include <queue>
+#include <format>
+#include <initializer_list>
 
 
 // 3rd party stuff
@@ -54,8 +45,13 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 #include "glm/gtx/vector_angle.hpp"
+#include "glm/ext/quaternion_geometric.hpp"
+#include "glm/ext/scalar_constants.hpp"
+#include "glm/fwd.hpp"
+#include "glm/geometric.hpp"
+#include "glm/gtx/transform.hpp"
 
-// concepts, aliases, forward declarations
+// concepts, aliases, perfect forwards
 
 namespace enpitsu
 {

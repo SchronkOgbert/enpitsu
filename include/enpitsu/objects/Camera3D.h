@@ -3,39 +3,22 @@
 
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "ControlObject.h"
-#include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {
-    class Camera3D : public ControlObject, public InputEvents
+    class Camera3D : public ControlObject
     {
-        unsigned moving{0};
+        // control
+        bool update{false};
     protected:
         Vector2 size;
         Vector3 position;
         Vector3 orientation{0, 0, -1};
         Vector3 up{0, 1, 0};
-        float speed{0.1f};
         int FOV{80};
 
-        int speedLeft{0};
-        int speedForward{0};
-        float mouseSensitivity{0.5f};
-        bool justClicked{false};
-        Vector2 prevMousePos;
-        Vector2 currMousePos;
-        float yaw{-90.0f};
-        float pitch = 0;
-
         void init() override;
-
-    public:
-        const Vector3 &getPosition() const;
-
-        void setPosition(const Vector3 &position);
-
-    protected:
 
         std::unique_ptr<glm::mat4> view = std::make_unique<glm::mat4>(1.0f);
         std::unique_ptr<glm::mat4> projection = std::make_unique<glm::mat4>(1.0f);
@@ -46,15 +29,17 @@ namespace enpitsu
 
         virtual void updateMatrix(const float &nearPlane, const float &farPlane, const char *uniformName);
 
-        void OnMousePressed(const MouseEvent &event) override;
+        [[nodiscard]] const Vector3 &getPosition() const;
 
-        void OnMouseReleased(const MouseEvent &event) override;
+        void setPosition(const Vector3& position);
 
-        void OnKeyPressed(const KeyEvent &event) override;
+        [[nodiscard]] const Vector3 &getOrientation() const;
 
-        void OnKeyReleased(const KeyEvent &event) override;
+        void setOrientation(const Vector3& orientation);
 
-        void move();
+        int getFov() const;
+
+        void setFov(int fov);
     };
 }
 

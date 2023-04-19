@@ -5,8 +5,8 @@
 
 namespace enpitsu
 {
-    static std::unique_ptr<std::map<std::string, const char *>> defaultShaderSources(
-            new std::map<std::string, const char *>{
+    static std::unique_ptr<std::map<std::string, std::string>> defaultShaderSources(
+            new std::map<std::string, std::string>{
                     {"default.vert",   "#version 450\n"
                                        "\n"
                                        "layout (location = 0) in vec3 vertexPosition;\n"
@@ -99,10 +99,6 @@ namespace enpitsu
                                        "\n"
                                        "out vec4 color;\n"
                                        "\n"
-                                       "uniform float scaleX = 1;\n"
-                                       "uniform float scaleY = 1;\n"
-                                       "uniform float scaleZ = 1;\n"
-                                       "\n"
                                        "uniform mat4 camMatrix;\n"
                                        "uniform mat4 modelMatrix;\n"
                                        "uniform vec3 cameraPosition;\n"
@@ -110,9 +106,34 @@ namespace enpitsu
                                        "void main()\n"
                                        "{\n"
                                        "    float w = distance(vertexPosition, cameraPosition);\n"
-                                       "    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x * scaleX, vertexPosition.y * scaleY, vertexPosition.z * scaleZ, 1);\n"
+                                       "    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1);\n"
                                        "    color = inColor;\n"
                                        "}"
+                    },
+                    {
+                        "light.vert", "#version 450\n"
+                                      "\n"
+                                      "layout (location = 1) in vec3 vertexPosition;\n"
+                                      "\n"
+                                      "uniform mat4 model;\n"
+                                      "uniform mat4 camMatrix;\n"
+                                      "\n"
+                                      "void main()\n"
+                                      "{\n"
+                                      "    gl_Position = camMatrix * model * vec4(vertexPosition, 1);\n"
+                                      "}"
+                    },
+                    {
+                        "light.frag", "#version 450\n"
+                                      "\n"
+                                      "out vec4 outColor;\n"
+                                      "\n"
+                                      "uniform vec4 lightColor = vec4(1, 1, 1, 1);\n"
+                                      "\n"
+                                      "void main() \n"
+                                      "{\n"
+                                      "    outColor = lightColor;\n"
+                                      "}"
                     }
             });
 }

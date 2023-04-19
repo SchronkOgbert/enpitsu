@@ -9,10 +9,10 @@ namespace enpitsu
         const bool defaultVertex = defaultShaderSources->count(std::string(vertexFile));
         const bool defaultFrag = defaultShaderSources->count(std::string(fragmentFile));
         const char *vertexData = defaultVertex ?
-                                 (*defaultShaderSources)[std::string(vertexFile)] :
+                                 (*defaultShaderSources)[std::string(vertexFile)].c_str() :
                                  readShaderFile(vertexFile);
         const char *fragmentData = defaultFrag ?
-                                   (*defaultShaderSources)[std::string(fragmentFile)] :
+                                   (*defaultShaderSources)[std::string(fragmentFile)].c_str() :
                                    readShaderFile(fragmentFile);
 
         if (strlen(vertexData) == 0)

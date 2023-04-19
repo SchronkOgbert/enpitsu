@@ -25,18 +25,7 @@ namespace enpitsu
     {
         this->vertices = linearizePointsVector<Vector3>
                 (*points, screen->getSize().x, screen->getSize().y);
-        PLOGD << "Vertices:";
-        for (size_t i = 0; i < vertices.size(); i += 3)
-        {
-            PLOGD << std::format("vertex: ({}, {}, {})", vertices[i], vertices[i + 1], vertices[i + 2]);
-        }
-        PLOGD << "Draw order ";
-        for (auto &index: indices)
-        {
-            PLOGD << index << ' ';
-        }
         this->shaderProgram = shader;
-        PLOGD << std::format("origin: {}", origin);
         model = glm::translate(glm::mat4(1), origin);
         model = glm::rotate(model,glm::radians(0.0f),glm::vec3(1,0,0));
         model = glm::rotate(model,glm::radians(0.0f),glm::vec3(0,1,0));

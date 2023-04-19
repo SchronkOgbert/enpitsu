@@ -16,7 +16,8 @@ namespace enpitsu
             VERTEX2D = 0,
             VERTEX3D = 1,
             RGBA = 2,
-            TEXTURE2D = 3
+            TEXTURE2D = 3,
+            NORMAL = 4
         };
     private:
         objectLayout layout;

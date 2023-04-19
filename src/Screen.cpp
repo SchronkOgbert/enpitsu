@@ -173,7 +173,6 @@ void enpitsu::Screen::init()
         glfwGetCursorPos(glfwWindow, &x, &y);
         y = obj->getSize().y - y;
         obj->cursorPos = {x, y};
-        PLOGD << std::format("Sending mouse position {}", obj->cursorPos);
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -238,8 +237,9 @@ void enpitsu::Screen::callKeyEvents(const int &key,
         }
         default:
         {
-            PLOGE << "Event not implemented";
+//            PLOGE << "Event not implemented";
         }
+        break;
     }
 }
 
@@ -249,10 +249,6 @@ void enpitsu::Screen::sendPress(KeyEvent event) const
     {
         obj->OnKeyPressed(event);
     }
-    if (camera)
-    {
-        camera->OnKeyPressed(event);
-    }
 }
 
 void enpitsu::Screen::sendRelease(const KeyEvent &event)
@@ -260,10 +256,6 @@ void enpitsu::Screen::sendRelease(const KeyEvent &event)
     for (auto &obj: *callableEvents)
     {
         obj->OnKeyReleased(event);
-    }
-    if (camera)
-    {
-        camera->OnKeyReleased(event);
     }
 }
 
@@ -308,10 +300,6 @@ void enpitsu::Screen::callMouseEvents(const int &button, const int &action, cons
     for (auto &obj: *callableEvents)
     {
         action ? obj->OnMousePressed(event) : obj->OnMouseReleased(event);
-    }
-    if (camera)
-    {
-        action ? camera->OnMousePressed(event) : camera->OnMouseReleased(event);
     }
 }
 

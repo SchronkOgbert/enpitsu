@@ -15,7 +15,7 @@ namespace enpitsu
 
         void LinkVBO(VBO vbo);
 
-        void Bind();
+        void Bind() const;
 
         void Unbind();
 
