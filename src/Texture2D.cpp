@@ -1,4 +1,4 @@
-#include "shading/Texture2D.h"
+#include "enpitsu/shading/Texture2D.h"
 #include "stb_image.h"
 
 enpitsu::Texture2D::Texture2D(const char *textureFile)

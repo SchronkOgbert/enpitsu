@@ -1,9 +1,7 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
+#include "enpitsu/GL/VAO.h"
+#include "enpitsu/GL/VBO.h"
 
-#include "GL/VAO.h"
-#include "GL/VBO.h"
+using namespace enpitsu;
 
 GLuint VAO::getId() const
 {
@@ -22,10 +20,11 @@ void VAO::LinkVBO(VBO vbo)
     switch (vbo.getLayout())
     {
         case VBO::objectLayout::VERTEX2D:
-        case VBO::objectLayout::TEXTURE2D: // these are both vec2 so we only need 1 branch for both
+        case VBO::objectLayout::TEXTURE2D: // these are both vec2, so we only need 1 branch for both
             glVertexAttribPointer(static_cast<GLuint>(layout), 2, GL_FLOAT, GL_FALSE, 0, nullptr);
             break;
         case VBO::objectLayout::VERTEX3D:
+        case VBO::objectLayout::NORMAL: // these are both vec3, so we only need 1 branch for both
             glVertexAttribPointer(static_cast<GLuint>(layout), 3, GL_FLOAT, GL_FALSE, 0, nullptr);
             break;
         case VBO::objectLayout::RGBA:
@@ -36,12 +35,12 @@ void VAO::LinkVBO(VBO vbo)
     vbo.Unbind();
 }
 
-void VAO::Bind()
+void VAO::Bind() const
 {
     glBindVertexArray(ID);
 }
 
-void VAO::Unbind()
+void VAO::Unbind() const
 {
     glBindVertexArray(0U);
 }

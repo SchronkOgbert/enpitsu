@@ -1,9 +1,9 @@
-#include "objects/Screen.h"
-#include "objects/Object.h"
-#include "helpers/InputEvents.h"
-#include "objects/Camera3D.h"
-
-bool enpitsu::Screen::exists = false;
+#include "enpitsu/objects/Screen.h"
+#include "GLFW/glfw3.h"
+#include "enpitsu/objects/Object.h"
+#include "enpitsu/helpers/InputEvents.h"
+#include "enpitsu/objects/Camera3D.h"
+#include "enpitsu/objects/Object3D.h"
 
 using enpitsu::Object;
 
@@ -12,16 +12,15 @@ enpitsu::Screen::Screen
          const bool &fullScreen
         ) : size(size), fullScreen(fullScreen)
 {
-    if (exists)
-    {
-        throw BadProcessCreation();
-    }
-    exists = true;
     this->window = nullptr;
     this->name = "Window";
     this->objects = std::make_unique<std::list<std::unique_ptr<Object>>>();
+    this->objectsQueue = std::make_unique<std::queue<std::unique_ptr<Object>>>();
     this->destroyQueue = std::make_unique<std::vector<Object *>>();
+    this->callableEvents = std::make_unique<std::vector<InputEvents *>>();
     this->shouldDestroy = false;
+    this->camMatrix = std::vector<GLfloat>(16);
+    this->setCamMatrix(glm::value_ptr(glm::mat4(1)));
     if (glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
@@ -84,6 +83,11 @@ void enpitsu::Screen::createGLFWWindow()
     {
         glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
     }
+    else
+    {
+        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
+        PLOGW << "Raw mouse motion not supported";
+    }
 }
 
 void enpitsu::Screen::callTick(const float &delta)
@@ -92,10 +96,12 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         obj->callTick(delta);
     }
+    updateCamera = false;
     if (camera)
     {
         camera->callTick(delta);
     }
+    moveObjectsFromQueue();
 }
 
 void enpitsu::Screen::setGLFWHints()
@@ -116,9 +122,9 @@ void enpitsu::Screen::tick(const float &delta)
     this->callTick(delta);
     glfwPollEvents();
     std::jthread destroyer([this]
-                        {
-                            this->destroyObjectsFromQueue();
-                        });
+                           {
+                               this->destroyObjectsFromQueue();
+                           }); // this may not actually be needed
     glfwSwapBuffers(this->window);
 }
 
@@ -156,10 +162,10 @@ void enpitsu::Screen::init()
     glfwSetMouseButtonCallback(window, [](GLFWwindow *glfwWindow, int button, int action, int mods)
     {
         auto obj = static_cast<Screen *>(glfwGetWindowUserPointer(glfwWindow));
-        auto *pos = &(obj->cursorPos);
-        glfwGetCursorPos(glfwWindow, &(pos->x), &(pos->y));
-//        println(pos->first, ' ', pos->second);
-        pos->y = obj->getSize().y - pos->y;
+        double x, y;
+        glfwGetCursorPos(glfwWindow, &x, &y);
+        y = obj->getSize().y - y;
+        obj->cursorPos = {x, y};
         obj->callMouseEvents(button, action, mods, obj->cursorPos);
     });
     glfwSetErrorCallback([](int errorCode, const char *description)
@@ -169,11 +175,11 @@ void enpitsu::Screen::init()
                          });
 
     //load opengl
-//    glewExperimental = true;
     glewInit();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    moveObjectsFromQueue();
 }
 
 void enpitsu::Screen::destroy()
@@ -183,14 +189,9 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
-    PLOGI << "Calling init for " << objects->size() << " objects";
-    for (auto &obj: *objects)
-    {
-        obj->callInit();
-    }
     if (camera)
     {
-        PLOGI << "Calling init for camera";
+        PLOGD << "Calling init for camera";
         camera->callInit();
     }
 }
@@ -229,39 +230,32 @@ void enpitsu::Screen::callKeyEvents(const int &key,
         }
         default:
         {
-            PLOGE << "Event not implemented";
+//            PLOGE << "Event not implemented";
         }
+            break;
     }
 }
 
 void enpitsu::Screen::sendPress(KeyEvent event) const
 {
-    for (auto &obj: *objects)
+    for (auto obj: *callableEvents)
     {
-        obj->callKeyPressed(event);
-    }
-    if (camera)
-    {
-        camera->callKeyPressed(event);
+        obj->OnKeyPressed(event);
     }
 }
 
 void enpitsu::Screen::sendRelease(const KeyEvent &event)
 {
-    for (auto &obj: *objects)
+    for (auto &obj: *callableEvents)
     {
-        obj->callKeyReleased(event);
-    }
-    if (camera)
-    {
-        camera->callKeyReleased(event);
+        obj->OnKeyReleased(event);
     }
 }
 
-void enpitsu::Screen::updateScreenDefaults()
+void enpitsu::Screen::updateScreenDefaults() const
 {
-    checkDepth ? glClear(GL_COLOR_BUFFER_BIT) :
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    checkDepth ? glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) :
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void enpitsu::Screen::removeObject(Object *obj)
@@ -296,13 +290,9 @@ void enpitsu::Screen::callMouseEvents(const int &button, const int &action, cons
             throw BadMouseInput();
         }
     }
-    for (auto &obj: *objects)
+    for (auto &obj: *callableEvents)
     {
-        action ? obj->callMousePressed(event) : obj->callMouseReleased(event);
-    }
-    if (camera)
-    {
-        action ? camera->callMousePressed(event) : camera->callMouseReleased(event);
+        action ? obj->OnMousePressed(event) : obj->OnMouseReleased(event);
     }
 }
 
@@ -311,25 +301,20 @@ void enpitsu::Screen::enableCursor(const bool &enable)
     glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
-inline const enpitsu::Vector2 &enpitsu::Screen::getSize() const
-{
-    return size;
-}
-
 void enpitsu::Screen::setSize(const Vector2 &size)
 {
     this->size = size;
     glfwSetWindowSize(window, size.x, size.y);
 }
 
-inline const enpitsu::Camera3D *enpitsu::Screen::getCamera3D() const
+enpitsu::Camera3D *enpitsu::Screen::getCamera3D()
 {
     return this->camera.get();
 }
 
-void enpitsu::Screen::setCamera3D(enpitsu::Camera3D *camera3D)
+void enpitsu::Screen::setCamera3D(std::unique_ptr<Camera3D> &&camera3D)
 {
-    this->camera = std::unique_ptr<Camera3D>(camera3D);
+    this->camera = std::move(camera3D);
 }
 
 void enpitsu::Screen::showCursor(const bool &show)
@@ -340,6 +325,7 @@ void enpitsu::Screen::showCursor(const bool &show)
 void enpitsu::Screen::removeObjectNow(Object *obj)
 {
     bool success = false;
+    std::erase(*callableEvents, dynamic_cast<InputEvents *>(obj));
     objects->remove_if([obj, &success](std::unique_ptr<Object> &el)
                        {
                            if (success) return false;
@@ -370,8 +356,55 @@ void enpitsu::Screen::setCheckDepth(bool checkDepth)
     this->checkDepth = checkDepth;
 }
 
-enpitsu::Screen::Screen(const enpitsu::Vector2 &&size, const bool &&fullScreen) : Screen(size, fullScreen)
+void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
 {
+    callableEvents->push_back(eventHandler);
+    PLOGD << "Callables: " << callableEvents->size();
+}
 
+void enpitsu::Screen::moveObjectsFromQueue()
+{
+    while (!objectsQueue->empty())
+    {
+        PLOGD << "Adding " << objectsQueue->front().get();
+        objectsQueue->front()->callInit();
+        auto eventHandler = dynamic_cast<InputEvents *>(objectsQueue->front().get());
+        if (eventHandler)
+        {
+            callableEvents->push_back(eventHandler);
+        }
+        objects->push_back(std::move(objectsQueue->front()));
+        objectsQueue->pop();
+        PLOGD << std::format("{} elements left in queue", objectsQueue->size());
+    }
+}
+
+void enpitsu::Screen::setBackgroundColor(const Vector4 &newColor)
+{
+    glClearColor(newColor.x, newColor.y, newColor.z, newColor.a);
+}
+
+enpitsu::Vector2 enpitsu::Screen::getMousePosition() const
+{
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    return {x, y};
+}
+
+void enpitsu::Screen::setMousePosition(const enpitsu::Vector2 &newPosition)
+{
+    glfwSetCursorPos(window, newPosition.x, newPosition.y);
+}
+
+void enpitsu::Screen::setCamMatrix(const GLfloat *camMatrix)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        if (this->camMatrix[i] != camMatrix[i])
+        {
+            updateCamera = true;
+            this->camMatrix[i] = camMatrix[i];
+        }
+    }
 }
 

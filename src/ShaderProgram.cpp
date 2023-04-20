@@ -1,6 +1,6 @@
-#include "shading/ShaderProgram.h"
-#include "helpers/defines.h"
-#include "shading/ShaderSources.h"
+#include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/helpers/defines.h"
+#include "enpitsu/shading/ShaderSources.h"
 
 namespace enpitsu
 {
@@ -9,10 +9,10 @@ namespace enpitsu
         const bool defaultVertex = defaultShaderSources->count(std::string(vertexFile));
         const bool defaultFrag = defaultShaderSources->count(std::string(fragmentFile));
         const char *vertexData = defaultVertex ?
-                                 (*defaultShaderSources)[std::string(vertexFile)] :
+                                 (*defaultShaderSources)[std::string(vertexFile)].c_str() :
                                  readShaderFile(vertexFile);
         const char *fragmentData = defaultFrag ?
-                                   (*defaultShaderSources)[std::string(fragmentFile)] :
+                                   (*defaultShaderSources)[std::string(fragmentFile)].c_str() :
                                    readShaderFile(fragmentFile);
 
         if (strlen(vertexData) == 0)
@@ -57,10 +57,10 @@ namespace enpitsu
         }
         setVao(new VAO(vertexSize));
         getVao()->Bind();
-        setVertexPosition(new VBO(&vertices[0U], sizeof(&vertices[0]) * vertices.size(),
+        setVertexPosition(new VBO(&vertices[0U], sizeof(vertices[0]) * vertices.size(),
                                   vertexSize == 2 ? VBO::objectLayout::VERTEX2D : VBO::objectLayout::VERTEX3D,
                                   isStatic));
-        setEbo(new EBO(&indices[0U], sizeof(&indices[0]) * indices.size(), isStatic));
+        setEbo(new EBO(&indices[0U], sizeof(indices[0]) * indices.size(), isStatic));
         glLinkProgram(ID);
         hasCompiled(vertexShader);
         hasCompiled(fragmentShader);
@@ -140,5 +140,16 @@ namespace enpitsu
     {
         vao->Unbind();
         glUseProgram(0);
+    }
+
+    void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value) const
+    {
+        glUniformMatrix4fv(glGetUniformLocation(this->getId(), uniformName.c_str()),
+                           1, GL_FALSE, value);
+    }
+
+    void ShaderProgram::updateVec3Uniform(const std::string &uniformName, const float *value) const
+    {
+        glUniform3fv(glGetUniformLocation(this->getId(), uniformName.c_str()), 1, value);
     }
 }

@@ -1,14 +1,12 @@
-//
-// Created by weekendUM on 1/27/2023.
-//
-
-#include "objects/Object2D.h"
-#include "objects/Screen.h"
-#include "shading/SolidColor.h"
-#include "helpers/GeometryEssentials.h"
+#include "enpitsu/objects/Object2D.h"
+#include "enpitsu/helpers/defines.h"
+#include "enpitsu/objects/Screen.h"
+#include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/shading/SolidColor.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
-                            ShaderProgram *shader,
+                            std::shared_ptr<ShaderProgram> &&shader,
                             const bool &isStatic, const std::vector<unsigned int> &drawOrder) :
         Object(screen),
         isStatic(isStatic),
@@ -21,10 +19,12 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     this->vertices.reserve(points.size() * 2U);
     for (auto &point: points)
     {
+        PLOGD << std::format("Origin: {} Point {}", origin.x, point.y);
+        PLOGD << std::format("Point x: {}", toGLCoord(origin.x + point.x, screen->getSize().x));
         this->vertices.push_back(toGLCoord(origin.x + point.x, screen->getSize().x));
-        this->vertices.push_back(toGLCoord(origin.y + point.y,
-                                           screen->getSize().y));
+        this->vertices.push_back(toGLCoord(origin.y + point.y, screen->getSize().y));
     }
+//    vertices = linearizePointsVector(points, screen->getSize().x, screen->getSize().y);
     if (drawOrder.empty())
     {
         this->indices = std::vector<GLuint>(this->vertices.size());
@@ -36,7 +36,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     {
         this->indices = drawOrder;
     }
-    shaderProgram = std::unique_ptr<ShaderProgram>(shader);
+    shaderProgram = std::move(shader);
 }
 
 void enpitsu::Object2D::init()
@@ -126,5 +126,7 @@ void enpitsu::Object2D::tick(const float &delta)
 
 void enpitsu::Object2D::setSize(const enpitsu::Vector2 &newSize)
 {
-    
+
+    size = newSize;
+    shaderProgram->getVertexPosition()->UpdateScale({newSize.x, newSize.y, 1}, shaderProgram.get());
 }

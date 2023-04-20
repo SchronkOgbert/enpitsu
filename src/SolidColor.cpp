@@ -1,8 +1,4 @@
-//
-// Created by weekendUM on 2/8/2023.
-//
-
-#include "shading/SolidColor.h"
+#include "enpitsu/shading/SolidColor.h"
 
 namespace enpitsu
 {
@@ -26,10 +22,6 @@ namespace enpitsu
             colorInfo[i] = static_cast<float>(color.a) / 255.0f;
         }
         PLOGD << "size of color info: " << sizeof(GLfloat) * colorInfo.size();
-//        for (auto &vertex: colorInfo)
-//        {
-//            std::cout << "color vertex: " << vertex << '\n';
-//        }
         colorVertex = std::make_unique<VBO>(&colorInfo[0U],
                                             sizeof(GLfloat) * colorInfo.size(), VBO::objectLayout::RGBA,
                                             isStatic);
