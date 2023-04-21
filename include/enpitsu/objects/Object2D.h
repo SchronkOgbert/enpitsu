@@ -32,6 +32,7 @@ namespace enpitsu
         bool isStatic;
 
         glm::mat4 model{1};
+        bool updateModel = false;
 
         void forceSetLocation(const Vector2& newLocation) noexcept;
     protected:

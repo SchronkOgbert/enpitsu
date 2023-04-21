@@ -78,6 +78,10 @@ void enpitsu::Object2D::draw()
     {
         shaderProgram->updateMat4UniformF("camMatrix", screen->getCam2DMatrix());
     }
+    if(!isStatic && updateModel)
+    {
+        shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
+    }
 }
 
 const enpitsu::Vector2 &enpitsu::Object2D::getOrigin() const
@@ -98,21 +102,9 @@ void enpitsu::Object2D::setLocation(const enpitsu::Vector2 &newLocation)
 
 void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) noexcept
 {
-    Vector2 distance = newLocation - origin;
+    model = glm::translate(model, Vector3(newLocation - origin, 1));
     origin = newLocation;
-    for (auto i = 0; i < vertices.size(); i += 2)
-    {
-        vertices[i] = toGLCoord(
-                fromGLCoord(vertices[i], screen->getSize().x) + distance.x,
-                screen->getSize().x
-        );
-        vertices[i + 1] = toGLCoord(
-                fromGLCoord(vertices[i + 1], screen->getSize().y) +
-                distance.y, // this is because y starts form the bottom in glfw
-                screen->getSize().y
-        );
-    }
-    shaderProgram->getVertexPosition()->Update(&vertices[0]);
+    updateModel = true;
 }
 
 void enpitsu::Object2D::tick(const float &delta)
@@ -125,6 +117,7 @@ void enpitsu::Object2D::tick(const float &delta)
 void enpitsu::Object2D::setSize(const enpitsu::Vector2 &newSize)
 {
 
+    model = glm::scale(model, Vector3(newSize / size, 1));
     size = newSize;
-    shaderProgram->getVertexPosition()->UpdateScale({newSize.x, newSize.y, 1}, shaderProgram.get());
+    updateModel = true;
 }
