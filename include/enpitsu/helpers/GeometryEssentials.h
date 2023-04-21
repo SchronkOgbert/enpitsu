@@ -28,7 +28,7 @@ namespace enpitsu
 
     template<vectorType T>
     std::vector<GLfloat>
-    linearizePointsVector(const std::vector<T> &points, const float &screenWidth, const float &screenHeight)
+    linearizePointsVector(const std::vector<T> &points)
     {
         size_t dimensions;
         if (typeid(T) == typeid(Vector2))
@@ -50,8 +50,8 @@ namespace enpitsu
             {
                 case 2:
                 {
-                    res[counter++] = toGLCoord(el[0], screenWidth);
-                    res[counter++] = toGLCoord(el[1], screenHeight);
+                    res[counter++] = el[0];
+                    res[counter++] = el[1];
                 }
                 break;
                 case 3:

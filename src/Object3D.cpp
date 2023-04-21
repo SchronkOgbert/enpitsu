@@ -17,7 +17,7 @@ namespace enpitsu
             : Object(screen), isStatic(isStatic), origin(origin), indices(*drawOrder)
     {
         this->vertices = linearizePointsVector<Vector3>
-                (*points, screen->getSize().x, screen->getSize().y);
+                (*points);
         this->shaderProgram = shader;
         model = glm::translate(glm::mat4(1), origin);
         model = glm::rotate(model,glm::radians(0.0f),glm::vec3(1,0,0));
@@ -36,9 +36,9 @@ namespace enpitsu
     void Object3D::draw()
     {
         shaderProgram->Bind();
-        if(shouldUpdateCamera())
+        if(shouldUpdateCamera3D())
         {
-            shaderProgram->updateMat4UniformF("camMatrix", screen->getCamMatrix());
+            shaderProgram->updateMat4UniformF("cam3DMatrix", screen->getCam3DMatrix());
         }
     }
 
@@ -54,8 +54,7 @@ namespace enpitsu
         shaderProgram->getVao()->Unbind();
         shaderProgram->getVertexPosition()->Unbind();
         shaderProgram->getEbo()->Unbind();
-        shaderProgram->updateMat4UniformF("camMatrix", screen->getCamMatrix());
+        shaderProgram->updateMat4UniformF("cam3DMatrix", screen->getCam3DMatrix());
         shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
-        shaderProgram->updateVec3Uniform("cameraPosition", glm::value_ptr(screen->getCamera3D()->getPosition()));
     }
 } // enpitsu

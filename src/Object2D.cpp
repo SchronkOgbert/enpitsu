@@ -4,6 +4,7 @@
 #include "enpitsu/shading/ShaderProgram.h"
 #include "enpitsu/shading/SolidColor.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
+#include "glm/gtx/transform.hpp"
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
                             std::shared_ptr<ShaderProgram> &&shader,
@@ -17,13 +18,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
         throw BadShaderObject();
     }
     this->vertices.reserve(points.size() * 2U);
-    for (auto &point: points)
-    {
-        PLOGD << std::format("Origin: {} Point {}", origin.x, point.y);
-        PLOGD << std::format("Point x: {}", toGLCoord(origin.x + point.x, screen->getSize().x));
-        this->vertices.push_back(toGLCoord(origin.x + point.x, screen->getSize().x));
-        this->vertices.push_back(toGLCoord(origin.y + point.y, screen->getSize().y));
-    }
+    this->vertices = linearizePointsVector(points);
 //    vertices = linearizePointsVector(points, screen->getSize().x, screen->getSize().y);
     if (drawOrder.empty())
     {
@@ -36,6 +31,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     {
         this->indices = drawOrder;
     }
+    model = glm::translate(model, Vector3(origin, 1));
     shaderProgram = std::move(shader);
 }
 
@@ -52,6 +48,8 @@ void enpitsu::Object2D::init()
     shaderProgram->getVao()->Unbind();
     shaderProgram->getVertexPosition()->Unbind();
     shaderProgram->getEbo()->Unbind();
+    shaderProgram->updateMat4UniformF("camMatrix", screen->getCam2DMatrix());
+    shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
 }
 
 void enpitsu::Object2D::onDestroy()
@@ -76,9 +74,9 @@ void enpitsu::Object2D::setScaleToScreen(const bool &scaleToScreen)
 void enpitsu::Object2D::draw()
 {
     shaderProgram->Bind();
-    if (scaleToScreen)
+    if(shouldUpdateCamera2D())
     {
-
+        shaderProgram->updateMat4UniformF("camMatrix", screen->getCam2DMatrix());
     }
 }
 

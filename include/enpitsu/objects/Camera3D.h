@@ -27,7 +27,7 @@ namespace enpitsu
     public:
         Camera3D(Screen* screen, const Vector3 &position, const Vector2 &size);
 
-        virtual void updateMatrix(const float &nearPlane, const float &farPlane, const char *uniformName);
+        virtual void updateMatrix(const float &nearPlane, const float &farPlane);
 
         [[nodiscard]] const Vector3 &getPosition() const;
 

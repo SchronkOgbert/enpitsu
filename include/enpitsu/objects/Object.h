@@ -51,7 +51,9 @@ namespace enpitsu
 
         virtual void draw() = 0;
 
-        [[nodiscard]] bool shouldUpdateCamera() const;
+        [[nodiscard]] bool shouldUpdateCamera3D() const;
+
+        [[nodiscard]] bool shouldUpdateCamera2D() const;
     };
 }
 

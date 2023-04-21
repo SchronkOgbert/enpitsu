@@ -31,6 +31,8 @@ namespace enpitsu
         Vector2 size{1, 1};
         bool isStatic;
 
+        glm::mat4 model{1};
+
         void forceSetLocation(const Vector2& newLocation) noexcept;
     protected:
 
