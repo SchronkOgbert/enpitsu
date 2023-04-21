@@ -2,13 +2,13 @@
 #define ENPITSU_OBJECT3D_H
 
 #include "Object.h"
+
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/SolidColor.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 
 namespace enpitsu
 {
-
     class Object3D : public Object
     {
     protected:
@@ -19,8 +19,6 @@ namespace enpitsu
         Vector3 origin;
 
         glm::mat4 model{1};
-
-        static GLfloat *camMatrix;
 
     public:
         [[nodiscard]] const std::shared_ptr<ShaderProgram> & getShaderProgram() const;

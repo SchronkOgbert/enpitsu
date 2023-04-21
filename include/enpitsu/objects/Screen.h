@@ -126,6 +126,8 @@ namespace enpitsu
 
         void moveObjectsFromQueue();
 
+        void callScreenSizeChanged();
+
     public:
         Screen() = delete;
 

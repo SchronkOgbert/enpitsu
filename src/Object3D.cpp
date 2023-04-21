@@ -4,8 +4,6 @@
 
 namespace enpitsu
 {
-    GLfloat *Object3D::camMatrix = nullptr;
-
     const std::shared_ptr<ShaderProgram> &Object3D::getShaderProgram() const
     {
         return shaderProgram;

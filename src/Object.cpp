@@ -53,3 +53,8 @@ bool enpitsu::Object::shouldUpdateCamera2D() const
 {
     return screen->updateCamera2D;
 }
+
+void enpitsu::Object::screenSizeChanged(const enpitsu::Vector2 &newSize)
+{
+    PLOGD << "Control Object: screen size changed";
+}

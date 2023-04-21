@@ -1,13 +1,11 @@
 #include "enpitsu/objects/Screen.h"
-#include "GLFW/glfw3.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
+#include "enpitsu/objects/ControlObject.h"
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
 #include "enpitsu/objects/Object3D.h"
 #include "enpitsu/objects/Camera2D.h"
-#include "glm/gtx/transform.hpp"
-#include <utility>
 
 using enpitsu::Object;
 
@@ -165,9 +163,9 @@ void enpitsu::Screen::init()
         glViewport(0, 0, width, height);
         screen->now = std::chrono::system_clock::now();
         std::chrono::duration<float> delta = screen->now - screen->before;
+        screen->callScreenSizeChanged();
         screen->tick(delta.count());
         screen->before = screen->now;
-
     });
     glfwSetCursorPosCallback(window, [](GLFWwindow *glfwWindow, double xpos, double ypos)
     {
@@ -441,5 +439,10 @@ void enpitsu::Screen::setCam2DMatrix(const GLfloat *camMatrix)
 void enpitsu::Screen::setCamera2D(std::unique_ptr<Camera2D> &&camera2D)
 {
     this->camera2D = std::move(camera2D);
+}
+
+void enpitsu::Screen::callScreenSizeChanged()
+{
+    static_cast<ControlObject*>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
 }
 
