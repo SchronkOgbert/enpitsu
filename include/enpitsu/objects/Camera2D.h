@@ -19,7 +19,7 @@ namespace enpitsu
         Vector3 up{0, 1, 0};
         glm::mat4 projection;
         glm::mat4 view{1};
-        float unitScale{8};
+        float unitScale{128};
 
     protected:
         void init() override;

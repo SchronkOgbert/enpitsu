@@ -2,6 +2,8 @@
 #define ENPITSU_DEFINES_H
 
 // this piece of shit needs to be here for stb to work
+#include <ostream>
+#include <vector>
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
@@ -99,6 +101,17 @@ namespace enpitsu
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
+}
+
+template<class T>
+std::ostream& operator<<(std::ostream &out, const std::vector<T> &v)
+{
+    out << '[';
+    for(size_t i = 0; i < v.size(); i++)
+    {
+        out << v[i] << ", ";
+    }
+    out << *(v.rbegin()) << ']';
 }
 
 #endif //ENPITSU_DEFINES_H

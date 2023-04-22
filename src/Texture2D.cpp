@@ -4,14 +4,15 @@
 enpitsu::Texture2D::Texture2D(const char *textureFile)
 {
     stbi_set_flip_vertically_on_load(true);
-    auto textureData = readTextureFile(textureFile);
+    auto dealloc = [](unsigned char* ptr) { stbi_image_free(ptr); };
+    std::unique_ptr<unsigned char, decltype(dealloc)> textureData{readTextureFile(textureFile), dealloc};
     if(!textureData)
     {
         throw BadTextureException();
     }
     glGenTextures(1, &ID);
     glActiveTexture(GL_TEXTURE0);
-    Bind();
+    this->Bind();
     changeDisplayType(DisplayType::LINEAR);
     glTexImage2D
             (
@@ -23,10 +24,9 @@ enpitsu::Texture2D::Texture2D(const char *textureFile)
                     0,
                     GL_RGBA,
                     GL_UNSIGNED_BYTE,
-                    textureData
+                    textureData.get()
             );
     glGenerateMipmap(GL_TEXTURE_2D);
-    stbi_image_free(textureData);
 }
 
 void enpitsu::Texture2D::Bind() const

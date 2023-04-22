@@ -1,4 +1,5 @@
 #include "enpitsu/objects/Object2D.h"
+#include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/shading/ShaderProgram.h"
@@ -13,13 +14,13 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
         isStatic(isStatic),
         origin(origin)
 {
-    if (!shader)
+    if (!shader.get())
     {
         throw BadShaderObject();
     }
     this->vertices.reserve(points.size() * 2U);
     this->vertices = linearizePointsVector(points);
-//    vertices = linearizePointsVector(points, screen->getSize().x, screen->getSize().y);
+    PLOGD << "Origin: " << origin.x << ' ' << origin.y;
     if (drawOrder.empty())
     {
         this->indices = std::vector<GLuint>(this->vertices.size());
@@ -31,8 +32,8 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
     {
         this->indices = drawOrder;
     }
-    model = glm::translate(model, Vector3(origin, 1));
-    shaderProgram = std::move(shader);
+    model = glm::translate(model, Vector3(origin, 0));
+    shaderProgram = shader;
 }
 
 void enpitsu::Object2D::init()
@@ -50,6 +51,7 @@ void enpitsu::Object2D::init()
     shaderProgram->getEbo()->Unbind();
     shaderProgram->updateMat4UniformF("camMatrix", screen->getCam2DMatrix());
     shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
+    PLOGD << "set camera and model matrices";
 }
 
 void enpitsu::Object2D::onDestroy()
@@ -102,7 +104,7 @@ void enpitsu::Object2D::setLocation(const enpitsu::Vector2 &newLocation)
 
 void enpitsu::Object2D::forceSetLocation(const enpitsu::Vector2 &newLocation) noexcept
 {
-    model = glm::translate(model, Vector3(newLocation - origin, 1));
+    model = glm::translate(model, Vector3(newLocation - origin, 0));
     origin = newLocation;
     updateModel = true;
 }
@@ -114,10 +116,20 @@ void enpitsu::Object2D::tick(const float &delta)
     shaderProgram->Unbind();
 }
 
-void enpitsu::Object2D::setSize(const enpitsu::Vector2 &newSize)
+void enpitsu::Object2D::setScale(const Vector2 &newScale)
 {
+    if(isStatic) throw Exception("Cannot scale static object");
+    forceSetScale(newScale);
+}
 
-    model = glm::scale(model, Vector3(newSize / size, 1));
-    size = newSize;
+void enpitsu::Object2D::forceSetScale(const enpitsu::Vector2 &newScale)
+{
+    model = glm::scale(model, Vector3(newScale / size, 1));
+    size = newScale;
     updateModel = true;
+}
+
+void enpitsu::Object2D::forceSetRotation(const float &rotation)
+{
+    model = glm::rotate(model, glm::radians(rotation), Vector3(0, 0, 1));
 }

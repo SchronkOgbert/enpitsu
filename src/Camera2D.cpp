@@ -11,7 +11,7 @@ namespace enpitsu
                                              this->getOffsetFromCenter(),
                                              -1.0f,
                                              1.0f,
-                                             0.0f, 1000000.0f), Vector3(Vector2(1.0f / 8), 1)))
+                                             0.0f, 1000000.0f), Vector3(Vector2(1.0f / 128), 1)))
     {
         view = glm::translate(view, Vector3(position, 16));
     }
@@ -19,6 +19,11 @@ namespace enpitsu
     void Camera2D::init()
     {
         Object::init();
+        projection = glm::scale(glm::ortho(-(this->getOffsetFromCenter()),
+                                         this->getOffsetFromCenter(),
+                                         -1.0f,
+                                         1.0f,
+                                         0.0f, 1000000.0f), Vector3(Vector2(1.0f / unitScale), 1));
         updateMatrix();
     }
 
@@ -38,6 +43,7 @@ namespace enpitsu
     void Camera2D::setUnitScale(float unitScale)
     {
         this->unitScale = unitScale;
+        updateMatrix();
     }
 
     void Camera2D::screenSizeChanged(const Vector2 &newSize)

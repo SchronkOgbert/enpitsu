@@ -75,8 +75,12 @@ namespace enpitsu
         }
         return res;
     }
+
+    enpitsu::Vector2 mousePosToGLCoords(const enpitsu::Vector2 &mousePos, const enpitsu::Vector2 &screenSize,
+                                        const enpitsu::Vector2 &cameraPosition = {0, 0}, const float &unitScale = 1);
 } // namespace enpitsu
 
+// TODO remove this cause it doesn't work on gcc
 namespace std
 {
     template<>

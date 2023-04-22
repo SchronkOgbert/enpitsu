@@ -29,18 +29,27 @@ namespace enpitsu
     {
         Vector2 origin{};
         Vector2 size{1, 1};
+        float rotation{0};
         bool isStatic;
 
         glm::mat4 model{1};
         bool updateModel = false;
 
         void forceSetLocation(const Vector2& newLocation) noexcept;
+
+        void forceSetScale(const Vector2& newScale);
+
+        void forceSetRotation(const float& rotation);
     protected:
 
         std::vector<GLfloat > vertices;
         std::vector<GLuint > indices;
         std::shared_ptr<ShaderProgram> shaderProgram;
         bool scaleToScreen = false;
+
+        void tick(const float &delta) override;
+
+        void init() override;
     public:
         using Object::Object;
 
@@ -59,13 +68,6 @@ namespace enpitsu
                           const bool &isStatic = true,
                           const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 
-        void init() override;
-
-    protected:
-        void tick(const float &delta) override;
-
-    public:
-
         void onDestroy() override;
 
         /**
@@ -78,9 +80,15 @@ namespace enpitsu
 
         /**
          * The default size is (1.0, 1.0). This new size should also be in percentages
-         * @param newSize
+         * @param newScale
          */
-        void setSize(const Vector2& newSize);
+        void setScale(const Vector2& newScale);
+
+        /**
+         * Rotate an object on the z axis(the axis piercing the screen)
+         * @param rotation in degrees
+         */
+        void setRotation(const float& rotation);
 
     protected:
         void draw() override;

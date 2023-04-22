@@ -23,10 +23,7 @@ namespace enpitsu
                                               VBO::objectLayout::TEXTURE2D,
                                               isStatic);
         vao->LinkVBO(*textureCoords);
-        GLuint textureScale = glGetUniformLocation(ID, "scale");
-        glUniform1f(textureScale, 1.0F);
-        GLfloat scale;
-        glGetUniformfv(ID, glGetUniformLocation(ID, "scale"), &scale);
+        PLOGD << "Vertices " << coordData;
         glUniform1i(glGetUniformLocation(ID, "textureObject"), 0);
         GLint texObj;
         glGetUniformiv(ID, glGetUniformLocation(ID, "textureObject"), &texObj);
