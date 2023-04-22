@@ -17,11 +17,13 @@ namespace enpitsu
         Vector3 orientation{0, 0, -1};
         Vector3 up{0, 1, 0};
         int FOV{80};
+        bool orthogonal{false};
+    protected:
 
         void init() override;
 
-        std::unique_ptr<glm::mat4> view = std::make_unique<glm::mat4>(1.0f);
-        std::unique_ptr<glm::mat4> projection = std::make_unique<glm::mat4>(1.0f);
+        glm::mat4 view{1.0f};
+        glm::mat4 projection{1.0f};
 
         void tick(const float &delta) override;
     public:
@@ -40,6 +42,12 @@ namespace enpitsu
         int getFov() const;
 
         void setFov(int fov);
+
+        bool isOrthogonal() const;
+
+        void setOrthogonal(bool orthogonal);
+
+        float getOffsetFromCenter() const;
     };
 }
 
