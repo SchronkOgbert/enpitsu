@@ -6,8 +6,7 @@
 #include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/InputEvents.h"
-#include <memory>
-#include <vector>
+#include <functional>
 
 namespace enpitsu
 {
@@ -80,6 +79,7 @@ namespace enpitsu
 
         // misc
         bool checkDepth{false};
+        std::unique_ptr<GLFWwindow, std::function<void(GLFWwindow*)>> windowPtr;
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
@@ -130,6 +130,8 @@ namespace enpitsu
 
     public:
         Screen() = delete;
+
+        static unsigned screenCount;
 
         /**
          * The default constructor of the class

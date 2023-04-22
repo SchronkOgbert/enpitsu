@@ -1,4 +1,5 @@
 #include "enpitsu/objects/Screen.h"
+#include "GLFW/glfw3.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/objects/ControlObject.h"
 #include "enpitsu/objects/Object.h"
@@ -8,6 +9,8 @@
 #include "enpitsu/objects/Camera2D.h"
 
 using enpitsu::Object;
+
+unsigned enpitsu::Screen::screenCount = 0;
 
 enpitsu::Screen::Screen
         (const Vector2 &size,
@@ -40,11 +43,6 @@ enpitsu::Screen::~Screen()
     {
         obj->onDestroy();
     }
-    if (window)
-    {
-        glfwDestroyWindow(window);
-    }
-    glfwTerminate();
 }
 
 void enpitsu::Screen::start()
@@ -53,7 +51,7 @@ void enpitsu::Screen::start()
     {
         PLOG_WARNING << "This screen has no camera3D";
     }
-    if(!camera2D)
+    if (!camera2D)
     {
         PLOGW << "This screen has no camera2D";
     }
@@ -75,13 +73,21 @@ void enpitsu::Screen::start()
 
 void enpitsu::Screen::createGLFWWindow()
 {
-    window = glfwCreateWindow(
+    windowPtr = std::move(std::unique_ptr<GLFWwindow, std::function<void(GLFWwindow *)>>(glfwCreateWindow(
             static_cast<int>(size.x),
             static_cast<int>(size.y),
             name.c_str(),
             nullptr,
             nullptr
-    );
+    ), [](GLFWwindow *ptr)
+             {
+                 if (ptr)
+                     glfwDestroyWindow(ptr);
+                 screenCount--;
+                 if (!screenCount) glfwTerminate();
+             }));
+    screenCount++;
+    window = windowPtr.get();
     if (!window)
     {
         throw BadWindow();
@@ -443,6 +449,5 @@ void enpitsu::Screen::setCamera2D(std::unique_ptr<Camera2D> &&camera2D)
 
 void enpitsu::Screen::callScreenSizeChanged()
 {
-    static_cast<ControlObject*>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
+    static_cast<ControlObject *>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
 }
-
