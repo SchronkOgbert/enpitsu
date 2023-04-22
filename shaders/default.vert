@@ -5,12 +5,11 @@ layout (location = 2) in vec4 inColor;
 
 out vec4 color;
 
-uniform float scaleX = 1;
-uniform float scaleY = 1;
-uniform float scaleZ = 1;
+uniform mat4 camMatrix;
+uniform mat4 modelMatrix;
 
 void main()
 {
-    gl_Position = vec4(vertexPosition.x * scaleX, vertexPosition.y * scaleY, vertexPosition.z * scaleZ, 1.0);
+    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1.0);
     color = inColor;
 }

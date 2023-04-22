@@ -6,9 +6,7 @@
 #include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/InputEvents.h"
-#include <cstring>
 #include <memory>
-#include <utility>
 #include <vector>
 
 namespace enpitsu
@@ -74,6 +72,8 @@ namespace enpitsu
 
         friend class Camera3D;
 
+        friend class Camera2D;
+
         //props
         Vector2 size;
         bool fullScreen;
@@ -84,12 +84,14 @@ namespace enpitsu
         std::string name;
         bool shouldDestroy;
         Vector2 cursorPos;
-        std::unique_ptr<Camera3D> camera;
+        std::unique_ptr<Camera3D> camera3D;
+        std::unique_ptr<Camera2D> camera2D;
 
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
         std::chrono::time_point<std::chrono::system_clock> now;
-        bool updateCamera = false;
+        bool updateCamera3D = false;
+        bool updateCamera2D = false;
 
         //references
         std::unique_ptr<std::queue<std::unique_ptr<Object>>> objectsQueue;
@@ -98,7 +100,8 @@ namespace enpitsu
         std::unique_ptr<std::vector<InputEvents *>> callableEvents;
 
         // geometry
-        std::vector<GLfloat> camMatrix;
+        std::vector<GLfloat> cam3DMatrix;
+        std::vector<GLfloat> cam2DMatrix;
 
         //private events
         void sendPress(KeyEvent event) const;
@@ -122,6 +125,8 @@ namespace enpitsu
         void destroyObjectsFromQueue();
 
         void moveObjectsFromQueue();
+
+        void callScreenSizeChanged();
 
     public:
         Screen() = delete;
@@ -222,6 +227,10 @@ namespace enpitsu
          */
         void setCamera3D(std::unique_ptr<Camera3D>&& camera3D);
 
+        Camera2D* getCamera2D() { return this->camera2D.get(); }
+
+        void setCamera2D(std::unique_ptr<Camera2D>&& camera2D);
+
         /**
          * adds an object that should have input events called for it
          * @param eventHandler raw pointer to object
@@ -250,13 +259,17 @@ namespace enpitsu
          * this is only useful for OpenGL math, it gets the camera matrix, which is the projection matrix multiplied by the view matrix
          * @return projection * view
          */
-        [[nodiscard]] const GLfloat *getCamMatrix() const { return &camMatrix[0]; }
+        [[nodiscard]] const GLfloat *getCam3DMatrix() const { return &cam3DMatrix[0]; }
 
         /**
          * sets the camera matrix(which should be a result of the projection matrix multiplied by the view matrix)
          * @param camMatrix glm::mat4 with the desired data
          */
-        void setCamMatrix(const GLfloat *camMatrix);
+        void setCam3DMatrix(const GLfloat *camMatrix);
+
+        [[nodiscard]] const GLfloat *getCam2DMatrix() const { return &cam2DMatrix[0]; };
+
+        void setCam2DMatrix(const GLfloat* camMatrix);
 
         /**
          * check whether the depth is checked(used in 3D rendering)

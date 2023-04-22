@@ -28,7 +28,7 @@ namespace enpitsu
 
     template<vectorType T>
     std::vector<GLfloat>
-    linearizePointsVector(const std::vector<T> &points, const float &screenWidth, const float &screenHeight)
+    linearizePointsVector(const std::vector<T> &points)
     {
         size_t dimensions;
         if (typeid(T) == typeid(Vector2))
@@ -50,8 +50,8 @@ namespace enpitsu
             {
                 case 2:
                 {
-                    res[counter++] = toGLCoord(el[0], screenWidth);
-                    res[counter++] = toGLCoord(el[1], screenHeight);
+                    res[counter++] = el[0];
+                    res[counter++] = el[1];
                 }
                 break;
                 case 3:
@@ -75,8 +75,12 @@ namespace enpitsu
         }
         return res;
     }
+
+    enpitsu::Vector2 mousePosToGLCoords(const enpitsu::Vector2 &mousePos, const enpitsu::Vector2 &screenSize,
+                                        const enpitsu::Vector2 &cameraPosition = {0, 0}, const float &unitScale = 1);
 } // namespace enpitsu
 
+// TODO remove this cause it doesn't work on gcc
 namespace std
 {
     template<>

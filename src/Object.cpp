@@ -44,7 +44,17 @@ void enpitsu::Object::onDestroy()
 //    println("destroying ", this);
 }
 
-bool enpitsu::Object::shouldUpdateCamera() const
+bool enpitsu::Object::shouldUpdateCamera3D() const
 {
-    return screen->updateCamera;
+    return screen->updateCamera3D;
+}
+
+bool enpitsu::Object::shouldUpdateCamera2D() const
+{
+    return screen->updateCamera2D;
+}
+
+void enpitsu::Object::screenSizeChanged(const enpitsu::Vector2 &newSize)
+{
+    PLOGD << "Control Object: screen size changed";
 }

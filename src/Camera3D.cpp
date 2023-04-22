@@ -12,21 +12,21 @@ enpitsu::Camera3D::Camera3D(enpitsu::Screen *screen, const Vector3 &position, co
 }
 
 void
-enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane, const char *uniformName)
+enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane)
 {
     Vector3 center = position + orientation;
     *view = glm::lookAt(position, center, up);
 
     *projection = glm::perspective(glm::radians(static_cast<float>(FOV)),
                                    static_cast<float>(size.x) / size.y, nearPlane, farPlane);
-    screen->setCamMatrix(glm::value_ptr(*projection * *view));
+    screen->setCam3DMatrix(glm::value_ptr(*projection * *view));
 }
 
 void enpitsu::Camera3D::tick(const float &delta)
 {
     if(update)
     {
-        updateMatrix(0.01f, 100, "camMatrix");
+        updateMatrix(0.01f, 100);
         update = false;
     }
 }
@@ -45,7 +45,7 @@ void enpitsu::Camera3D::setPosition(const enpitsu::Vector3 &position)
 void enpitsu::Camera3D::init()
 {
     Object::init();
-    updateMatrix(0.1f, 100.0f, "camMatrix");
+    updateMatrix(0.1f, 100.0f);
 }
 
 const enpitsu::Vector3 &enpitsu::Camera3D::getOrientation() const

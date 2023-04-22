@@ -1,6 +1,7 @@
 #ifndef ENPITSU_OBJECT_H
 #define ENPITSU_OBJECT_H
 
+#include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/helpers/Exception.h"
@@ -37,9 +38,10 @@ namespace enpitsu
 
         [[nodiscard]] bool isDestroyed() const { return queueDestroy; }
 
-
     protected:
         //events
+        virtual void screenSizeChanged(const Vector2& newSize);
+
         virtual void tick(const float &delta);
 
         virtual void init();
@@ -51,7 +53,9 @@ namespace enpitsu
 
         virtual void draw() = 0;
 
-        [[nodiscard]] bool shouldUpdateCamera() const;
+        [[nodiscard]] bool shouldUpdateCamera3D() const;
+
+        [[nodiscard]] bool shouldUpdateCamera2D() const;
     };
 }
 

@@ -1,9 +1,11 @@
 #include "enpitsu/objects/Screen.h"
-#include "GLFW/glfw3.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
+#include "enpitsu/objects/ControlObject.h"
 #include "enpitsu/objects/Object.h"
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Camera3D.h"
 #include "enpitsu/objects/Object3D.h"
+#include "enpitsu/objects/Camera2D.h"
 
 using enpitsu::Object;
 
@@ -19,8 +21,10 @@ enpitsu::Screen::Screen
     this->destroyQueue = std::make_unique<std::vector<Object *>>();
     this->callableEvents = std::make_unique<std::vector<InputEvents *>>();
     this->shouldDestroy = false;
-    this->camMatrix = std::vector<GLfloat>(16);
-    this->setCamMatrix(glm::value_ptr(glm::mat4(1)));
+    this->cam3DMatrix = std::vector<GLfloat>(16);
+    this->cam2DMatrix = std::vector<GLfloat>(16);
+    this->setCam3DMatrix(glm::value_ptr(glm::mat4(1)));
+    this->setCam2DMatrix(glm::value_ptr(glm::translate(glm::mat4(1), Vector3(0, 0, 1280))));
     if (glfwInit() == GLFW_FALSE)
     {
         glfwTerminate();
@@ -45,9 +49,13 @@ enpitsu::Screen::~Screen()
 
 void enpitsu::Screen::start()
 {
-    if (!camera)
+    if (!camera3D)
     {
-        PLOG_WARNING << "This screen has no camera";
+        PLOG_WARNING << "This screen has no camera3D";
+    }
+    if(!camera2D)
+    {
+        PLOGW << "This screen has no camera2D";
     }
     this->init();
 
@@ -82,8 +90,7 @@ void enpitsu::Screen::createGLFWWindow()
     if (glfwRawMouseMotionSupported())
     {
         glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-    }
-    else
+    } else
     {
         glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
         PLOGW << "Raw mouse motion not supported";
@@ -96,10 +103,15 @@ void enpitsu::Screen::callTick(const float &delta)
     {
         obj->callTick(delta);
     }
-    updateCamera = false;
-    if (camera)
+    updateCamera3D = false;
+    updateCamera2D = false;
+    if (camera3D)
     {
-        camera->callTick(delta);
+        camera3D->callTick(delta);
+    }
+    if (camera2D)
+    {
+        camera2D->callTick(delta);
     }
     moveObjectsFromQueue();
 }
@@ -151,9 +163,9 @@ void enpitsu::Screen::init()
         glViewport(0, 0, width, height);
         screen->now = std::chrono::system_clock::now();
         std::chrono::duration<float> delta = screen->now - screen->before;
+        screen->callScreenSizeChanged();
         screen->tick(delta.count());
         screen->before = screen->now;
-
     });
     glfwSetCursorPosCallback(window, [](GLFWwindow *glfwWindow, double xpos, double ypos)
     {
@@ -189,10 +201,14 @@ void enpitsu::Screen::destroy()
 
 void enpitsu::Screen::callInit()
 {
-    if (camera)
+    if (camera3D)
     {
-        PLOGD << "Calling init for camera";
-        camera->callInit();
+        PLOGD << "Calling init for camera3D";
+        camera3D->callInit();
+    }
+    if (camera2D)
+    {
+        camera2D->callInit();
     }
 }
 
@@ -309,12 +325,12 @@ void enpitsu::Screen::setSize(const Vector2 &size)
 
 enpitsu::Camera3D *enpitsu::Screen::getCamera3D()
 {
-    return this->camera.get();
+    return this->camera3D.get();
 }
 
 void enpitsu::Screen::setCamera3D(std::unique_ptr<Camera3D> &&camera3D)
 {
-    this->camera = std::move(camera3D);
+    this->camera3D = std::move(camera3D);
 }
 
 void enpitsu::Screen::showCursor(const bool &show)
@@ -396,15 +412,37 @@ void enpitsu::Screen::setMousePosition(const enpitsu::Vector2 &newPosition)
     glfwSetCursorPos(window, newPosition.x, newPosition.y);
 }
 
-void enpitsu::Screen::setCamMatrix(const GLfloat *camMatrix)
+void enpitsu::Screen::setCam3DMatrix(const GLfloat *camMatrix)
 {
     for (int i = 0; i < 16; i++)
     {
-        if (this->camMatrix[i] != camMatrix[i])
+        if (this->cam3DMatrix[i] != camMatrix[i])
         {
-            updateCamera = true;
-            this->camMatrix[i] = camMatrix[i];
+            updateCamera3D = true;
+            this->cam3DMatrix[i] = camMatrix[i];
         }
     }
+}
+
+void enpitsu::Screen::setCam2DMatrix(const GLfloat *camMatrix)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        if (this->cam2DMatrix[i] != camMatrix[i])
+        {
+            updateCamera2D = true;
+            this->cam2DMatrix[i] = camMatrix[i];
+        }
+    }
+}
+
+void enpitsu::Screen::setCamera2D(std::unique_ptr<Camera2D> &&camera2D)
+{
+    this->camera2D = std::move(camera2D);
+}
+
+void enpitsu::Screen::callScreenSizeChanged()
+{
+    static_cast<ControlObject*>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
 }
 

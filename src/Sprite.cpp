@@ -1,5 +1,7 @@
 #include "enpitsu/objects/Sprite.h"
+#include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/shading/Texture2DShader.h"
 
 namespace enpitsu
 {
@@ -37,7 +39,11 @@ namespace enpitsu
     void Sprite::draw()
     {
         Triangles2D::draw();
-//        println("drawing sprite");
+    }
+
+    void Sprite::onDestroy()
+    {
+        Object2D::onDestroy();
     }
 
     void Sprite::init()
@@ -47,7 +53,7 @@ namespace enpitsu
 
     Sprite::~Sprite()
     {
-//        println("destroying sprite");
+
     }
 
 } // enpitsu

@@ -24,6 +24,8 @@ namespace enpitsu
 
         ~Sprite() override;
 
+        void onDestroy() override;
+
     protected:
         void draw() override;
     };
