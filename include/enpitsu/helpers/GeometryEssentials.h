@@ -3,7 +3,6 @@
 
 #include "defines.h"
 #include "Exception.h"
-#include "fmt/core.h"
 
 namespace enpitsu
 {
@@ -14,9 +13,6 @@ namespace enpitsu
     float toGLCoord(const float &screenCoord, const float &maxDimension);
 
     float fromGLCoord(const float &GLCoord, const float &maxDimension);
-
-    glm::vec3 toGLMVec3(const Vector3 &obj);
-
     template<class Vector>
     concept vectorType =
     requires(Vector t)
@@ -79,6 +75,11 @@ namespace enpitsu
 
     enpitsu::Vector2 mousePosToGLCoords(const enpitsu::Vector2 &mousePos, const enpitsu::Vector2 &screenSize,
                                         const enpitsu::Vector2 &cameraPosition = {0, 0}, const float &unitScale = 1);
+
+    Vector3 generateFlatNormal(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3);
+
+    std::pair<std::vector<GLfloat>, std::vector<GLfloat>>
+    generateFlatNormals(const std::vector<GLfloat> &points, const std::vector<GLuint> &indices);
 } // namespace enpitsu
 
 template<>

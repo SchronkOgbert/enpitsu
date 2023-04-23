@@ -12,8 +12,7 @@ VBO::VBO(GLfloat *vertices, const GLsizeiptr &size, const VBO::objectLayout &lay
 {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
-    glBufferData(GL_ARRAY_BUFFER, size, vertices,
-                 isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size, vertices, isStatic ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 }
 
 void VBO::Bind() const
@@ -49,4 +48,14 @@ void VBO::UpdateScale(const enpitsu::Vector3 &newScale, ShaderProgram *shader) c
     glGetUniformfv(shader->getId(), scaleX, &newValX);
     PLOGD << "New X val: " << newValX;
     shader->Unbind();
+}
+
+unsigned int VBO::getSize() const
+{
+    return size;
+}
+
+void VBO::setSize(unsigned int size)
+{
+    VBO::size = size;
 }

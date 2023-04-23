@@ -57,6 +57,9 @@ namespace enpitsu
         std::unique_ptr<VAO> vao;
         std::unique_ptr<VBO> vertexPosition;
         std::unique_ptr<EBO> ebo;
+
+        std::vector<GLfloat> *vertices; // reference only, non-owning
+        std::vector<GLuint> *indices; // reference only, non-owning
     public:
         [[nodiscard]] const std::unique_ptr<VAO> &getVao() const
         {
@@ -119,6 +122,18 @@ namespace enpitsu
         void updateMat4UniformF(const std::string& uniformName, const float* value) const;
 
         void updateVec3Uniform(const std::string& uniformName, const float* value) const;
+
+        void updateVec4Uniform(const std::string& uniformName, const float value[]) const;
+
+        void updateFloatUniform(const std::string& uniformName, const float& value) const;
+
+        [[nodiscard]] std::vector<GLfloat> *getVertices() const;
+
+        void setVertices(std::vector<GLfloat> *vertices);
+
+        [[nodiscard]] std::vector<GLuint> *getIndices() const;
+
+        void setIndices(std::vector<GLuint> *indices);
     };
 }
 

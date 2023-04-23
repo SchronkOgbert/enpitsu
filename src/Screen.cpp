@@ -196,7 +196,7 @@ void enpitsu::Screen::init()
     glewInit();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+    glEnable(GL_BLEND); // these glEnables MUST be after the window was created
     checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
     moveObjectsFromQueue();
 }
@@ -451,4 +451,24 @@ void enpitsu::Screen::setCamera2D(std::unique_ptr<Camera2D> &&camera2D)
 void enpitsu::Screen::callScreenSizeChanged()
 {
     if(camera2D) static_cast<ControlObject *>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
+}
+
+const enpitsu::Vector3 &enpitsu::Screen::getLightPosition() const
+{
+    return lightPosition;
+}
+
+void enpitsu::Screen::setLightPosition(const enpitsu::Vector3 &lightPosition)
+{
+    Screen::lightPosition = lightPosition;
+}
+
+const enpitsu::Vector4 &enpitsu::Screen::getLightColor() const
+{
+    return lightColor;
+}
+
+void enpitsu::Screen::setLightColor(const enpitsu::Vector4 &lightColor)
+{
+    Screen::lightColor = lightColor;
 }

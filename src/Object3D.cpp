@@ -1,6 +1,8 @@
 #include "enpitsu/objects/Object3D.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/objects/Camera3D.h"
+#include "enpitsu/shading/LitShaderBase.h"
 
 namespace enpitsu
 {
@@ -14,14 +16,13 @@ namespace enpitsu
                        std::vector<unsigned int> *drawOrder)
             : Object(screen), isStatic(isStatic), origin(origin), indices(*drawOrder)
     {
-        this->vertices = linearizePointsVector<Vector3>
-                (*points);
+        this->vertices = linearizePointsVector<Vector3>(*points);
         this->shaderProgram = shader;
         model = glm::translate(glm::mat4(1), origin);
-        model = glm::rotate(model,glm::radians(0.0f),glm::vec3(1,0,0));
-        model = glm::rotate(model,glm::radians(0.0f),glm::vec3(0,1,0));
-        model = glm::rotate(model,glm::radians(0.0f),glm::vec3(0,0,1));
-        model = glm::scale(model,Vector3(1,1,1));
+        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1, 0, 0));
+        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 1, 0));
+        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 0, 1));
+        model = glm::scale(model, Vector3(1, 1, 1));
     }
 
     void Object3D::tick(const float &delta)
@@ -34,7 +35,7 @@ namespace enpitsu
     void Object3D::draw()
     {
         shaderProgram->Bind();
-        if(shouldUpdateCamera3D())
+        if (shouldUpdateCamera3D())
         {
             shaderProgram->updateMat4UniformF("cam3DMatrix", screen->getCam3DMatrix());
         }
@@ -43,6 +44,13 @@ namespace enpitsu
     void Object3D::init()
     {
         Object::init();
+        shaderProgram->setVertices(&vertices);
+        shaderProgram->setIndices(&indices);
+        auto litShader = dynamic_cast<LitShaderBase*>(shaderProgram.get());
+        if(litShader)
+        {
+            litShader->setScreen(screen);
+        }
         shaderProgram->Create(vertices, indices, 3, isStatic);
         if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
         {

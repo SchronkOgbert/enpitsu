@@ -26,8 +26,9 @@ namespace enpitsu
 
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        ID = glCreateProgram();
+        PLOGD << format("vertex shader: {}, fragment shader: {}", vertexShader, fragmentShader);
         PLOGD << "compiling shader " << ID << "(" << vertexFile << ")";
+        ID = glCreateProgram();
 
         glShaderSource(vertexShader, 1, &vertexData, nullptr);
         glShaderSource(fragmentShader, 1, &fragmentData, nullptr);
@@ -157,5 +158,35 @@ namespace enpitsu
         int location = glGetUniformLocation(this->getId(), uniformName);
         if(location == -1) throw BadUniform(uniformName);
         return location;
+    }
+
+    std::vector<GLfloat> *ShaderProgram::getVertices() const
+    {
+        return vertices;
+    }
+
+    void ShaderProgram::setVertices(std::vector<GLfloat> *vertices)
+    {
+        ShaderProgram::vertices = vertices;
+    }
+
+    std::vector<GLuint> *ShaderProgram::getIndices() const
+    {
+        return indices;
+    }
+
+    void ShaderProgram::setIndices(std::vector<GLuint> *indices)
+    {
+        ShaderProgram::indices = indices;
+    }
+
+    void ShaderProgram::updateVec4Uniform(const std::string &uniformName, const float *value) const
+    {
+        glUniform4fv(getUnifromLocation(uniformName.c_str()), 1, value);
+    }
+
+    void ShaderProgram::updateFloatUniform(const std::string &uniformName, const float &value) const
+    {
+        glUniform1f(getUnifromLocation(uniformName.c_str()), value);
     }
 }

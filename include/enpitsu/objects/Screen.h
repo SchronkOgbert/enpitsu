@@ -92,6 +92,8 @@ namespace enpitsu
         std::chrono::time_point<std::chrono::system_clock> now;
         bool updateCamera3D = false;
         bool updateCamera2D = false;
+        Vector3 lightPosition;
+        Vector4 lightColor;
 
         //references
         std::unique_ptr<std::queue<std::unique_ptr<Object>>> objectsQueue;
@@ -284,6 +286,14 @@ namespace enpitsu
          * @param checkDepth true for enable, false for disable, default false
          */
         void setCheckDepth(bool checkDepth);
+
+        [[nodiscard]] const Vector3 &getLightPosition() const;
+
+        void setLightPosition(const Vector3 &lightPosition);
+
+        [[nodiscard]] const Vector4 &getLightColor() const;
+
+        void setLightColor(const Vector4 &lightColor);
 
     protected:
 
