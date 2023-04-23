@@ -3,6 +3,7 @@
 
 #include "defines.h"
 #include "Exception.h"
+#include "fmt/core.h"
 
 namespace enpitsu
 {
@@ -53,7 +54,7 @@ namespace enpitsu
                     res[counter++] = el[0];
                     res[counter++] = el[1];
                 }
-                break;
+                    break;
                 case 3:
                 {
                     res[counter++] = el[0];
@@ -79,5 +80,53 @@ namespace enpitsu
     enpitsu::Vector2 mousePosToGLCoords(const enpitsu::Vector2 &mousePos, const enpitsu::Vector2 &screenSize,
                                         const enpitsu::Vector2 &cameraPosition = {0, 0}, const float &unitScale = 1);
 } // namespace enpitsu
+
+template<>
+struct fmt::formatter<enpitsu::Vector2>
+{
+    template<class ParseContext>
+    constexpr auto parse(ParseContext &context)
+    {
+        return context.begin();
+    }
+
+    template<class FormatContext>
+    auto format(const enpitsu::Vector2 &v, FormatContext &context)
+    {
+        return fmt::format_to(context.out(), "({}, {})", v.x, v.y);
+    }
+};
+
+template<>
+struct fmt::formatter<enpitsu::Vector3>
+{
+    template<class ParseContext>
+    constexpr auto parse(ParseContext &context)
+    {
+        return context.begin();
+    }
+
+    template<class FormatContext>
+    auto format(const enpitsu::Vector3 &v, FormatContext &context)
+    {
+        return fmt::format_to(context.out(), "({}, {}, {})", v.x, v.y, v.z);
+    }
+};
+
+template<>
+struct fmt::formatter<enpitsu::Vector4>
+{
+    template<class ParseContext>
+    constexpr auto parse(ParseContext &context)
+    {
+        return context.begin();
+    }
+
+    template<class FormatContext>
+    auto format(const enpitsu::Vector4 &v, FormatContext &context)
+    {
+        return fmt::format_to(context.out(), "({}, {}, {}, {})", v.x, v.y, v.z, v.w);
+    }
+};
 
 #endif //ENPITSU_GEOMETRYESSENTIALS_H
