@@ -143,12 +143,19 @@ namespace enpitsu
 
     void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value) const
     {
-        glUniformMatrix4fv(glGetUniformLocation(this->getId(), uniformName.c_str()),
+        glUniformMatrix4fv(getUnifromLocation(uniformName.c_str()),
                            1, GL_FALSE, value);
     }
 
     void ShaderProgram::updateVec3Uniform(const std::string &uniformName, const float *value) const
     {
-        glUniform3fv(glGetUniformLocation(this->getId(), uniformName.c_str()), 1, value);
+        glUniform3fv(getUnifromLocation(uniformName.c_str()), 1, value);
+    }
+
+    int ShaderProgram::getUnifromLocation(const char *uniformName) const
+    {
+        int location = glGetUniformLocation(this->getId(), uniformName);
+        if(location == -1) throw BadUniform(uniformName);
+        return location;
     }
 }

@@ -197,6 +197,7 @@ void enpitsu::Screen::init()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
     moveObjectsFromQueue();
 }
 

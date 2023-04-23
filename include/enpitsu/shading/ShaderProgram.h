@@ -39,6 +39,13 @@ namespace enpitsu
         {}
     };
 
+    class BadUniform : public Exception
+    {
+    public:
+        BadUniform() = delete;
+        BadUniform(const char* uniform) : Exception(format("Uniform {} does not exist", uniform)){}
+    };
+
     class ShaderProgram
     {
     protected:
@@ -87,6 +94,8 @@ namespace enpitsu
         void hasCompiled(const GLuint &shader);
 
         void hasLinked();
+
+        int getUnifromLocation(const char* uniformName) const;
 
     public:
         explicit ShaderProgram(const char *vertexFile = "default.vert", const char *fragmentFile = "default.frag");

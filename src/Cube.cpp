@@ -1,8 +1,9 @@
 #include "enpitsu/objects/Cube.h"
+#include "enpitsu/shading/ShaderProgram.h"
 
 namespace enpitsu
 {
-    Cube::Cube(Screen *screen, const Vector3 &origin, const std::shared_ptr<ShaderProgram> &shader) :
+    Cube::Cube(Screen *screen, const Vector3 &origin, std::shared_ptr<ShaderProgram> &&shader) :
             Triangles3D(screen, new std::vector<Vector3>{
                                 {-1, -1, 0},
                                 {-1, -1, -1},
@@ -15,7 +16,7 @@ namespace enpitsu
                         },
                         origin,
                         {1, 1, 1},
-                        shader,
+                        std::forward<std::shared_ptr<ShaderProgram>>(shader),
                         isStatic,
                         new std::vector<unsigned>{
                                 0, 1, 2,
@@ -32,7 +33,5 @@ namespace enpitsu
                                 4, 6, 7
                         }
             )
-    {
-
-    }
+    {}
 } // enpitsu
