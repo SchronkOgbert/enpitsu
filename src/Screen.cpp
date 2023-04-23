@@ -449,5 +449,5 @@ void enpitsu::Screen::setCamera2D(std::unique_ptr<Camera2D> &&camera2D)
 
 void enpitsu::Screen::callScreenSizeChanged()
 {
-    static_cast<ControlObject *>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
+    if(camera2D) static_cast<ControlObject *>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
 }

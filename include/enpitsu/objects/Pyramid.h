@@ -1,5 +1,5 @@
-#ifndef ENPITSU_CUBE_H
-#define ENPITSU_CUBE_H
+#ifndef ENPITSU_PYRAMID_H
+#define ENPITSU_PYRAMID_H
 
 #include "Triangles3D.h"
 #include "enpitsu/objects/Screen.h"
@@ -17,4 +17,4 @@ namespace enpitsu
 
 } // enpitsu
 
-#endif //ENPITSU_CUBE_H
+#endif //ENPITSU_PYRAMID_H
