@@ -56,7 +56,7 @@ namespace enpitsu
     {
     public:
         explicit BadObjectRemove(void *obj) : Exception(
-                std::format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
+                format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
         {
         }
     };

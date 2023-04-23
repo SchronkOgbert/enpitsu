@@ -80,35 +80,4 @@ namespace enpitsu
                                         const enpitsu::Vector2 &cameraPosition = {0, 0}, const float &unitScale = 1);
 } // namespace enpitsu
 
-// TODO remove this cause it doesn't work on gcc
-namespace std
-{
-    template<>
-    struct std::formatter<enpitsu::Vector2> : std::formatter<std::string>
-    {
-        auto format(const enpitsu::Vector2 &v, format_context &context)
-        {
-            return formatter<string>::format(std::format("({}, {})", v.x, v.y), context);
-        }
-    };
-
-    template<>
-    struct std::formatter<enpitsu::Vector3> : std::formatter<std::string>
-    {
-        auto format(const enpitsu::Vector3 &v, format_context &context)
-        {
-            return formatter<string>::format(std::format("({}, {}, {})", v.x, v.y, v.z), context);
-        }
-    };
-
-    template<>
-    struct std::formatter<enpitsu::Vector4> : std::formatter<std::string>
-    {
-        auto format(const enpitsu::Vector4 &v, format_context &context)
-        {
-            return formatter<string>::format(std::format("({}, {}, {}, {})", v.x, v.y, v.z, v.a), context);
-        }
-    };
-} // namespace std
-
 #endif //ENPITSU_GEOMETRYESSENTIALS_H

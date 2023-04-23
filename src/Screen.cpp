@@ -124,7 +124,7 @@ void enpitsu::Screen::callTick(const float &delta)
 
 void enpitsu::Screen::setGLFWHints()
 {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOT_VERSION);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOR_VERSION);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_DEFAULT_MINOR_VERSION);
     glfwWindowHint(GLFW_OPENGL_PROFILE, OPENGL_DEFAULT_PROFILE);
 }
@@ -397,7 +397,7 @@ void enpitsu::Screen::moveObjectsFromQueue()
         }
         objects->push_back(std::move(objectsQueue->front()));
         objectsQueue->pop();
-        PLOGD << std::format("{} elements left in queue", objectsQueue->size());
+        PLOGD << format("{} elements left in queue", objectsQueue->size());
     }
 }
 

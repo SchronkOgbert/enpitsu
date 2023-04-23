@@ -9,7 +9,7 @@
 #endif
 
 // default settings
-#define OPENGL_DEFAULT_MAJOT_VERSION 4
+#define OPENGL_DEFAULT_MAJOR_VERSION 4
 #define OPENGL_DEFAULT_MINOR_VERSION 5
 #define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
 
@@ -30,7 +30,6 @@
 #include <thread>
 #include <set>
 #include <queue>
-#include <format>
 #include <initializer_list>
 
 
@@ -52,11 +51,15 @@
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/transform.hpp"
+#include "fmt/core.h"
+#include "fmt/format.h"
 
 // concepts, aliases, perfect forwards
 
 namespace enpitsu
 {
+    using namespace fmt;
+
     template<class Object>
     concept objectType =
     requires(Object t)

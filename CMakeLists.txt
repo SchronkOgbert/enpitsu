@@ -17,6 +17,7 @@ find_package(GLEW REQUIRED)
 find_package(stb REQUIRED)
 find_package(glm REQUIRED)
 find_package(plog REQUIRED)
+find_package(fmt REQUIRED)
 
 file(GLOB HEADER_FILES include/*.h)
 file(GLOB SOURCE_FILES src/*.cpp)
