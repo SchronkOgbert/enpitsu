@@ -8,11 +8,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #endif
 
-// default settings
-#define OPENGL_DEFAULT_MAJOR_VERSION 4
-#define OPENGL_DEFAULT_MINOR_VERSION 5
-#define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
-
 // std stuff
 #include <string>
 #include <memory>
@@ -53,6 +48,19 @@
 #include "glm/gtx/transform.hpp"
 #include "fmt/core.h"
 #include "fmt/format.h"
+
+// default settings
+#ifndef OPENGL_DEFAULT_MAJOR_VERSION
+#define OPENGL_DEFAULT_MAJOR_VERSION 4
+#endif
+
+#ifndef OPENGL_DEFAULT_MINOR_VERSION
+#define OPENGL_DEFAULT_MINOR_VERSION 5
+#endif
+
+#ifndef OPENGL_DEFAULT_PROFILE
+#define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
+#endif
 
 // concepts, aliases, perfect forwards
 
