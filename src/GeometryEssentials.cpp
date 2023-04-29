@@ -1,4 +1,5 @@
 #include "enpitsu/helpers/GeometryEssentials.h"
+#include "glm/ext/quaternion_geometric.hpp"
 
 using namespace enpitsu;
 
@@ -21,7 +22,7 @@ float enpitsu::fromGLCoord(const float &GLCoord, const float &maxDimension)
  * @return world gl coordinates expressed as Vector2
  */
 Vector2 enpitsu::mousePosToGLCoords(const Vector2 &mousePos, const Vector2 &screenSize,
-                                             const Vector2 &cameraPosition, const float &unitScale)
+                                    const Vector2 &cameraPosition, const float &unitScale)
 {
     float x = toGLCoord(mousePos.x, screenSize.x) * unitScale * screenSize.x / screenSize.y + cameraPosition.x;
     float y = toGLCoord(mousePos.y, screenSize.y) * unitScale + cameraPosition.x;
@@ -54,7 +55,7 @@ enpitsu::generateFlatNormals(const std::vector<GLfloat> &points, const std::vect
         auto normal = generateFlatNormal(v1, v2, v3);
         PLOGD << format("normal for triangle: {}", normal);
         int8_t n = 3;
-        while(n)
+        while (n)
         {
             normals.emplace_back(normal[0]);
             normals.emplace_back(normal[1]);
@@ -67,5 +68,5 @@ enpitsu::generateFlatNormals(const std::vector<GLfloat> &points, const std::vect
 
 Vector3 enpitsu::generateFlatNormal(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3)
 {
-    return glm::cross(v3 - v2, v3 - v1);
+    return glm::normalize(glm::cross(v3 - v2, v3 - v1));
 }
