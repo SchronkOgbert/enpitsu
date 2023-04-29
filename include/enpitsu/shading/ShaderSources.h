@@ -123,9 +123,10 @@ namespace enpitsu
                                           "uniform vec4 lightColor = vec4(1, 1, 1, 1);\n"
                                           "uniform vec3 lightPos;\n"
                                           "uniform vec3 cameraPosition;\n"
-                                          "uniform float ambient = 0.2f;\n"
+                                          "uniform float ambient = 0.05f;\n"
                                           "uniform float diffuse = 0.0f;\n"
-                                          "uniform float specular = 0.6f;\n"
+                                          "uniform float specular = 0.3f;\n"
+                                          "uniform float radius = 8.0f;\n"
                                           "\n"
                                           "out vec4 FragColor;\n"
                                           "void main()\n"
@@ -134,7 +135,8 @@ namespace enpitsu
                                           "    vec3 lightDirection = normalize(lightPos - position);\n"
                                           "    float diffuseVal = max(dot(normalizedNormal, lightDirection), diffuse);\n"
                                           "    vec4 colorCompose = color * lightColor;\n"
-                                          "    FragColor = vec4(vec3(colorCompose) * (ambient + diffuseVal), colorCompose.w * color.w);\n"
+                                          "    float distanceBasedIntensity = min(radius / distance(lightPos, position), 1.0f);\n"
+                                          "    FragColor = vec4(vec3(colorCompose) * (ambient + diffuseVal) * distanceBasedIntensity, colorCompose.w * color.w);\n"
                                           "}"
                     },
                     {

@@ -41,16 +41,11 @@ namespace enpitsu
         if(normals.empty())
         {
             calculateNormals(flatShading);
-            PLOGD << "Normals size:" << normals.size();
-            PLOGD << "Vertices size: " << this->vertices->size();
-            PLOGD << "Indices size: " << this->indices->size();
         }
         normalsVBO = std::make_unique<VBO>(&normals[0], sizeof(GLfloat) * normals.size(), VBO::objectLayout::NORMAL, isStatic);
         SolidColor::Create(*(this->vertices), *(this->indices), vertexSize, isStatic);
         vao->LinkVBO(*normalsVBO);
         normalsVBO->Unbind();
-        PLOGD << format("Light color: {}", screen->getLightColor());
-        PLOGD << format("Object color: {}", this->color / 255.0f * screen->getLightColor() / 255.0f);
         try
         {
             this->updateVec4Uniform("lightColor", glm::value_ptr(screen->getLightColor() / 255.0f));
