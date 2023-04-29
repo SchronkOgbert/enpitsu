@@ -2,8 +2,6 @@
 #define ENPITSU_DEFINES_H
 
 // this piece of shit needs to be here for stb to work
-#include <ostream>
-#include <vector>
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
@@ -26,6 +24,7 @@
 #include <set>
 #include <queue>
 #include <initializer_list>
+#include <exception>
 
 
 // 3rd party stuff
