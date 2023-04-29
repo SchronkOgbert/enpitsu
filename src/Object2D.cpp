@@ -83,6 +83,7 @@ void enpitsu::Object2D::draw()
     if(!isStatic && updateModel)
     {
         shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
+        updateModel = false;
     }
 }
 

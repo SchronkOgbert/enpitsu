@@ -48,6 +48,7 @@ namespace enpitsu
         if (updateModel)
         {
             shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
+            updateModel = false;
         }
     }
 

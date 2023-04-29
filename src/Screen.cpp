@@ -139,10 +139,13 @@ void enpitsu::Screen::tick(const float &delta)
     updateScreenDefaults();
     this->callTick(delta);
     glfwPollEvents();
-    std::jthread destroyer([this]
-                           {
-                               this->destroyObjectsFromQueue();
-                           }); // this may not actually be needed
+    if(!destroyQueue->empty())
+    {
+        std::jthread destroyer([this]
+                               {
+                                   this->destroyObjectsFromQueue();
+                               }); // this may not actually be needed
+    }
     glfwSwapBuffers(this->window);
 }
 
