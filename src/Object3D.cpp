@@ -35,7 +35,6 @@ namespace enpitsu
     {
         Object::tick(delta);
         this->draw();
-        shaderProgram->Unbind();
     }
 
     void Object3D::draw()
@@ -47,9 +46,9 @@ namespace enpitsu
         }
         if (updateModel)
         {
-            shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
             updateModel = false;
         }
+        shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
     }
 
     void Object3D::init()

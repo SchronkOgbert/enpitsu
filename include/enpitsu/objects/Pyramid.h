@@ -12,7 +12,7 @@ namespace enpitsu
     {
     public:
         using Triangles3D::Triangles3D;
-        Pyramid(Screen* screen, Vector3 origin, std::shared_ptr<ShaderProgram> &&shader, const bool& isStatic = true);
+        Pyramid(Screen* screen, Vector3 origin, const std::shared_ptr<ShaderProgram> &shader, const bool& isStatic = true);
     };
 
 } // enpitsu
