@@ -39,19 +39,20 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
 void enpitsu::Object2D::init()
 {
     Object::init();
-//    forceSetLocation(origin); // this also compiles the shader
-    shaderProgram->Create(vertices, indices, 2, isStatic);
-    if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
+    if(!(shaderProgram->isInitialized()))
     {
-        throw BadGLObject();
+        shaderProgram->Create(vertices, indices, 2, isStatic);
+        if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
+        {
+            throw BadGLObject();
+        }
+        shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
+        shaderProgram->getVao()->Unbind();
+        shaderProgram->getVertexPosition()->Unbind();
+        shaderProgram->getEbo()->Unbind();
+        shaderProgram->updateMat4UniformF("camMatrix", screen->getCam2DMatrix());
     }
-    shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
-    shaderProgram->getVao()->Unbind();
-    shaderProgram->getVertexPosition()->Unbind();
-    shaderProgram->getEbo()->Unbind();
-    shaderProgram->updateMat4UniformF("camMatrix", screen->getCam2DMatrix());
     shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
-    PLOGD << "set camera and model matrices";
 }
 
 void enpitsu::Object2D::onDestroy()
@@ -82,9 +83,9 @@ void enpitsu::Object2D::draw()
     }
     if(!isStatic && updateModel)
     {
-        shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
         updateModel = false;
     }
+    shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
 }
 
 const enpitsu::Vector2 &enpitsu::Object2D::getOrigin() const

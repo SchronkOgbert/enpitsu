@@ -67,6 +67,7 @@ namespace enpitsu
         hasCompiled(fragmentShader);
         hasLinked();
         glUseProgram(ID);
+        initialized = true;
     }
 
     void ShaderProgram::Delete()
@@ -189,5 +190,15 @@ namespace enpitsu
     void ShaderProgram::updateFloatUniform(const std::string &uniformName, const float &value) const
     {
         glUniform1f(getUnifromLocation(uniformName.c_str()), value);
+    }
+
+    bool ShaderProgram::isInitialized() const
+    {
+        return initialized;
+    }
+
+    void ShaderProgram::setInitialized(bool initialized)
+    {
+        ShaderProgram::initialized = initialized;
     }
 }

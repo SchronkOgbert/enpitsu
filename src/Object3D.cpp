@@ -56,21 +56,24 @@ namespace enpitsu
         Object::init();
         shaderProgram->setVertices(&vertices);
         shaderProgram->setIndices(&indices);
-        auto litShader = dynamic_cast<LitShaderBase *>(shaderProgram.get());
-        if (litShader)
+        if(!(shaderProgram->isInitialized()))
         {
-            litShader->setScreen(screen);
+            auto litShader = dynamic_cast<LitShaderBase *>(shaderProgram.get());
+            if (litShader)
+            {
+                litShader->setScreen(screen);
+            }
+            shaderProgram->Create(vertices, indices, 3, isStatic);
+            if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
+            {
+                throw BadGLObject();
+            }
+            shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
+            shaderProgram->getVao()->Unbind();
+            shaderProgram->getVertexPosition()->Unbind();
+            shaderProgram->getEbo()->Unbind();
+            shaderProgram->updateMat4UniformF("cam3DMatrix", screen->getCam3DMatrix());
         }
-        shaderProgram->Create(vertices, indices, 3, isStatic);
-        if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
-        {
-            throw BadGLObject();
-        }
-        shaderProgram->getVao()->LinkVBO(*shaderProgram->getVertexPosition());
-        shaderProgram->getVao()->Unbind();
-        shaderProgram->getVertexPosition()->Unbind();
-        shaderProgram->getEbo()->Unbind();
-        shaderProgram->updateMat4UniformF("cam3DMatrix", screen->getCam3DMatrix());
         shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
     }
 

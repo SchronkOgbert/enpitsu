@@ -52,6 +52,7 @@ namespace enpitsu
         GLuint ID;
         GLuint vertexShader;
         GLuint fragmentShader;
+        bool initialized{false};
 
         //shader data
         std::unique_ptr<VAO> vao;
@@ -90,6 +91,10 @@ namespace enpitsu
         {
             ShaderProgram::ebo = std::unique_ptr<EBO>(ebo);
         }
+
+        [[nodiscard]] bool isInitialized() const;
+
+        void setInitialized(bool initialized);
 
     private:
         static char *readShaderFile(const char *filename);
