@@ -59,3 +59,8 @@ void VBO::setSize(unsigned int size)
 {
     VBO::size = size;
 }
+
+VBO::~VBO()
+{
+
+}

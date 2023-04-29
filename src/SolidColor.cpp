@@ -28,4 +28,9 @@ namespace enpitsu
         vao->LinkVBO(*colorVertex);
         colorVertex->Unbind();
     }
+
+    SolidColor::~SolidColor()
+    {
+        colorVertex->Delete();
+    }
 } // enpitsu

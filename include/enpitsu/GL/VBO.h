@@ -35,6 +35,8 @@ namespace enpitsu
         explicit VBO(GLfloat *vertices, const GLsizeiptr &size, const VBO::objectLayout &layout,
                      const bool &isStatic = true);
 
+        virtual ~VBO();
+
         void Bind() const;
 
         void Unbind() const;

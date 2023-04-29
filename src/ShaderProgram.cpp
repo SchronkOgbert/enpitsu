@@ -103,7 +103,6 @@ namespace enpitsu
         glGetShaderiv(ID, GL_COMPILE_STATUS, &compiled);
         char shaderSource[1024];
         glGetShaderSource(shader, 1024, nullptr, shaderSource);
-//        println("Shader source:\n------------------\n", shaderSource, "\n-----------------");
         if (!compiled)
         {
             char shaderInfo[1024];
@@ -133,7 +132,9 @@ namespace enpitsu
 
     ShaderProgram::~ShaderProgram()
     {
-//        println("destroy shader");
+        vao->Delete();
+        vertexPosition->Delete();
+        ebo->Delete();
     }
 
     void ShaderProgram::Unbind()

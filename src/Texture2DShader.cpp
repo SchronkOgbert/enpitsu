@@ -35,4 +35,9 @@ namespace enpitsu
         ShaderProgram::Bind();
         textureObject->Bind();
     }
+
+    Texture2DShader::~Texture2DShader()
+    {
+        textureCoords->Delete();
+    }
 } // enpitsu

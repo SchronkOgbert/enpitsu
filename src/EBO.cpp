@@ -42,3 +42,8 @@ void EBO::Update(GLuint *indices) const
     this->Bind();
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, indices);
 }
+
+EBO::~EBO()
+{
+
+}

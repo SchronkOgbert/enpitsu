@@ -20,6 +20,8 @@ namespace enpitsu
     public:
         explicit LitShaderBase(const Vector4 &color = {255, 255, 255, 255}, bool flat = true);
 
+        ~LitShaderBase() override;
+
         void calculateNormals(bool flat = true);
 
         [[nodiscard]] bool isFlatShading() const;

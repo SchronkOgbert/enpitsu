@@ -10,6 +10,8 @@ class EBO
 public:
     EBO(GLuint *indices, const GLsizeiptr &size, const bool &isStatic = true);
 
+    virtual ~EBO();
+
     void Bind() const;
 
     void Unbind() const;

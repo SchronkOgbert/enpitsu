@@ -77,4 +77,9 @@ namespace enpitsu
     {
         LitShaderBase::screen = screen;
     }
+
+    LitShaderBase::~LitShaderBase()
+    {
+        normalsVBO->Delete();
+    }
 } // enpitsu
