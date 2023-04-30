@@ -1,6 +1,7 @@
 #ifndef ENPITSU_OBJECT2D_H
 #define ENPITSU_OBJECT2D_H
 
+#include "enpitsu/helpers/Drawable.h"
 #include "enpitsu/helpers/defines.h"
 
 #include "Object.h"
@@ -25,7 +26,7 @@ namespace enpitsu
         BadObjectSize() : Exception("The size of the object should be greater than Vector2(0, 0)") {}
     };
 
-    class Object2D : public Object
+    class Object2D : public Object, public Drawable
     {
         Vector2 origin{};
         Vector2 size{1, 1};
@@ -50,6 +51,8 @@ namespace enpitsu
         void tick(const float &delta) override;
 
         void init() override;
+
+        void draw() override;
     public:
         using Object::Object;
 
@@ -89,9 +92,6 @@ namespace enpitsu
          * @param rotation in degrees
          */
         void setRotation(const float& rotation);
-
-    protected:
-        void draw() override;
     };
 }
 

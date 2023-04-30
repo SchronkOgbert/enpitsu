@@ -3,13 +3,14 @@
 
 #include "Object.h"
 
+#include "enpitsu/helpers/Drawable.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/SolidColor.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 
 namespace enpitsu
 {
-    class Object3D : public Object
+    class Object3D : public Object, public Drawable
     {
     protected:
         std::vector<GLfloat> vertices;
