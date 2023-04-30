@@ -31,6 +31,9 @@ namespace enpitsu
 
     SolidColor::~SolidColor()
     {
-        colorVertex->Delete();
+        if(colorVertex)
+        {
+            colorVertex->Delete();
+        }
     }
 } // enpitsu

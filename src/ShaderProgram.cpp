@@ -133,9 +133,18 @@ namespace enpitsu
 
     ShaderProgram::~ShaderProgram()
     {
-        vao->Delete();
-        vertexPosition->Delete();
-        ebo->Delete();
+        if(vao)
+        {
+            vao->Delete();
+        }
+        if(vertexPosition)
+        {
+            vertexPosition->Delete();
+        }
+        if(ebo)
+        {
+            ebo->Delete();
+        }
     }
 
     void ShaderProgram::Unbind()

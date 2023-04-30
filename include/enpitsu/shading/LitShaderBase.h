@@ -10,7 +10,7 @@ namespace enpitsu
     class LitShaderBase : public SolidColor
     {
         std::vector<GLfloat > normals;
-        std::unique_ptr<VBO> normalsVBO;
+        std::unique_ptr<VBO> normalsVBO{nullptr};
         Screen* screen;
 
         bool flatShading{true};
