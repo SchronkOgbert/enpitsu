@@ -108,9 +108,9 @@ namespace enpitsu
 
     void Object3D::forceSetRotation(const Vector3 &newRotation)
     {
-        model = glm::rotate(model, newRotation.x - rotation.x, Vector3(1, 0, 0));
-        model = glm::rotate(model, newRotation.y - rotation.y, Vector3(0, 1, 0));
-        model = glm::rotate(model, newRotation.z - rotation.z, Vector3(0, 0, 1));
+        model = glm::rotate(model, glm::radians(newRotation.x - rotation.x), Vector3(1, 0, 0));
+        model = glm::rotate(model, glm::radians(newRotation.y - rotation.y), Vector3(0, 1, 0));
+        model = glm::rotate(model, glm::radians(newRotation.z - rotation.z), Vector3(0, 0, 1));
         this->rotation = newRotation;
         updateModel = true;
     }

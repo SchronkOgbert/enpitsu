@@ -14,8 +14,10 @@ uniform mat4 modelMatrix;
 void main()
 {
     vec4 positionBuffer = modelMatrix * vec4(vertexPosition, 1);
+    mat3 normalMatrix = mat3(modelMatrix);
+    normalMatrix = inverse(normalMatrix);
     gl_Position = cam3DMatrix * modelMatrix * vec4(vertexPosition, 1);
     color = inColor;
-    normal = inNormal;
+    normal = normalize(inNormal * normalMatrix);
     position = vec3(positionBuffer);
 }

@@ -107,9 +107,11 @@ namespace enpitsu
                                        "void main()\n"
                                        "{\n"
                                        "    vec4 positionBuffer = modelMatrix * vec4(vertexPosition, 1);\n"
+                                       "    mat3 normalMatrix = mat3(modelMatrix);\n"
+                                       "    normalMatrix = inverse(normalMatrix);\n"
                                        "    gl_Position = cam3DMatrix * modelMatrix * vec4(vertexPosition, 1);\n"
                                        "    color = inColor;\n"
-                                       "    normal = inNormal;\n"
+                                       "    normal = normalize(inNormal * normalMatrix);\n"
                                        "    position = vec3(positionBuffer);\n"
                                        "}"
                     },
