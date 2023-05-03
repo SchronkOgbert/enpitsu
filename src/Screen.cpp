@@ -408,7 +408,7 @@ void enpitsu::Screen::moveObjectsFromQueue()
 
 void enpitsu::Screen::setBackgroundColor(const Vector4 &newColor)
 {
-    glClearColor(newColor.x, newColor.y, newColor.z, newColor.a);
+    glClearColor(newColor.x / 255.0f, newColor.y / 255.0f, newColor.z / 255.0f, newColor.w / 255.0f);
 }
 
 enpitsu::Vector2 enpitsu::Screen::getMousePosition() const
