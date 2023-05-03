@@ -59,6 +59,7 @@ void enpitsu::Screen::start()
 
     this->callInit(); //call this after the init actually runs the code and adds the objects
 
+    constexpr float maxFrameTime = 1 / 20.0f;
     before = std::chrono::system_clock::now();
     now = before;
     std::chrono::duration<float> delta{};
@@ -66,7 +67,7 @@ void enpitsu::Screen::start()
     {
         now = std::chrono::system_clock::now();
         delta = now - before;
-        this->tick(delta.count());
+        this->tick(std::min(delta.count(), maxFrameTime));
         before = now;
     }
 }
