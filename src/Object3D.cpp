@@ -95,8 +95,9 @@ namespace enpitsu
 
     void Object3D::forceSetLocation(const Vector3 &newLocation)
     {
-        model = glm::translate(model, newLocation - origin - worldOriginOffset);
-        origin = worldOriginOffset + newLocation;
+        // TODO implement world origin offset operations
+        model = glm::translate(model, newLocation - origin);
+        origin = newLocation;
         updateModel = true;
     }
 
@@ -126,5 +127,15 @@ namespace enpitsu
         model = glm::scale(model, newScale / scale);
         scale = newScale;
         updateModel = true;
+    }
+
+    const Vector3 &Object3D::getRotation() const
+    {
+        return this->rotation;
+    }
+
+    const Vector3 &Object3D::getScale() const
+    {
+        return this->scale;
     }
 } // enpitsu

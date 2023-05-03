@@ -58,7 +58,13 @@ namespace enpitsu
 
         void setScale(const Vector3& newScale);
 
+        [[nodiscard]] const Vector3 &getRotation() const;
+
+        [[nodiscard]] const Vector3 &getScale() const;
+
         [[nodiscard]] const Vector3 &getOrigin() const;
+
+        [[nodiscard]] const Vector3 &getLocation() const { return this->getOrigin(); }
 
         void setOrigin(const Vector3 &origin);
 
