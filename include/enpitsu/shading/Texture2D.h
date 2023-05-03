@@ -42,8 +42,6 @@ namespace enpitsu
 
         void Unbind() const;
 
-//        void BuildUnit(ShaderProgram* shaderProgram, )
-
         virtual ~Texture2D();
     };
 }

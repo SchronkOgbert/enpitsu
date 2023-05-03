@@ -12,7 +12,7 @@ namespace enpitsu
     protected:
         std::unique_ptr<Texture2D> textureObject;
         std::unique_ptr<VBO> textureCoords;
-        std::vector<GLfloat > coordData{0, 0, 0, 1, 1, 1, 1, 0};
+        std::vector<GLfloat > coordData{0, 0, 1, 0, 1, 1, 0, 1};
     public:
         explicit Texture2DShader(Texture2D* textureObject);
 
