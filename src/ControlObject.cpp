@@ -2,8 +2,4 @@
 
 namespace enpitsu
 {
-    void ControlObject::draw()
-    {
-
-    }
 } // enpitsu

@@ -9,7 +9,7 @@ class EnpitsuConan(ConanFile):
     default_options = {"shared": False}
     # default_options = {"shared": True, "fPIC": True}
     generators = "cmake", "cmake_find_package"
-    requires = 'glfw/3.3.8', 'glew/2.2.0', 'stb/cci.20220909', 'glm/cci.20220420', 'plog/1.1.9'
+    requires = 'glfw/3.3.8', 'glew/2.2.0', 'stb/cci.20220909', 'glm/cci.20220420', 'plog/1.1.9', 'fmt/9.1.0'
     exports_sources = "CMakeLists.txt", "include/*", "src/*"
     build_policy = "missing"
 

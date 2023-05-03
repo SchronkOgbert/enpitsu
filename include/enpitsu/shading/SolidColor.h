@@ -18,6 +18,8 @@ namespace enpitsu
                             const char *vertexFile = "default.vert",
                             const char *fragmentFile = "default.frag");
 
+        virtual ~SolidColor();
+
         void Create(std::vector<GLfloat> &vertices, std::vector<GLuint> &indices, const int &vertexSize,
                     const bool &isStatic) override;
     };

@@ -39,17 +39,28 @@ namespace enpitsu
         {}
     };
 
+    class BadUniform : public Exception
+    {
+    public:
+        BadUniform() = delete;
+        BadUniform(const char* uniform) : Exception(format("Uniform {} does not exist", uniform)){}
+    };
+
     class ShaderProgram
     {
     protected:
         GLuint ID;
         GLuint vertexShader;
         GLuint fragmentShader;
+        bool initialized{false};
 
         //shader data
         std::unique_ptr<VAO> vao;
         std::unique_ptr<VBO> vertexPosition;
         std::unique_ptr<EBO> ebo;
+
+        std::vector<GLfloat> *vertices; // reference only, non-owning
+        std::vector<GLuint> *indices; // reference only, non-owning
     public:
         [[nodiscard]] const std::unique_ptr<VAO> &getVao() const
         {
@@ -81,12 +92,18 @@ namespace enpitsu
             ShaderProgram::ebo = std::unique_ptr<EBO>(ebo);
         }
 
+        [[nodiscard]] bool isInitialized() const;
+
+        void setInitialized(bool initialized);
+
     private:
         static char *readShaderFile(const char *filename);
 
         void hasCompiled(const GLuint &shader);
 
         void hasLinked();
+
+        int getUnifromLocation(const char* uniformName) const;
 
     public:
         explicit ShaderProgram(const char *vertexFile = "default.vert", const char *fragmentFile = "default.frag");
@@ -110,6 +127,18 @@ namespace enpitsu
         void updateMat4UniformF(const std::string& uniformName, const float* value) const;
 
         void updateVec3Uniform(const std::string& uniformName, const float* value) const;
+
+        void updateVec4Uniform(const std::string& uniformName, const float value[]) const;
+
+        void updateFloatUniform(const std::string& uniformName, const float& value) const;
+
+        [[nodiscard]] std::vector<GLfloat> *getVertices() const;
+
+        void setVertices(std::vector<GLfloat> *vertices);
+
+        [[nodiscard]] std::vector<GLuint> *getIndices() const;
+
+        void setIndices(std::vector<GLuint> *indices);
     };
 }
 

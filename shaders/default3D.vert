@@ -2,17 +2,22 @@
 
 layout (location = 1) in vec3 vertexPosition;
 layout (location = 2) in vec4 inColor;
-layout (location = 4) in vec3 inNormals;
+layout (location = 4) in vec3 inNormal;
 
 out vec4 color;
+out vec3 normal;
+out vec3 position;
 
-uniform mat4 camMatrix;
+uniform mat4 cam3DMatrix;
 uniform mat4 modelMatrix;
-uniform vec3 cameraPosition;
 
 void main()
 {
-    float w = distance(vertexPosition, cameraPosition);
-    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1);
+    vec4 positionBuffer = modelMatrix * vec4(vertexPosition, 1);
+    mat3 normalMatrix = mat3(modelMatrix);
+    normalMatrix = inverse(normalMatrix);
+    gl_Position = cam3DMatrix * modelMatrix * vec4(vertexPosition, 1);
     color = inColor;
+    normal = normalize(inNormal * normalMatrix);
+    position = vec3(positionBuffer);
 }

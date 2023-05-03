@@ -6,8 +6,7 @@
 #include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/InputEvents.h"
-#include <memory>
-#include <vector>
+#include <functional>
 
 namespace enpitsu
 {
@@ -57,7 +56,7 @@ namespace enpitsu
     {
     public:
         explicit BadObjectRemove(void *obj) : Exception(
-                std::format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
+                format("Could not remove object {}. Are you sure you added it using Screen::addObject?", obj))
         {
         }
     };
@@ -80,6 +79,7 @@ namespace enpitsu
 
         // misc
         bool checkDepth{false};
+        std::unique_ptr<GLFWwindow, std::function<void(GLFWwindow*)>> windowPtr;
         GLFWwindow *window;
         std::string name;
         bool shouldDestroy;
@@ -92,6 +92,8 @@ namespace enpitsu
         std::chrono::time_point<std::chrono::system_clock> now;
         bool updateCamera3D = false;
         bool updateCamera2D = false;
+        Vector3 lightPosition;
+        Vector4 lightColor;
 
         //references
         std::unique_ptr<std::queue<std::unique_ptr<Object>>> objectsQueue;
@@ -130,6 +132,8 @@ namespace enpitsu
 
     public:
         Screen() = delete;
+
+        static unsigned screenCount;
 
         /**
          * The default constructor of the class
@@ -282,6 +286,14 @@ namespace enpitsu
          * @param checkDepth true for enable, false for disable, default false
          */
         void setCheckDepth(bool checkDepth);
+
+        [[nodiscard]] const Vector3 &getLightPosition() const;
+
+        void setLightPosition(const Vector3 &lightPosition);
+
+        [[nodiscard]] const Vector4 &getLightColor() const;
+
+        void setLightColor(const Vector4 &lightColor);
 
     protected:
 

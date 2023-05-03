@@ -4,7 +4,7 @@
 namespace enpitsu
 {
 
-    Pyramid::Pyramid(Screen *screen, Vector3 origin, std::shared_ptr<ShaderProgram> &&shader, const bool &isStatic) :
+    Pyramid::Pyramid(Screen *screen, Vector3 origin, const std::shared_ptr<ShaderProgram> &shader, const bool &isStatic) :
             Triangles3D(screen, new std::vector<Vector3>{
                                 {-0.5, 0, 0.5},
                                 {-0.5, 0, -0.5},
@@ -14,10 +14,10 @@ namespace enpitsu
                         },
                         origin,
                         {1, 1, 1},
-                        std::forward<std::shared_ptr<ShaderProgram>>(shader),
+                        shader,
                         isStatic,
-                        new std::vector<unsigned>{0, 1, 2,
-                                                  0, 2, 3,
+                        new std::vector<unsigned>{2, 1, 0,
+                                                  3, 2, 0,
                                                   0, 1, 4,
                                                   1, 2, 4,
                                                   2, 3, 4,

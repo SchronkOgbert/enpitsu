@@ -26,3 +26,24 @@ void EBO::Delete()
 {
     glDeleteBuffers(1, &ID);
 }
+
+GLsizeiptr EBO::getSize() const
+{
+    return size;
+}
+
+void EBO::setSize(GLsizeiptr size)
+{
+    EBO::size = size;
+}
+
+void EBO::Update(GLuint *indices) const
+{
+    this->Bind();
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, indices);
+}
+
+EBO::~EBO()
+{
+
+}

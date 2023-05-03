@@ -28,8 +28,14 @@ namespace enpitsu
             return layout;
         }
 
+        [[nodiscard]] unsigned int getSize() const;
+
+        void setSize(unsigned int size);
+
         explicit VBO(GLfloat *vertices, const GLsizeiptr &size, const VBO::objectLayout &layout,
                      const bool &isStatic = true);
+
+        virtual ~VBO();
 
         void Bind() const;
 

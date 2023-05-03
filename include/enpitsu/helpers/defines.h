@@ -2,16 +2,9 @@
 #define ENPITSU_DEFINES_H
 
 // this piece of shit needs to be here for stb to work
-#include <ostream>
-#include <vector>
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
-
-// default settings
-#define OPENGL_DEFAULT_MAJOT_VERSION 4
-#define OPENGL_DEFAULT_MINOR_VERSION 5
-#define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
 
 // std stuff
 #include <string>
@@ -30,8 +23,8 @@
 #include <thread>
 #include <set>
 #include <queue>
-#include <format>
 #include <initializer_list>
+#include <exception>
 
 
 // 3rd party stuff
@@ -52,11 +45,28 @@
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/transform.hpp"
+#include "fmt/core.h"
+#include "fmt/format.h"
+
+// default settings
+#ifndef OPENGL_DEFAULT_MAJOR_VERSION
+#define OPENGL_DEFAULT_MAJOR_VERSION 4
+#endif
+
+#ifndef OPENGL_DEFAULT_MINOR_VERSION
+#define OPENGL_DEFAULT_MINOR_VERSION 5
+#endif
+
+#ifndef OPENGL_DEFAULT_PROFILE
+#define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
+#endif
 
 // concepts, aliases, perfect forwards
 
 namespace enpitsu
 {
+    using namespace fmt;
+
     template<class Object>
     concept objectType =
     requires(Object t)

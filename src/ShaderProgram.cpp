@@ -26,8 +26,9 @@ namespace enpitsu
 
         vertexShader = glCreateShader(GL_VERTEX_SHADER);
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        ID = glCreateProgram();
+        PLOGD << format("vertex shader: {}, fragment shader: {}", vertexShader, fragmentShader);
         PLOGD << "compiling shader " << ID << "(" << vertexFile << ")";
+        ID = glCreateProgram();
 
         glShaderSource(vertexShader, 1, &vertexData, nullptr);
         glShaderSource(fragmentShader, 1, &fragmentData, nullptr);
@@ -66,6 +67,7 @@ namespace enpitsu
         hasCompiled(fragmentShader);
         hasLinked();
         glUseProgram(ID);
+        initialized = true;
     }
 
     void ShaderProgram::Delete()
@@ -102,7 +104,6 @@ namespace enpitsu
         glGetShaderiv(ID, GL_COMPILE_STATUS, &compiled);
         char shaderSource[1024];
         glGetShaderSource(shader, 1024, nullptr, shaderSource);
-//        println("Shader source:\n------------------\n", shaderSource, "\n-----------------");
         if (!compiled)
         {
             char shaderInfo[1024];
@@ -132,7 +133,18 @@ namespace enpitsu
 
     ShaderProgram::~ShaderProgram()
     {
-//        println("destroy shader");
+        if(vao)
+        {
+            vao->Delete();
+        }
+        if(vertexPosition)
+        {
+            vertexPosition->Delete();
+        }
+        if(ebo)
+        {
+            ebo->Delete();
+        }
     }
 
     void ShaderProgram::Unbind()
@@ -143,12 +155,59 @@ namespace enpitsu
 
     void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value) const
     {
-        glUniformMatrix4fv(glGetUniformLocation(this->getId(), uniformName.c_str()),
+        glUniformMatrix4fv(getUnifromLocation(uniformName.c_str()),
                            1, GL_FALSE, value);
     }
 
     void ShaderProgram::updateVec3Uniform(const std::string &uniformName, const float *value) const
     {
-        glUniform3fv(glGetUniformLocation(this->getId(), uniformName.c_str()), 1, value);
+        glUniform3fv(getUnifromLocation(uniformName.c_str()), 1, value);
+    }
+
+    int ShaderProgram::getUnifromLocation(const char *uniformName) const
+    {
+        int location = glGetUniformLocation(this->getId(), uniformName);
+        if(location == -1) throw BadUniform(uniformName);
+        return location;
+    }
+
+    std::vector<GLfloat> *ShaderProgram::getVertices() const
+    {
+        return vertices;
+    }
+
+    void ShaderProgram::setVertices(std::vector<GLfloat> *vertices)
+    {
+        ShaderProgram::vertices = vertices;
+    }
+
+    std::vector<GLuint> *ShaderProgram::getIndices() const
+    {
+        return indices;
+    }
+
+    void ShaderProgram::setIndices(std::vector<GLuint> *indices)
+    {
+        ShaderProgram::indices = indices;
+    }
+
+    void ShaderProgram::updateVec4Uniform(const std::string &uniformName, const float *value) const
+    {
+        glUniform4fv(getUnifromLocation(uniformName.c_str()), 1, value);
+    }
+
+    void ShaderProgram::updateFloatUniform(const std::string &uniformName, const float &value) const
+    {
+        glUniform1f(getUnifromLocation(uniformName.c_str()), value);
+    }
+
+    bool ShaderProgram::isInitialized() const
+    {
+        return initialized;
+    }
+
+    void ShaderProgram::setInitialized(bool initialized)
+    {
+        ShaderProgram::initialized = initialized;
     }
 }

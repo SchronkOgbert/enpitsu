@@ -12,9 +12,6 @@ namespace enpitsu
     {
     public:
         using Object::Object;
-
-    protected:
-        void draw() final;
     };
 
 } // enpitsu

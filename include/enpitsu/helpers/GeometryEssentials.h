@@ -13,9 +13,6 @@ namespace enpitsu
     float toGLCoord(const float &screenCoord, const float &maxDimension);
 
     float fromGLCoord(const float &GLCoord, const float &maxDimension);
-
-    glm::vec3 toGLMVec3(const Vector3 &obj);
-
     template<class Vector>
     concept vectorType =
     requires(Vector t)
@@ -53,7 +50,7 @@ namespace enpitsu
                     res[counter++] = el[0];
                     res[counter++] = el[1];
                 }
-                break;
+                    break;
                 case 3:
                 {
                     res[counter++] = el[0];
@@ -78,37 +75,59 @@ namespace enpitsu
 
     enpitsu::Vector2 mousePosToGLCoords(const enpitsu::Vector2 &mousePos, const enpitsu::Vector2 &screenSize,
                                         const enpitsu::Vector2 &cameraPosition = {0, 0}, const float &unitScale = 1);
+
+    Vector3 generateFlatNormal(const Vector3 &v1, const Vector3 &v2, const Vector3 &v3);
+
+    std::pair<std::vector<GLfloat>, std::vector<GLfloat>>
+    generateFlatNormals(const std::vector<GLfloat> &points, const std::vector<GLuint> &indices);
 } // namespace enpitsu
 
-// TODO remove this cause it doesn't work on gcc
-namespace std
+template<>
+struct fmt::formatter<enpitsu::Vector2>
 {
-    template<>
-    struct std::formatter<enpitsu::Vector2> : std::formatter<std::string>
+    template<class ParseContext>
+    constexpr auto parse(ParseContext &context)
     {
-        auto format(const enpitsu::Vector2 &v, format_context &context)
-        {
-            return formatter<string>::format(std::format("({}, {})", v.x, v.y), context);
-        }
-    };
+        return context.begin();
+    }
 
-    template<>
-    struct std::formatter<enpitsu::Vector3> : std::formatter<std::string>
+    template<class FormatContext>
+    auto format(const enpitsu::Vector2 &v, FormatContext &context)
     {
-        auto format(const enpitsu::Vector3 &v, format_context &context)
-        {
-            return formatter<string>::format(std::format("({}, {}, {})", v.x, v.y, v.z), context);
-        }
-    };
+        return fmt::format_to(context.out(), "({}, {})", v.x, v.y);
+    }
+};
 
-    template<>
-    struct std::formatter<enpitsu::Vector4> : std::formatter<std::string>
+template<>
+struct fmt::formatter<enpitsu::Vector3>
+{
+    template<class ParseContext>
+    constexpr auto parse(ParseContext &context)
     {
-        auto format(const enpitsu::Vector4 &v, format_context &context)
-        {
-            return formatter<string>::format(std::format("({}, {}, {}, {})", v.x, v.y, v.z, v.a), context);
-        }
-    };
-} // namespace std
+        return context.begin();
+    }
+
+    template<class FormatContext>
+    auto format(const enpitsu::Vector3 &v, FormatContext &context)
+    {
+        return fmt::format_to(context.out(), "({}, {}, {})", v.x, v.y, v.z);
+    }
+};
+
+template<>
+struct fmt::formatter<enpitsu::Vector4>
+{
+    template<class ParseContext>
+    constexpr auto parse(ParseContext &context)
+    {
+        return context.begin();
+    }
+
+    template<class FormatContext>
+    auto format(const enpitsu::Vector4 &v, FormatContext &context)
+    {
+        return fmt::format_to(context.out(), "({}, {}, {}, {})", v.x, v.y, v.z, v.w);
+    }
+};
 
 #endif //ENPITSU_GEOMETRYESSENTIALS_H

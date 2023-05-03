@@ -13,6 +13,8 @@ namespace enpitsu
     public:
         explicit VAO(const GLint &vertexSize);
 
+        virtual ~VAO();
+
         void LinkVBO(VBO vbo);
 
         void Bind() const;

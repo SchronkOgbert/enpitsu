@@ -4,7 +4,7 @@
 
 void enpitsu::Object::tick(const float &delta)
 {
-    this->draw();
+
 }
 
 void enpitsu::Object::callTick(const float &delta)

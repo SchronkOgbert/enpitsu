@@ -6,8 +6,11 @@
 class EBO
 {
     GLuint ID;
+    GLsizeiptr size;
 public:
     EBO(GLuint *indices, const GLsizeiptr &size, const bool &isStatic = true);
+
+    virtual ~EBO();
 
     void Bind() const;
 
@@ -16,6 +19,12 @@ public:
     void Delete();
 
     [[nodiscard]] GLuint getId() const;
+
+    [[nodiscard]] GLsizeiptr getSize() const;
+
+    void setSize(GLsizeiptr size);
+
+    void Update(GLuint* indices) const;
 };
 
 

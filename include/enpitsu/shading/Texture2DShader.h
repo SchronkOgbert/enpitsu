@@ -18,6 +18,8 @@ namespace enpitsu
 
         Texture2DShader(const char *vertexFile, const char *fragmentFile, Texture2D* textureObject);
 
+        virtual ~Texture2DShader();
+
         [[nodiscard]] int getWidth() const
         {
             return textureObject->getWidth();

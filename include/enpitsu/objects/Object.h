@@ -51,8 +51,6 @@ namespace enpitsu
          */
         virtual void onDestroy();
 
-        virtual void draw() = 0;
-
         [[nodiscard]] bool shouldUpdateCamera3D() const;
 
         [[nodiscard]] bool shouldUpdateCamera2D() const;

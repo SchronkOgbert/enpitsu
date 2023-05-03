@@ -1,4 +1,5 @@
 #include "enpitsu/objects/Screen.h"
+#include "GLFW/glfw3.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/objects/ControlObject.h"
 #include "enpitsu/objects/Object.h"
@@ -8,6 +9,8 @@
 #include "enpitsu/objects/Camera2D.h"
 
 using enpitsu::Object;
+
+unsigned enpitsu::Screen::screenCount = 0;
 
 enpitsu::Screen::Screen
         (const Vector2 &size,
@@ -40,11 +43,6 @@ enpitsu::Screen::~Screen()
     {
         obj->onDestroy();
     }
-    if (window)
-    {
-        glfwDestroyWindow(window);
-    }
-    glfwTerminate();
 }
 
 void enpitsu::Screen::start()
@@ -53,7 +51,7 @@ void enpitsu::Screen::start()
     {
         PLOG_WARNING << "This screen has no camera3D";
     }
-    if(!camera2D)
+    if (!camera2D)
     {
         PLOGW << "This screen has no camera2D";
     }
@@ -61,6 +59,7 @@ void enpitsu::Screen::start()
 
     this->callInit(); //call this after the init actually runs the code and adds the objects
 
+    constexpr float maxFrameTime = 1 / 20.0f;
     before = std::chrono::system_clock::now();
     now = before;
     std::chrono::duration<float> delta{};
@@ -68,20 +67,28 @@ void enpitsu::Screen::start()
     {
         now = std::chrono::system_clock::now();
         delta = now - before;
-        this->tick(delta.count());
+        this->tick(std::min(delta.count(), maxFrameTime));
         before = now;
     }
 }
 
 void enpitsu::Screen::createGLFWWindow()
 {
-    window = glfwCreateWindow(
+    windowPtr = std::move(std::unique_ptr<GLFWwindow, std::function<void(GLFWwindow *)>>(glfwCreateWindow(
             static_cast<int>(size.x),
             static_cast<int>(size.y),
             name.c_str(),
             nullptr,
             nullptr
-    );
+    ), [](GLFWwindow *ptr)
+             {
+                 if (ptr)
+                     glfwDestroyWindow(ptr);
+                 screenCount--;
+                 if (!screenCount) glfwTerminate();
+             }));
+    screenCount++;
+    window = windowPtr.get();
     if (!window)
     {
         throw BadWindow();
@@ -118,7 +125,7 @@ void enpitsu::Screen::callTick(const float &delta)
 
 void enpitsu::Screen::setGLFWHints()
 {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOT_VERSION);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, OPENGL_DEFAULT_MAJOR_VERSION);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, OPENGL_DEFAULT_MINOR_VERSION);
     glfwWindowHint(GLFW_OPENGL_PROFILE, OPENGL_DEFAULT_PROFILE);
 }
@@ -133,10 +140,13 @@ void enpitsu::Screen::tick(const float &delta)
     updateScreenDefaults();
     this->callTick(delta);
     glfwPollEvents();
-    std::jthread destroyer([this]
-                           {
-                               this->destroyObjectsFromQueue();
-                           }); // this may not actually be needed
+    if(!destroyQueue->empty())
+    {
+        std::jthread destroyer([this]
+                               {
+                                   this->destroyObjectsFromQueue();
+                               }); // this may not actually be needed
+    }
     glfwSwapBuffers(this->window);
 }
 
@@ -190,7 +200,8 @@ void enpitsu::Screen::init()
     glewInit();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
+    glEnable(GL_BLEND); // these glEnables MUST be after the window was created
+    checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
     moveObjectsFromQueue();
 }
 
@@ -391,7 +402,7 @@ void enpitsu::Screen::moveObjectsFromQueue()
         }
         objects->push_back(std::move(objectsQueue->front()));
         objectsQueue->pop();
-        PLOGD << std::format("{} elements left in queue", objectsQueue->size());
+        PLOGD << format("{} elements left in queue", objectsQueue->size());
     }
 }
 
@@ -443,6 +454,25 @@ void enpitsu::Screen::setCamera2D(std::unique_ptr<Camera2D> &&camera2D)
 
 void enpitsu::Screen::callScreenSizeChanged()
 {
-    static_cast<ControlObject*>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
+    if(camera2D) static_cast<ControlObject *>(camera2D.get())->screenSizeChanged(this->size); // vs compiler bug
 }
 
+const enpitsu::Vector3 &enpitsu::Screen::getLightPosition() const
+{
+    return lightPosition;
+}
+
+void enpitsu::Screen::setLightPosition(const enpitsu::Vector3 &lightPosition)
+{
+    Screen::lightPosition = lightPosition;
+}
+
+const enpitsu::Vector4 &enpitsu::Screen::getLightColor() const
+{
+    return lightColor;
+}
+
+void enpitsu::Screen::setLightColor(const enpitsu::Vector4 &lightColor)
+{
+    Screen::lightColor = lightColor;
+}

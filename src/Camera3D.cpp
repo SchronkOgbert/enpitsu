@@ -3,6 +3,8 @@
 #include "enpitsu/helpers/InputEvents.h"
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/objects/Object3D.h"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "glm/gtx/transform.hpp"
 
 enpitsu::Camera3D::Camera3D(enpitsu::Screen *screen, const Vector3 &position, const Vector2 &size) :
         ControlObject(screen)
@@ -15,11 +17,25 @@ void
 enpitsu::Camera3D::updateMatrix(const float &nearPlane, const float &farPlane)
 {
     Vector3 center = position + orientation;
-    *view = glm::lookAt(position, center, up);
+    view = glm::lookAt(position, center, up);
 
-    *projection = glm::perspective(glm::radians(static_cast<float>(FOV)),
-                                   static_cast<float>(size.x) / size.y, nearPlane, farPlane);
-    screen->setCam3DMatrix(glm::value_ptr(*projection * *view));
+    if (orthogonal)
+    {
+        // TODO fix this abomination if i have the time
+        float distance = glm::distance(position, orientation);
+        PLOGD << "Distance: " << distance;
+        projection = glm::ortho(-(this->getOffsetFromCenter()) * distance,
+                                this->getOffsetFromCenter() * distance,
+                                -distance,
+                                distance,
+                                -100000.0f, 10000.0f);
+    }
+    else
+    {
+        projection = glm::perspective(glm::radians(static_cast<float>(FOV)),
+                                      static_cast<float>(size.x) / size.y, nearPlane, farPlane);
+    }
+    screen->setCam3DMatrix(glm::value_ptr(projection * view));
 }
 
 void enpitsu::Camera3D::tick(const float &delta)
@@ -67,4 +83,20 @@ int enpitsu::Camera3D::getFov() const
 void enpitsu::Camera3D::setFov(int fov)
 {
     FOV = fov;
+}
+
+bool enpitsu::Camera3D::isOrthogonal() const
+{
+    return orthogonal;
+}
+
+void enpitsu::Camera3D::setOrthogonal(bool orthogonal)
+{
+    Camera3D::orthogonal = orthogonal;
+    update = true;
+}
+
+float enpitsu::Camera3D::getOffsetFromCenter() const
+{
+    return size.x / size.y;
 }
