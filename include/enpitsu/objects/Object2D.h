@@ -28,6 +28,12 @@ namespace enpitsu
 
     class Object2D : public Object, public Drawable
     {
+        void forceSetLocation(const Vector2& newLocation) noexcept;
+
+        void forceSetScale(const Vector2& newScale);
+
+        void forceSetRotation(const float& rotation);
+    protected:
         Vector2 origin{};
         Vector2 size{1, 1};
         float rotation{0};
@@ -35,13 +41,6 @@ namespace enpitsu
 
         glm::mat4 model{1};
         bool updateModel = false;
-
-        void forceSetLocation(const Vector2& newLocation) noexcept;
-
-        void forceSetScale(const Vector2& newScale);
-
-        void forceSetRotation(const float& rotation);
-    protected:
 
         std::vector<GLfloat > vertices;
         std::vector<GLuint > indices;

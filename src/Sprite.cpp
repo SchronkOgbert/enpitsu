@@ -1,4 +1,5 @@
 #include "enpitsu/objects/Sprite.h"
+#include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/ShaderProgram.h"
 #include "enpitsu/shading/Texture2DShader.h"
@@ -10,10 +11,10 @@ namespace enpitsu
             Triangles2D(screen,
                         {
                                 Vector2(0, 0),
-                                Vector2(0, static_cast<GLfloat >(shader->getWidth())),
-                                Vector2(static_cast<GLfloat >(shader->getHeight()),
-                                        static_cast<GLfloat >(shader->getWidth())),
-                                Vector2(static_cast<GLfloat >(shader->getHeight()), 0)
+                                Vector2(static_cast<GLfloat >(shader->getWidth()), 0),
+                                Vector2(static_cast<GLfloat >(shader->getWidth()),
+                                        static_cast<GLfloat >(shader->getHeight())),
+                                Vector2(0, static_cast<GLfloat >(shader->getHeight()))
                         },
                         origin,
                         std::forward<std::shared_ptr<ShaderProgram>>(shader),
