@@ -19,6 +19,9 @@ namespace enpitsu
         bool isStatic;
         Vector3 origin;
         const Vector3 worldOriginOffset;
+        static const Vector3 xVec;
+        static const Vector3 yVec;
+        static const Vector3 zVec;
 
         /**
          * in degrees

@@ -153,20 +153,29 @@ namespace enpitsu
         glUseProgram(0);
     }
 
-    void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value) const
+    void ShaderProgram::updateMat4UniformF(const std::string &uniformName, const float *value)
     {
-        glUniformMatrix4fv(getUnifromLocation(uniformName.c_str()),
+        glUniformMatrix4fv(getUniformLocation(uniformName.c_str()),
                            1, GL_FALSE, value);
     }
 
-    void ShaderProgram::updateVec3Uniform(const std::string &uniformName, const float *value) const
+    void ShaderProgram::updateVec3Uniform(const std::string &uniformName, const float *value)
     {
-        glUniform3fv(getUnifromLocation(uniformName.c_str()), 1, value);
+        glUniform3fv(getUniformLocation(uniformName.c_str()), 1, value);
     }
 
-    int ShaderProgram::getUnifromLocation(const char *uniformName) const
+    int ShaderProgram::getUniformLocation(const char *uniformName)
     {
-        int location = glGetUniformLocation(this->getId(), uniformName);
+        int location = -1;
+        if(uniformsCache.find(uniformName) == uniformsCache.end())
+        {
+            location = glGetUniformLocation(this->getId(), uniformName);
+            uniformsCache[uniformName] = location;
+        }
+        else
+        {
+            location = uniformsCache[uniformName];
+        }
         if(location == -1) throw BadUniform(uniformName);
         return location;
     }
@@ -191,14 +200,14 @@ namespace enpitsu
         ShaderProgram::indices = indices;
     }
 
-    void ShaderProgram::updateVec4Uniform(const std::string &uniformName, const float *value) const
+    void ShaderProgram::updateVec4Uniform(const std::string &uniformName, const float *value)
     {
-        glUniform4fv(getUnifromLocation(uniformName.c_str()), 1, value);
+        glUniform4fv(getUniformLocation(uniformName.c_str()), 1, value);
     }
 
-    void ShaderProgram::updateFloatUniform(const std::string &uniformName, const float &value) const
+    void ShaderProgram::updateFloatUniform(const std::string &uniformName, const float &value)
     {
-        glUniform1f(getUnifromLocation(uniformName.c_str()), value);
+        glUniform1f(getUniformLocation(uniformName.c_str()), value);
     }
 
     bool ShaderProgram::isInitialized() const

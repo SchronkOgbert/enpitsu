@@ -201,7 +201,17 @@ void enpitsu::Screen::init()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND); // these glEnables MUST be after the window was created
-    checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+    if(checkDepth)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
     moveObjectsFromQueue();
 }
 

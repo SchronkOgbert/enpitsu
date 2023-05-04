@@ -54,6 +54,8 @@ namespace enpitsu
         GLuint fragmentShader;
         bool initialized{false};
 
+        std::map<const std::string, int> uniformsCache;
+
         //shader data
         std::unique_ptr<VAO> vao;
         std::unique_ptr<VBO> vertexPosition;
@@ -103,7 +105,7 @@ namespace enpitsu
 
         void hasLinked();
 
-        int getUnifromLocation(const char* uniformName) const;
+        int getUniformLocation(const char* uniformName);
 
     public:
         explicit ShaderProgram(const char *vertexFile = "default.vert", const char *fragmentFile = "default.frag");
@@ -124,13 +126,13 @@ namespace enpitsu
 
         // uniform updaters
 
-        void updateMat4UniformF(const std::string& uniformName, const float* value) const;
+        void updateMat4UniformF(const std::string& uniformName, const float* value);
 
-        void updateVec3Uniform(const std::string& uniformName, const float* value) const;
+        void updateVec3Uniform(const std::string& uniformName, const float* value);
 
-        void updateVec4Uniform(const std::string& uniformName, const float value[]) const;
+        void updateVec4Uniform(const std::string& uniformName, const float value[]);
 
-        void updateFloatUniform(const std::string& uniformName, const float& value) const;
+        void updateFloatUniform(const std::string& uniformName, const float& value);
 
         [[nodiscard]] std::vector<GLfloat> *getVertices() const;
 
