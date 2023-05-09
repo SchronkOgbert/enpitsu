@@ -1,5 +1,6 @@
 #include "enpitsu/objects/Screen.h"
 #include "GLFW/glfw3.h"
+#include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/objects/ControlObject.h"
 #include "enpitsu/objects/Object.h"
@@ -485,4 +486,10 @@ const enpitsu::Vector4 &enpitsu::Screen::getLightColor() const
 void enpitsu::Screen::setLightColor(const enpitsu::Vector4 &lightColor)
 {
     Screen::lightColor = lightColor;
+}
+
+void enpitsu::Screen::setVSyncFrameCount(const int &frameCount)
+{
+    if(!window) throw Exception("Window does not exist");
+    glfwSwapInterval(frameCount);
 }

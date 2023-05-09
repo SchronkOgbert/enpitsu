@@ -295,6 +295,8 @@ namespace enpitsu
 
         void setLightColor(const Vector4 &lightColor);
 
+        void setVSyncFrameCount(const int& frameCount);
+
     protected:
 
         //all the events below run sometime during the Screen::start function
