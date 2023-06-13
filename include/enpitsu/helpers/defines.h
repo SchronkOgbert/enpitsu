@@ -61,6 +61,8 @@
 #define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
 #endif
 
+#define strdup _strdup
+
 // concepts, aliases, perfect forwards
 
 namespace enpitsu

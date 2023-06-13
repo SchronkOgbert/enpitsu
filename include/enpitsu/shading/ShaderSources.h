@@ -5,6 +5,15 @@
 
 namespace enpitsu
 {
+
+    std::map<unsigned int, std::string> GLErrors
+            {
+                    {GL_NO_ERROR, "GL_NO_ERROR"},
+                    {GL_INVALID_VALUE, "GL_INVALID_VALUE "},
+                    {GL_INVALID_OPERATION, "GL_INVALID_OPERATION "},
+                    {GL_INVALID_ENUM, "GL_INVALID_ENUM "}
+            };
+
     static std::unique_ptr<std::map<std::string, std::string>> defaultShaderSources(
             new std::map<std::string, std::string>{
                     {"default.vert",   "#version 450\n"
@@ -116,55 +125,55 @@ namespace enpitsu
                                        "}"
                     },
                     {
-                        "default3D.frag", "#version 450\n"
-                                          "\n"
-                                          "in vec4 color;\n"
-                                          "in vec3 normal;\n"
-                                          "in vec3 position;\n"
-                                          "\n"
-                                          "uniform vec4 lightColor = vec4(1, 1, 1, 1);\n"
-                                          "uniform vec3 lightPos;\n"
-                                          "uniform vec3 cameraPosition;\n"
-                                          "uniform float ambient = 0.05f;\n"
-                                          "uniform float diffuse = 0.0f;\n"
-                                          "uniform float specular = 0.3f;\n"
-                                          "uniform float radius = 8.0f;\n"
-                                          "\n"
-                                          "out vec4 FragColor;\n"
-                                          "void main()\n"
-                                          "{\n"
-                                          "    vec3 normalizedNormal = normalize(normal);\n"
-                                          "    vec3 lightDirection = normalize(lightPos - position);\n"
-                                          "    float diffuseVal = max(dot(normalizedNormal, lightDirection), diffuse);\n"
-                                          "    vec4 colorCompose = color * lightColor;\n"
-                                          "    float distanceBasedIntensity = min(radius / distance(lightPos, position), 1.0f);\n"
-                                          "    FragColor = vec4(vec3(colorCompose) * (ambient + diffuseVal) * distanceBasedIntensity, colorCompose.w * color.w);\n"
-                                          "}"
+                     "default3D.frag", "#version 450\n"
+                                       "\n"
+                                       "in vec4 color;\n"
+                                       "in vec3 normal;\n"
+                                       "in vec3 position;\n"
+                                       "\n"
+                                       "uniform vec4 lightColor = vec4(1, 1, 1, 1);\n"
+                                       "uniform vec3 lightPos;\n"
+                                       "uniform vec3 cameraPosition;\n"
+                                       "uniform float ambient = 0.05f;\n"
+                                       "uniform float diffuse = 0.0f;\n"
+                                       "uniform float specular = 0.3f;\n"
+                                       "uniform float radius = 8.0f;\n"
+                                       "\n"
+                                       "out vec4 FragColor;\n"
+                                       "void main()\n"
+                                       "{\n"
+                                       "    vec3 normalizedNormal = normalize(normal);\n"
+                                       "    vec3 lightDirection = normalize(lightPos - position);\n"
+                                       "    float diffuseVal = max(dot(normalizedNormal, lightDirection), diffuse);\n"
+                                       "    vec4 colorCompose = color * lightColor;\n"
+                                       "    float distanceBasedIntensity = min(radius / distance(lightPos, position), 1.0f);\n"
+                                       "    FragColor = vec4(vec3(colorCompose) * (ambient + diffuseVal) * distanceBasedIntensity, colorCompose.w * color.w);\n"
+                                       "}"
                     },
                     {
-                        "light.vert", "#version 450\n"
-                                      "\n"
-                                      "layout (location = 1) in vec3 vertexPosition;\n"
-                                      "\n"
-                                      "uniform mat4 modelMatrix;\n"
-                                      "uniform mat4 cam3DMatrix;\n"
-                                      "\n"
-                                      "void main()\n"
-                                      "{\n"
-                                      "    gl_Position = cam3DMatrix * modelMatrix * vec4(vertexPosition, 1);\n"
-                                      "}"
+                     "light.vert",     "#version 450\n"
+                                       "\n"
+                                       "layout (location = 1) in vec3 vertexPosition;\n"
+                                       "\n"
+                                       "uniform mat4 modelMatrix;\n"
+                                       "uniform mat4 cam3DMatrix;\n"
+                                       "\n"
+                                       "void main()\n"
+                                       "{\n"
+                                       "    gl_Position = cam3DMatrix * modelMatrix * vec4(vertexPosition, 1);\n"
+                                       "}"
                     },
                     {
-                        "light.frag", "#version 450\n"
-                                      "\n"
-                                      "out vec4 FragColor;\n"
-                                      "\n"
-                                      "uniform vec4 lightColor = vec4(1, 1, 1, 1);\n"
-                                      "\n"
-                                      "void main()\n"
-                                      "{\n"
-                                      "    FragColor = lightColor;\n"
-                                      "}"
+                     "light.frag",     "#version 450\n"
+                                       "\n"
+                                       "out vec4 FragColor;\n"
+                                       "\n"
+                                       "uniform vec4 lightColor = vec4(1, 1, 1, 1);\n"
+                                       "\n"
+                                       "void main()\n"
+                                       "{\n"
+                                       "    FragColor = lightColor;\n"
+                                       "}"
                     }
             });
 }

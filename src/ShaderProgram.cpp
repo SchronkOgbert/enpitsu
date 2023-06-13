@@ -1,6 +1,12 @@
 #include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/ShaderSources.h"
+#include "fmt/format.h"
+#include <chrono>
+#include <memory>
+#include <string>
+#include <thread>
 
 namespace enpitsu
 {
@@ -38,11 +44,11 @@ namespace enpitsu
         glAttachShader(ID, vertexShader);
         glAttachShader(ID, fragmentShader);
 
-        if(!defaultVertex)
+        if (!defaultVertex)
         {
             delete[] vertexData;
         }
-        if(!defaultFrag)
+        if (!defaultFrag)
         {
             delete[] fragmentData;
         }
@@ -52,7 +58,7 @@ namespace enpitsu
                                const int &vertexSize,
                                const bool &isStatic)
     {
-        if(vertices.empty() || indices.empty())
+        if (vertices.empty() || indices.empty())
         {
             throw BadShaderInfo();
         }
@@ -63,9 +69,9 @@ namespace enpitsu
                                   isStatic));
         setEbo(new EBO(&indices[0U], sizeof(indices[0]) * indices.size(), isStatic));
         glLinkProgram(ID);
+        hasLinked();
         hasCompiled(vertexShader);
         hasCompiled(fragmentShader);
-        hasLinked();
         glUseProgram(ID);
         initialized = true;
     }
@@ -88,9 +94,7 @@ namespace enpitsu
         {
             buffer += lineBuffer + "\n";
         }
-        char *result = new char[buffer.size() + 1];
-        strcpy(result, buffer.c_str());
-        return result;
+        return strdup(buffer.c_str());
     }
 
     GLuint ShaderProgram::getId() const
@@ -98,22 +102,30 @@ namespace enpitsu
         return ID;
     }
 
-    void ShaderProgram::hasCompiled(const GLuint &shader)
+    void ShaderProgram::hasCompiled(const GLuint &shader) const
     {
-        int compiled;
-        glGetShaderiv(ID, GL_COMPILE_STATUS, &compiled);
-        char shaderSource[1024];
-        glGetShaderSource(shader, 1024, nullptr, shaderSource);
+        int compiled = 0;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+        auto glError = glGetError();
+        if(glError != GL_NO_ERROR)
+        {
+            PLOGE << GLErrors[glError];
+            throw Exception(format("Error when checking shader: {}", GLErrors[glError].c_str()));
+        }
         if (!compiled)
         {
+            char shaderSource[1024];
+            glGetShaderSource(shader, 1024, nullptr, shaderSource);
+            PLOGE << format("Shader compile rc: {}", compiled);
             char shaderInfo[1024];
-            glGetShaderInfoLog(ID, 1024, nullptr, shaderInfo);
+            glGetShaderInfoLog(shader, 1024, nullptr, shaderInfo);
+            PLOGW << format("Shader source:\n{}\n", shaderSource);
             PLOGE << shaderInfo;
             throw BadShaderCompile(shaderInfo);
         }
     }
 
-    void ShaderProgram::hasLinked()
+    void ShaderProgram::hasLinked() const
     {
         int linked;
         glGetProgramiv(ID, GL_LINK_STATUS, &linked);

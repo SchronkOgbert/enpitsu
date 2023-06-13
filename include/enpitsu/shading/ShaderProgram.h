@@ -101,9 +101,9 @@ namespace enpitsu
     private:
         static char *readShaderFile(const char *filename);
 
-        void hasCompiled(const GLuint &shader);
+        void hasCompiled(const GLuint &shader) const;
 
-        void hasLinked();
+        void hasLinked() const;
 
         int getUniformLocation(const char* uniformName);
 
