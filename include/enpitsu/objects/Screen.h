@@ -175,6 +175,8 @@ namespace enpitsu
          */
         void start();
 
+        void stop();
+
         /**
          * Function that calls the keyboard events for all objects\n
          * It has to be public because of some quirks of glfw

@@ -493,3 +493,8 @@ void enpitsu::Screen::setVSyncFrameCount(const int &frameCount)
     if(!window) throw Exception("Window does not exist");
     glfwSwapInterval(frameCount);
 }
+
+void enpitsu::Screen::stop()
+{
+    this->destroy();
+}
