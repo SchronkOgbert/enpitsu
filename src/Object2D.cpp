@@ -6,6 +6,7 @@
 #include "enpitsu/shading/SolidColor.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "glm/gtx/transform.hpp"
+#include <memory>
 
 enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
                             std::shared_ptr<ShaderProgram> &&shader,
@@ -39,7 +40,7 @@ enpitsu::Object2D::Object2D(Screen *screen, const std::vector<Vector2> &points, 
 void enpitsu::Object2D::init()
 {
     Object::init();
-    if(!(shaderProgram->isInitialized()))
+    if (!(shaderProgram->isInitialized()))
     {
         shaderProgram->Create(vertices, indices, 2, isStatic);
         if (!shaderProgram->getVao() || !shaderProgram->getVertexPosition() || !shaderProgram->getEbo())
@@ -58,9 +59,6 @@ void enpitsu::Object2D::init()
 void enpitsu::Object2D::onDestroy()
 {
     Object::onDestroy();
-    shaderProgram->getVao()->Delete();
-    shaderProgram->getVertexPosition()->Delete();
-    shaderProgram->getEbo()->Delete();
     shaderProgram->Delete();
 }
 

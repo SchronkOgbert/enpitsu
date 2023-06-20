@@ -107,11 +107,12 @@ namespace enpitsu
         int compiled = 0;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
         auto glError = glGetError();
-        if(glError != GL_NO_ERROR)
+        if(glError != GL_NO_ERROR && !compiled)
         {
             PLOGE << GLErrors[glError];
             throw Exception(format("Error when checking shader: {}", GLErrors[glError].c_str()));
         }
+        PLOGD << format("Compiled: {}", compiled);
         if (!compiled)
         {
             char shaderSource[1024];
