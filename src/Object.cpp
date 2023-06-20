@@ -41,7 +41,7 @@ void enpitsu::Object::destroy()
 
 void enpitsu::Object::onDestroy()
 {
-//    println("destroying ", this);
+
 }
 
 bool enpitsu::Object::shouldUpdateCamera3D() const

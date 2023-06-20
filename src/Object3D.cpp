@@ -4,6 +4,7 @@
 #include "enpitsu/objects/Screen.h"
 #include "enpitsu/objects/Camera3D.h"
 #include "enpitsu/shading/LitShaderBase.h"
+#include "enpitsu/shading/ShaderProgram.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -11,6 +12,10 @@
 
 namespace enpitsu
 {
+    const Vector3 Object3D::xVec = Vector3 (1, 0, 0);
+    const Vector3 Object3D::yVec = Vector3 (0, 1, 0);
+    const Vector3 Object3D::zVec = Vector3 (0, 0, 1);
+
     const std::shared_ptr<ShaderProgram> &Object3D::getShaderProgram() const
     {
         return shaderProgram;
@@ -44,10 +49,6 @@ namespace enpitsu
         {
             shaderProgram->updateMat4UniformF("cam3DMatrix", screen->getCam3DMatrix());
         }
-        if (updateModel)
-        {
-            updateModel = false;
-        }
         shaderProgram->updateMat4UniformF("modelMatrix", glm::value_ptr(model));
     }
 
@@ -79,7 +80,7 @@ namespace enpitsu
 
     void Object3D::setLocation(const Vector3 &newLocation)
     {
-        if (isStatic) throw Exception("Cannot move static object");
+        [[unlikely]] if (isStatic) throw Exception("Cannot move static object");
         forceSetLocation(newLocation);
     }
 
@@ -98,27 +99,40 @@ namespace enpitsu
         // TODO implement world origin offset operations
         model = glm::translate(model, newLocation - origin);
         origin = newLocation;
-        updateModel = true;
     }
 
     void Object3D::setRotation(const Vector3 &newRotation)
     {
-        if (isStatic) throw Exception("Cannot rotate static object");
+        [[unlikely]] if (isStatic) throw Exception("Cannot rotate static object");
         forceSetRotation(newRotation);
     }
 
     void Object3D::forceSetRotation(const Vector3 &newRotation)
     {
-        model = glm::rotate(model, glm::radians(newRotation.x - rotation.x), Vector3(1, 0, 0));
-        model = glm::rotate(model, glm::radians(newRotation.y - rotation.y), Vector3(0, 1, 0));
-        model = glm::rotate(model, glm::radians(newRotation.z - rotation.z), Vector3(0, 0, 1));
+        float rotX = newRotation.x - rotation.x;
+        float rotY = newRotation.y - rotation.y;
+        float rotZ = newRotation.z - rotation.z;
+        static const Vector3 xVec(1, 0, 0);
+        static const Vector3 yVec(0, 1, 0);
+        static const Vector3 zVec(0, 0, 1);
+        if(rotX != 0)
+        {
+            model = glm::rotate(model, glm::radians(rotX), xVec);
+        }
+        if(rotY != 0)
+        {
+            model = glm::rotate(model, glm::radians(rotY), yVec);
+        }
+        if(rotZ != 0)
+        {
+            model = glm::rotate(model, glm::radians(rotZ), zVec);
+        }
         this->rotation = newRotation;
-        updateModel = true;
     }
 
     void Object3D::setScale(const Vector3 &newScale)
     {
-        if(isStatic) throw Exception("Cannot set scale of static object");
+        [[unlikely]] if(isStatic) throw Exception("Cannot set scale of static object");
         forceSetScale(newScale);
     }
 
@@ -126,7 +140,6 @@ namespace enpitsu
     {
         model = glm::scale(model, newScale / scale);
         scale = newScale;
-        updateModel = true;
     }
 
     const Vector3 &Object3D::getRotation() const

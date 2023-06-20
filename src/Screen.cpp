@@ -1,5 +1,6 @@
 #include "enpitsu/objects/Screen.h"
 #include "GLFW/glfw3.h"
+#include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/GeometryEssentials.h"
 #include "enpitsu/objects/ControlObject.h"
 #include "enpitsu/objects/Object.h"
@@ -201,7 +202,17 @@ void enpitsu::Screen::init()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND); // these glEnables MUST be after the window was created
-    checkDepth ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+    if(checkDepth)
+    {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+    }
+    else
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
     moveObjectsFromQueue();
 }
 
@@ -391,7 +402,8 @@ void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
 
 void enpitsu::Screen::moveObjectsFromQueue()
 {
-    while (!objectsQueue->empty())
+    auto left = maxAddOpPerTick;
+    while (!objectsQueue->empty() && left > 0)
     {
         PLOGD << "Adding " << objectsQueue->front().get();
         objectsQueue->front()->callInit();
@@ -403,6 +415,7 @@ void enpitsu::Screen::moveObjectsFromQueue()
         objects->push_back(std::move(objectsQueue->front()));
         objectsQueue->pop();
         PLOGD << format("{} elements left in queue", objectsQueue->size());
+        left--;
     }
 }
 
@@ -475,4 +488,25 @@ const enpitsu::Vector4 &enpitsu::Screen::getLightColor() const
 void enpitsu::Screen::setLightColor(const enpitsu::Vector4 &lightColor)
 {
     Screen::lightColor = lightColor;
+}
+
+void enpitsu::Screen::setVSyncFrameCount(const int &frameCount)
+{
+    if(!window) throw Exception("Window does not exist");
+    glfwSwapInterval(frameCount);
+}
+
+void enpitsu::Screen::stop()
+{
+    this->destroy();
+}
+
+unsigned int enpitsu::Screen::getMaxAddOpPerTick() const
+{
+    return maxAddOpPerTick;
+}
+
+void enpitsu::Screen::setMaxAddOpPerTick(unsigned int maxAddOpPerTick)
+{
+    Screen::maxAddOpPerTick = maxAddOpPerTick;
 }

@@ -86,6 +86,7 @@ namespace enpitsu
         Vector2 cursorPos;
         std::unique_ptr<Camera3D> camera3D;
         std::unique_ptr<Camera2D> camera2D;
+        unsigned maxAddOpPerTick = 128;
 
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
@@ -174,6 +175,8 @@ namespace enpitsu
          * A good practice would be to have an object derived from enpitsu::ControlObject added in the screen's init to control other objects
          */
         void start();
+
+        void stop();
 
         /**
          * Function that calls the keyboard events for all objects\n
@@ -289,11 +292,17 @@ namespace enpitsu
 
         [[nodiscard]] const Vector3 &getLightPosition() const;
 
+        void setMaxAddOpPerTick(unsigned int maxAddOpPerTick);
+
+        [[nodiscard]] unsigned int getMaxAddOpPerTick() const;
+
         void setLightPosition(const Vector3 &lightPosition);
 
         [[nodiscard]] const Vector4 &getLightColor() const;
 
         void setLightColor(const Vector4 &lightColor);
+
+        void setVSyncFrameCount(const int& frameCount);
 
     protected:
 
