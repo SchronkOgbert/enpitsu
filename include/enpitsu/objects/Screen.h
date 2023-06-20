@@ -86,6 +86,7 @@ namespace enpitsu
         Vector2 cursorPos;
         std::unique_ptr<Camera3D> camera3D;
         std::unique_ptr<Camera2D> camera2D;
+        unsigned maxAddOpPerTick = 128;
 
         //control variables
         std::chrono::time_point<std::chrono::system_clock> before;
@@ -290,6 +291,10 @@ namespace enpitsu
         void setCheckDepth(bool checkDepth);
 
         [[nodiscard]] const Vector3 &getLightPosition() const;
+
+        void setMaxAddOpPerTick(unsigned int maxAddOpPerTick);
+
+        [[nodiscard]] unsigned int getMaxAddOpPerTick() const;
 
         void setLightPosition(const Vector3 &lightPosition);
 

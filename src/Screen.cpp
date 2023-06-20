@@ -402,7 +402,8 @@ void enpitsu::Screen::addEventHandler(enpitsu::InputEvents *eventHandler)
 
 void enpitsu::Screen::moveObjectsFromQueue()
 {
-    while (!objectsQueue->empty())
+    auto left = maxAddOpPerTick;
+    while (!objectsQueue->empty() && left > 0)
     {
         PLOGD << "Adding " << objectsQueue->front().get();
         objectsQueue->front()->callInit();
@@ -414,6 +415,7 @@ void enpitsu::Screen::moveObjectsFromQueue()
         objects->push_back(std::move(objectsQueue->front()));
         objectsQueue->pop();
         PLOGD << format("{} elements left in queue", objectsQueue->size());
+        left--;
     }
 }
 
@@ -497,4 +499,14 @@ void enpitsu::Screen::setVSyncFrameCount(const int &frameCount)
 void enpitsu::Screen::stop()
 {
     this->destroy();
+}
+
+unsigned int enpitsu::Screen::getMaxAddOpPerTick() const
+{
+    return maxAddOpPerTick;
+}
+
+void enpitsu::Screen::setMaxAddOpPerTick(unsigned int maxAddOpPerTick)
+{
+    Screen::maxAddOpPerTick = maxAddOpPerTick;
 }
