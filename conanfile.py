@@ -26,6 +26,9 @@ class EnpitsuConan(ConanFile):
         cmake_debug = CMake(self, build_type="Debug")
         cmake_debug.configure()
         cmake_debug.build()
+        cmake_release = CMake(self, build_type="Release")
+        cmake_release.configure()
+        cmake_release.build()
 
     def package(self):
         self.copy('include/*', dst='', keep_path=True)
