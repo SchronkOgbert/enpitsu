@@ -78,7 +78,8 @@ namespace enpitsu
             KEY_LEFT,
             KEY_RIGHT,
             KEY_UP,
-            KEY_DOWN
+            KEY_DOWN,
+            UNKNOWN
         };
         KeyEvent::Event event;
 

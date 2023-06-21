@@ -252,7 +252,8 @@ void enpitsu::Screen::callKeyEvents(const int &key,
     {
         switch (key)
         {
-
+            default:
+                event = KeyEvent(KeyEvent::UNKNOWN);
         }
     }
     switch (action)
