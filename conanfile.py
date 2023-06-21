@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 
 class EnpitsuConan(ConanFile):
-    version = '0.4.1'  # 3d and basic shading + 2d texture hotfix
+    version = '0.4.2'  # first release
     name = "enpitsu"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
