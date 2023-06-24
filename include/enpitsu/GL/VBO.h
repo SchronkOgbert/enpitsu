@@ -45,8 +45,6 @@ namespace enpitsu
 
         void Update(GLfloat *newVertices) const;
 
-        void UpdateScale(const enpitsu::Vector3 &newScale, ShaderProgram *shader) const;
-
         [[nodiscard]] GLuint getId() const;
     };
 }

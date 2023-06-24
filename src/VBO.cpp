@@ -37,19 +37,6 @@ void VBO::Update(GLfloat *newVertices) const
     this->Unbind();
 }
 
-void VBO::UpdateScale(const enpitsu::Vector3 &newScale, ShaderProgram *shader) const
-{
-    shader->Bind();
-    GLint scaleX = glGetUniformLocation(shader->getId(), "scaleX");
-    GLint scaleY = glGetUniformLocation(shader->getId(), "scaleY");
-    glUniform1f(scaleX, newScale.x);
-    glUniform1f(scaleY, newScale.y);
-    GLfloat newValX;
-    glGetUniformfv(shader->getId(), scaleX, &newValX);
-    PLOGD << "New X val: " << newValX;
-    shader->Unbind();
-}
-
 unsigned int VBO::getSize() const
 {
     return size;
