@@ -28,7 +28,7 @@ namespace enpitsu
                                        "\n"
                                        "void main()\n"
                                        "{\n"
-                                       "    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1.0);\n"
+                                       "    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition, 1.0);\n"
                                        "    color = inColor;\n"
                                        "}"},
                     {"default.frag",   "#version 450\n"

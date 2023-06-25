@@ -8,6 +8,7 @@
 #include "enpitsu/objects/Camera3D.h"
 #include "enpitsu/objects/Object3D.h"
 #include "enpitsu/objects/Camera2D.h"
+#include "plog/Severity.h"
 
 using enpitsu::Object;
 
@@ -35,7 +36,7 @@ enpitsu::Screen::Screen
         throw BadInitException();
     }
     static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init(plog::verbose, &consoleAppender);
+    plog::init(plog::error, &consoleAppender);
 }
 
 enpitsu::Screen::~Screen()
@@ -251,7 +252,8 @@ void enpitsu::Screen::callKeyEvents(const int &key,
     {
         switch (key)
         {
-
+            default:
+                event = KeyEvent(KeyEvent::UNKNOWN);
         }
     }
     switch (action)

@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 
 class EnpitsuConan(ConanFile):
-    version = '0.4.1'  # 3d and basic shading + 2d texture hotfix
+    version = '0.4.2'  # first release
     name = "enpitsu"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
@@ -23,9 +23,9 @@ class EnpitsuConan(ConanFile):
         self.copy("*.lib", dst="bin", src="lib")
 
     def build(self):
-        cmake_debug = CMake(self, build_type="Debug")
-        cmake_debug.configure()
-        cmake_debug.build()
+        cmake_release = CMake(self, build_type="Release")
+        cmake_release.configure()
+        cmake_release.build()
 
     def package(self):
         self.copy('include/*', dst='', keep_path=True)

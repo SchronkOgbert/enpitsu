@@ -10,6 +10,6 @@ uniform mat4 modelMatrix;
 
 void main()
 {
-    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1.0);
+    gl_Position = camMatrix * modelMatrix * vec4(vertexPosition, 1.0);
     color = inColor;
 }

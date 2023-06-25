@@ -69,11 +69,13 @@ namespace enpitsu
 {
     using namespace fmt;
 
-    template<class Object>
+    class Object;
+
+    template<class AddObject>
     concept objectType =
-    requires(Object t)
+    requires(AddObject t)
     {
-        { t.callInit() };
+        std::same_as<AddObject, enpitsu::Object>;
     };
 
     class VAO;
