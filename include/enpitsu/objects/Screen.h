@@ -14,6 +14,8 @@ namespace enpitsu
 
     class Camera3D;
 
+    class Camera2D;
+
     class InputEvents;
 
     class BadInitException : public Exception
