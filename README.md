@@ -1,7 +1,6 @@
 # Enpitsu
 Enpitsu is a rendering library built using C++
 # Build instructions(via conan and CMake)
-The build assumes you are using msvc. It doesn't compile on gcc because of a perfect forwarding. Clang wasn't tested<br>
 Make sure you are in the root directory<br>
 This  guide shows you how to make a debug build<br>
 Run the following commands in order:<br>
