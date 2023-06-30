@@ -61,7 +61,9 @@
 #define OPENGL_DEFAULT_PROFILE GLFW_OPENGL_ANY_PROFILE
 #endif
 
+#ifdef MSVC
 #define strdup _strdup
+#endif
 
 // concepts, aliases, perfect forwards
 
@@ -71,20 +73,22 @@ namespace enpitsu
 
     class Object;
 
+    class ShaderProgram;
+
     template<class AddObject>
     concept objectType =
     requires(AddObject t)
     {
-        std::same_as<AddObject, enpitsu::Object>;
+        requires std::derived_from<AddObject, enpitsu::Object>;
     };
 
     class VAO;
 
-    template<class Shader>
+    template<class AddShader>
     concept shaderType =
-    requires(Shader t)
+    requires(AddShader t)
     {
-        { t.getVao() };
+        requires std::derived_from<AddShader, enpitsu::ShaderProgram>;
     };
 
 /**
@@ -96,11 +100,12 @@ namespace enpitsu
  * @return same as std::make_unique, which is std::unique_ptr<T>&&
  */
     template<objectType T, class... Args>
-    auto newObject(Args &&... args) -> decltype(std::make_unique<T>(
-            std::forward<Args>(args)...)) // perfect forward for std::make_unique
+    auto newObject(Args &&... args) // perfect forward for std::make_unique
     {
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
+
+
 
     /**
      * perfect forward to std::make_shared, except it uses a concept to validate T
@@ -111,10 +116,11 @@ namespace enpitsu
      * @return same as std::make_shared, which is std::shared_ptr<T>&&
      */
     template<shaderType T, class... Args>
-    auto newShader(Args&&... args) -> decltype(std::make_shared<T>(std::forward<Args>(args)...))
+    auto newShader(Args&&... args)
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
+
 }
 
 template<class T>
@@ -126,6 +132,7 @@ std::ostream& operator<<(std::ostream &out, const std::vector<T> &v)
         out << v[i] << ", ";
     }
     out << *(v.rbegin()) << ']';
+    return out;
 }
 
 #endif //ENPITSU_DEFINES_H

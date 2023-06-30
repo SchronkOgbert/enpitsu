@@ -63,10 +63,10 @@ namespace enpitsu
         void setOrigin(const Vector2 &origin);
 
         explicit Object2D(Screen *screen, const std::vector<Vector2> &points, const Vector2 &origin,
-                          std::shared_ptr<ShaderProgram> &&shader = newShader<ShaderProgram>(
+                          std::shared_ptr<ShaderProgram> &&shader = []{ return std::make_shared<SolidColor>(
                                   Vector4(0.8f, 0.3f, 0.02f, 1.0f),
                                   "default.vert",
-                                  "default.frag"),
+                                  "default.frag");}(),
                           const bool &isStatic = true,
                           const std::vector<unsigned int> &drawOrder = std::vector<unsigned int>(0U));
 
