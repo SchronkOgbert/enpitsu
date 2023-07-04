@@ -65,6 +65,8 @@
 #define strdup _strdup
 #endif
 
+#define DEBUG //disable for merges to release builds
+
 // concepts, aliases, perfect forwards
 
 namespace enpitsu
