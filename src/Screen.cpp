@@ -36,7 +36,7 @@ enpitsu::Screen::Screen
         throw BadInitException();
     }
     static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init(plog::error, &consoleAppender);
+    plog::init(plog::verbose, &consoleAppender);
 }
 
 enpitsu::Screen::~Screen()
