@@ -25,6 +25,9 @@
 #include <queue>
 #include <initializer_list>
 #include <exception>
+#include <optional>
+#include <vcruntime_typeinfo.h>
+#include <utility>
 
 
 // 3rd party stuff

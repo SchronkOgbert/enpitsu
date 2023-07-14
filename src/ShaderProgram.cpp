@@ -1,4 +1,5 @@
 #include "enpitsu/shading/ShaderProgram.h"
+#include "enpitsu/GL/Wrapper.h"
 #include "enpitsu/helpers/Exception.h"
 #include "enpitsu/helpers/defines.h"
 #include "enpitsu/shading/ShaderSources.h"
@@ -30,7 +31,7 @@ namespace enpitsu
             throw BadShaderSource("Fragment shader source could not be loaded. Is the file path correct?");
         }
 
-        vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        vertexShader = callGLFunction(glCreateShader, GL_VERTEX_SHADER);
         fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         PLOGD << format("vertex shader: {}, fragment shader: {}", vertexShader, fragmentShader);
         PLOGD << "compiling shader " << ID << "(" << vertexFile << ")";
