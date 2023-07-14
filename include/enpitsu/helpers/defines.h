@@ -26,7 +26,7 @@
 #include <initializer_list>
 #include <exception>
 #include <optional>
-#include <vcruntime_typeinfo.h>
+#include <typeinfo>
 #include <utility>
 
 
